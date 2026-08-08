@@ -1,42 +1,55 @@
 import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from './assets/vite.svg'
-import heroImg from './assets/hero.png'
 import './App.css'
 
 function App() {
-  const [count, setCount] = useState(0)
+    const [password, setPassword] = useState('')
 
-  return (
-    <>
-      <section id="center">
-        <div className="hero">
-          <img src={heroImg} className="base" width="170" height="179" alt="" />
-          <img src={reactLogo} className="framework" alt="React logo" />
-          <img src={viteLogo} className="vite" alt="Vite logo" />
-        </div>
+    const hasLength = password.length >= 8
+    const hasUpper = /[A-Z]/.test(password)
+    const hasLower = /[a-z]/.test(password)
+    const hasNumber = /\d/.test(password)
+    const hasSpecial = /[!@#$%^&*(),.?":{}|<>]/.test(password)
+
+    const isValid =
+        hasLength &&
+        hasUpper &&
+        hasLower &&
+        hasNumber &&
+        hasSpecial
+
+    return (
         <div>
-          <h1>Get started</h1>
-          <p>
-            Edit <code>src/App.jsx</code> and save to test <code>HMR</code>
-          </p>
+            <input
+                type="password"
+                id="password"
+                placeholder="Passwort"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+            />
+
+            <p id="feedback">
+                {isValid ? (
+                    <span style={{ color: 'green' }}>
+            ✓ Passwort erfüllt alle Anforderungen
+          </span>
+                ) : (
+                    <span style={{ color: 'red' }}>
+            Anforderungen:
+            <br />
+                        {hasLength ? '✓' : '✗'} Mindestens 8 Zeichen
+            <br />
+                        {hasUpper ? '✓' : '✗'} Großbuchstabe
+            <br />
+                        {hasLower ? '✓' : '✗'} Kleinbuchstabe
+            <br />
+                        {hasNumber ? '✓' : '✗'} Zahl
+            <br />
+                        {hasSpecial ? '✓' : '✗'} Sonderzeichen
+          </span>
+                )}
+            </p>
         </div>
-        <button
-          type="button"
-          className="counter"
-          onClick={() => setCount((count) => count + 1)}
-        >
-          Count is {count}
-        </button>
-      </section>
-
-      <div className="ticks"></div>
-
-
-      <div className="ticks"></div>
-      <section id="spacer"></section>
-    </>
-  )
+    )
 }
 
 export default App
