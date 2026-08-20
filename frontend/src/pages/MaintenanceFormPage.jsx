@@ -1,8 +1,8 @@
-import { Link, useParams } from 'react-router-dom'
+import { Link, useParams } from 'react-router-dom';
 
 function MaintenanceFormPage() {
-  const { id } = useParams()
-  const isEditing = Boolean(id)
+  const { id } = useParams();
+  const isEditing = Boolean(id);
 
   return (
     <>
@@ -11,7 +11,7 @@ function MaintenanceFormPage() {
         <button type="button">Cancel</button>
       </Link>
     </>
-  )
+  );
 }
 
-export default MaintenanceFormPage
+export default MaintenanceFormPage;

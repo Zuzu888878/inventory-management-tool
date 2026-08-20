@@ -1,13 +1,13 @@
-import { useLocation, useNavigate } from 'react-router-dom'
+import { useLocation, useNavigate } from 'react-router-dom';
 
 function LoginPage() {
-  const navigate = useNavigate()
-  const location = useLocation()
+  const navigate = useNavigate();
+  const location = useLocation();
 
   function login(event) {
-    event.preventDefault()
-    localStorage.setItem('authenticated', 'true')
-    navigate(location.state?.from?.pathname || '/dashboard', { replace: true })
+    event.preventDefault();
+    localStorage.setItem('authenticated', 'true');
+    navigate(location.state?.from?.pathname || '/dashboard', { replace: true });
   }
 
   return (
@@ -27,7 +27,7 @@ function LoginPage() {
         <button type="submit">Login</button>
       </form>
     </main>
-  )
+  );
 }
 
-export default LoginPage
+export default LoginPage;

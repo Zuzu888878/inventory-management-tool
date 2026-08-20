@@ -1,50 +1,41 @@
-import {
-  BrowserRouter,
-  Link,
-  Navigate,
-  Outlet,
-  Route,
-  Routes,
-  useLocation,
-  useNavigate,
-} from 'react-router-dom'
-import AssetDetailsPage from './pages/AssetDetailsPage.jsx'
-import AssetFormPage from './pages/AssetFormPage.jsx'
-import AssetsPage from './pages/AssetsPage.jsx'
-import DashboardPage from './pages/DashboardPage.jsx'
-import LoginPage from './pages/LoginPage.jsx'
-import MaintenanceDetailsPage from './pages/MaintenanceDetailsPage.jsx'
-import MaintenanceFormPage from './pages/MaintenanceFormPage.jsx'
-import MaintenancePage from './pages/MaintenancePage.jsx'
-import UsersPage from './pages/UsersPage.jsx'
+import { BrowserRouter, Link, Navigate, Outlet, Route, Routes, useLocation, useNavigate } from 'react-router-dom';
+import AssetDetailsPage from './pages/AssetDetailsPage.jsx';
+import AssetFormPage from './pages/AssetFormPage.jsx';
+import AssetsPage from './pages/AssetsPage.jsx';
+import DashboardPage from './pages/DashboardPage.jsx';
+import LoginPage from './pages/LoginPage.jsx';
+import MaintenanceDetailsPage from './pages/MaintenanceDetailsPage.jsx';
+import MaintenanceFormPage from './pages/MaintenanceFormPage.jsx';
+import MaintenancePage from './pages/MaintenancePage.jsx';
+import UsersPage from './pages/UsersPage.jsx';
 
-const isAuthenticated = () => localStorage.getItem('authenticated') === 'true'
+const isAuthenticated = () => localStorage.getItem('authenticated') === 'true';
 
 function ProtectedRoute() {
-  const location = useLocation()
+  const location = useLocation();
 
   if (!isAuthenticated()) {
-    return <Navigate to="/login" replace state={{ from: location }} />
+    return <Navigate to="/login" replace state={{ from: location }} />;
   }
 
-  return <Outlet />
+  return <Outlet />;
 }
 
 function Layout() {
-  const navigate = useNavigate()
+  const navigate = useNavigate();
 
   function logout() {
-    localStorage.removeItem('authenticated')
-    navigate('/login', { replace: true })
+    localStorage.removeItem('authenticated');
+    navigate('/login', { replace: true });
   }
 
   return (
     <>
       <nav>
-        <Link to="/dashboard">Dashboard</Link>{' '}
-        <Link to="/assets">Assets</Link>{' '}
-        <Link to="/maintenance">Maintenance</Link>{' '}
-        <Link to="/users">Users</Link>{' '}
+        <Link to="/dashboard">Dashboard</Link>
+        <Link to="/assets">Assets</Link>
+        <Link to="/maintenance">Maintenance</Link>
+        <Link to="/users">Users</Link>
         <button type="button" onClick={logout}>
           Logout
         </button>
@@ -53,7 +44,7 @@ function Layout() {
         <Outlet />
       </main>
     </>
-  )
+  );
 }
 
 function App() {
@@ -73,27 +64,18 @@ function App() {
 
             <Route path="/maintenance" element={<MaintenancePage />} />
             <Route path="/maintenance/new" element={<MaintenanceFormPage />} />
-            <Route
-              path="/maintenance/:id"
-              element={<MaintenanceDetailsPage />}
-            />
-            <Route
-              path="/maintenance/:id/edit"
-              element={<MaintenanceFormPage />}
-            />
+            <Route path="/maintenance/:id" element={<MaintenanceDetailsPage />} />
+            <Route path="/maintenance/:id/edit" element={<MaintenanceFormPage />} />
 
             <Route path="/users" element={<UsersPage />} />
           </Route>
         </Route>
 
-        <Route
-          path="/maintanance/*"
-          element={<Navigate to="/maintenance" replace />}
-        />
+        <Route path="/maintanance/*" element={<Navigate to="/maintenance" replace />} />
         <Route path="*" element={<Navigate to="/dashboard" replace />} />
       </Routes>
     </BrowserRouter>
-  )
+  );
 }
 
-export default App
+export default App;

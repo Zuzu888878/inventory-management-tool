@@ -1,18 +1,18 @@
-import { useEffect, useState } from 'react'
-import { Link } from 'react-router-dom'
-import { getAssets } from '../api/assets.js'
+import { useEffect, useState } from 'react';
+import { Link } from 'react-router-dom';
+import { getAssets } from '../api/assets.js';
 
 function AssetsPage() {
-  const [assets, setAssets] = useState([])
-  const [error, setError] = useState('')
-  const [loading, setLoading] = useState(true)
+  const [assets, setAssets] = useState([]);
+  const [error, setError] = useState('');
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     getAssets()
       .then(setAssets)
       .catch((requestError) => setError(requestError.message))
-      .finally(() => setLoading(false))
-  }, [])
+      .finally(() => setLoading(false));
+  }, []);
 
   return (
     <>
@@ -25,13 +25,12 @@ function AssetsPage() {
       <ul>
         {assets.map((asset) => (
           <li key={asset.id}>
-            {asset.name || `Asset ${asset.id}`}{' '}
-            <Link to={`/assets/${asset.id}`}>View</Link>
+            {asset.name || `Asset ${asset.id}`} <Link to={`/assets/${asset.id}`}>View</Link>
           </li>
         ))}
       </ul>
     </>
-  )
+  );
 }
 
-export default AssetsPage
+export default AssetsPage;
