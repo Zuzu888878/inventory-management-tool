@@ -1,0 +1,21 @@
+{
+  "users": [],
+  "assets": [
+    {
+      "name": "asdf",
+      "description": "asdf",
+      "id": 1
+    },
+    {
+      "name": "asfefwfw",
+      "description": "wefwefw",
+      "id": 2
+    },
+    {
+      "name": "bong bongo",
+      "description": "",
+      "id": 3
+    }
+  ],
+  "maintenance": []
+}
