@@ -8,7 +8,7 @@ cd backend && npm i
 
 # Start backend
 echo "Starting backend..."
-node server.js &
+npm start &
 BACKEND_PID=$!
 
 # Install frontend dependencies
@@ -29,6 +29,5 @@ echo "Press Ctrl+C to stop both servers."
 trap "echo 'Stopping servers...'; kill $BACKEND_PID $FRONTEND_PID 2>/dev/null; exit 0" SIGINT SIGTERM
 
 wait
-
 
 

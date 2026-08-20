@@ -1,26 +1,26 @@
-const ASSETS_URL = '/api/assets'
+const ASSETS_URL = '/api/assets';
 
 async function request(url, options) {
-  const response = await fetch(url, options)
+  const response = await fetch(url, options);
 
   if (!response.ok) {
-    const error = await response.json().catch(() => null)
-    throw new Error(error?.message || 'Request failed')
+    const error = await response.json().catch(() => null);
+    throw new Error(error?.message || 'Request failed');
   }
 
   if (response.status === 204) {
-    return null
+    return null;
   }
 
-  return response.json()
+  return response.json();
 }
 
 export function getAssets() {
-  return request(ASSETS_URL)
+  return request(ASSETS_URL);
 }
 
 export function getAsset(id) {
-  return request(`${ASSETS_URL}/${id}`)
+  return request(`${ASSETS_URL}/${id}`);
 }
 
 export function createAsset(asset) {
@@ -28,7 +28,7 @@ export function createAsset(asset) {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify(asset),
-  })
+  });
 }
 
 export function updateAsset(id, asset) {
@@ -36,9 +36,9 @@ export function updateAsset(id, asset) {
     method: 'PUT',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify(asset),
-  })
+  });
 }
 
 export function deleteAsset(id) {
-  return request(`${ASSETS_URL}/${id}`, { method: 'DELETE' })
+  return request(`${ASSETS_URL}/${id}`, { method: 'DELETE' });
 }
