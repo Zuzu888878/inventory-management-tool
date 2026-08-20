@@ -22,13 +22,33 @@ function AssetsPage() {
       </Link>
       {loading && <p>Loading...</p>}
       {error && <p>{error}</p>}
-      <ul>
-        {assets.map((asset) => (
-          <li key={asset.id}>
-            {asset.name || `Asset ${asset.id}`} <Link to={`/assets/${asset.id}`}>View</Link>
-          </li>
-        ))}
-      </ul>
+      {!loading && !error && assets.length === 0 && <p>No assets found.</p>}
+      {assets.length > 0 && (
+        <table>
+          <thead>
+            <tr>
+              <th scope="col">Name</th>
+              <th scope="col">Status</th>
+              <th scope="col">Location</th>
+              <th scope="col">Next Maintenance</th>
+              <th scope="col">Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            {assets.map((asset) => (
+              <tr key={asset.id}>
+                <td>{asset.name || `Asset ${asset.id}`}</td>
+                <td>{asset.status || 'Not set'}</td>
+                <td>{asset.location || 'Not set'}</td>
+                <td>{asset.nextMaintenance || 'Not set'}</td>
+                <td>
+                  <Link to={`/assets/${asset.id}`}>View</Link> <Link to={`/assets/${asset.id}/edit`}>Edit</Link>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      )}
     </>
   );
 }

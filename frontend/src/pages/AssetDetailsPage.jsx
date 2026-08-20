@@ -23,11 +23,23 @@ function AssetDetailsPage() {
     }
   }
 
+  if (error) {
+    return <p>{error}</p>;
+  }
+
+  if (!asset) {
+    return <p>Loading...</p>;
+  }
+
   return (
     <>
-      <h1>{asset?.name}</h1>
-      {asset?.description && <p>{asset.description}</p>}
-      {error && <p>{error}</p>}
+      <h1>{asset.name}</h1>
+      <p>{asset.description}</p>
+      <ul>
+        <li>Status: {asset.status || 'Not set'}</li>
+        <li>Location: {asset.location || 'Not set'}</li>
+        <li>Next Maintenance: {asset.nextMaintenance || 'Not set'}</li>
+      </ul>
       <div className="actions">
         <Link to={`/assets/${id}/edit`}>
           <button type="button">Edit</button>

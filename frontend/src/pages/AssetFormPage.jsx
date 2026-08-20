@@ -8,6 +8,9 @@ function AssetFormPage() {
   const isEditing = Boolean(id);
   const [name, setName] = useState('');
   const [description, setDescription] = useState('');
+  const [status, setStatus] = useState('Active');
+  const [location, setLocation] = useState('');
+  const [nextMaintenance, setNextMaintenance] = useState('');
   const [error, setError] = useState('');
 
   useEffect(() => {
@@ -17,6 +20,9 @@ function AssetFormPage() {
       .then((asset) => {
         setName(asset.name || '');
         setDescription(asset.description || '');
+        setStatus(asset.status || 'Active');
+        setLocation(asset.location || '');
+        setNextMaintenance(asset.nextMaintenance || '');
       })
       .catch((requestError) => setError(requestError.message));
   }, [id, isEditing]);
@@ -26,7 +32,8 @@ function AssetFormPage() {
     setError('');
 
     try {
-      const asset = isEditing ? await updateAsset(id, { name, description }) : await createAsset({ name, description });
+      const assetData = { name, description, status, location, nextMaintenance };
+      const asset = isEditing ? await updateAsset(id, assetData) : await createAsset(assetData);
 
       navigate(`/assets/${asset.id}`);
     } catch (requestError) {
@@ -47,6 +54,27 @@ function AssetFormPage() {
         <label>
           Description
           <input value={description} onChange={(event) => setDescription(event.target.value)} />
+        </label>
+        <br />
+        <label>
+          Status
+          <select value={status} onChange={(event) => setStatus(event.target.value)}>
+            <option value="Active">Active</option>
+            <option value="Maintenance">Maintenance</option>
+            <option value="Warning">Warning</option>
+            <option value="Critical">Critical</option>
+            <option value="Offline">Offline</option>
+          </select>
+        </label>
+        <br />
+        <label>
+          Location
+          <input value={location} onChange={(event) => setLocation(event.target.value)} />
+        </label>
+        <br />
+        <label>
+          Next Maintenance
+          <input type="date" value={nextMaintenance} onChange={(event) => setNextMaintenance(event.target.value)} />
         </label>
         <br />
         <button type="submit">Save</button>
