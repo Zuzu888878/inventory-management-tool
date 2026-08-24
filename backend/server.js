@@ -17,7 +17,7 @@ function writeData(data) {
 }
 
 app.get('/', (req, res) => {
-  res.send('Hallo Welt!');
+  res.send('Hello World!');
 });
 
 app.get('/api/assets', (req, res) => {
@@ -78,5 +78,5 @@ app.delete('/api/assets/:id', (req, res) => {
 });
 
 app.listen(PORT, () => {
-  console.log(`Server läuft auf http://localhost:${PORT}`);
+  console.log(`Server running on http://localhost:${PORT}`);
 });
