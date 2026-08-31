@@ -8,6 +8,7 @@ import MaintenanceDetailsPage from './pages/MaintenanceDetailsPage.jsx';
 import MaintenanceFormPage from './pages/MaintenanceFormPage.jsx';
 import MaintenancePage from './pages/MaintenancePage.jsx';
 import UsersPage from './pages/UsersPage.jsx';
+import {UsersFormPage} from "./pages/UsersFormPage.jsx";
 
 const isAuthenticated = () => localStorage.getItem('authenticated') === 'true';
 
@@ -18,7 +19,7 @@ function ProtectedRoute() {
     return <Navigate to="/login" replace state={{ from: location }} />;
   }
 
-  return <Outlet />;
+  return <div style={{border:"red 1px solid"}}><Outlet  /></div>;
 }
 
 function Layout() {
@@ -68,6 +69,7 @@ function App() {
             <Route path="/maintenance/:id/edit" element={<MaintenanceFormPage />} />
 
             <Route path="/users" element={<UsersPage />} />
+            <Route path="/users/new" element={<UsersFormPage />} />
           </Route>
         </Route>
 
