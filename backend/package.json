@@ -1,16 +1,25 @@
 {
-  "name": "backend",
+  "name": "leets-ag-backend",
   "version": "1.0.0",
-  "description": "",
+  "description": "Backend API for Leets AG Asset Management",
   "main": "server.js",
+  "type": "module",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "node server.js",
+    "dev": "node --watch server.js"
   },
-  "keywords": [],
-  "author": "",
+  "keywords": [
+    "express",
+    "postgresql",
+    "pg",
+    "asset-management",
+    "api"
+  ],
+  "author": "Leets AG",
   "license": "ISC",
-  "type": "commonjs",
   "dependencies": {
-    "express": "^5.2.1"
+    "dotenv": "^16.4.5",
+    "express": "^4.21.0",
+    "pg": "^8.12.0"
   }
 }
