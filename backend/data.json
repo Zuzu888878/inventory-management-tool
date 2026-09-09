@@ -2,26 +2,435 @@
   "users": [],
   "assets": [
     {
-      "name": "asdf",
-      "description": "asdf",
+      "name": "CNC-Machine1",
+      "machineType": "Mecora VX-800",
+      "description": "Three-axis CNC milling machine for precision machining of aluminium and steel components.",
       "status": "Active",
-      "location": "",
+      "location": "Production Hall 2 – Sector D",
       "nextMaintenance": "2026-08-21",
       "id": 1
     },
     {
-      "name": "asfefwfw",
-      "description": "wefwefw",
+      "name": "Double Mitre Saw1",
+      "machineType": "Altrix DS-550",
+      "description": "Double mitre saw for precise cutting of aluminium profiles and structural components.",
+      "status": "Active",
+      "location": "Production Hall 1 – Sector F",
+      "nextMaintenance": "2027-06-09",
       "id": 2
     },
     {
-      "name": "Tilidi",
-      "description": "",
+      "name": "Welding Machine1",
+      "machineType": "Ferrox W-400",
+      "description": "MIG welding machine for joining steel and aluminium components in production.",
       "status": "Active",
-      "location": "",
+      "location": "Production Hall 3 – Sector B",
       "nextMaintenance": "2026-08-05",
       "id": 3
+    },
+    {
+      "name": "CNC-Machine2",
+      "machineType": "Mecora VX-800",
+      "description": "Three-axis CNC milling machine used for machining small and medium-sized precision components.",
+      "status": "Active",
+      "location": "Production Hall 1 – Sector A",
+      "nextMaintenance": "2026-11-14",
+      "id": 4
+    },
+    {
+      "name": "CNC-Machine3",
+      "machineType": "Mecora MX-1200",
+      "description": "High-capacity CNC milling machine for large workpieces and demanding machining operations.",
+      "status": "Maintenance",
+      "location": "Production Hall 2 – Sector C",
+      "nextMaintenance": "2026-09-28",
+      "id": 5
+    },
+    {
+      "name": "Double Mitre Saw2",
+      "machineType": "Altrix DS-550",
+      "description": "Production saw for accurate double mitre cuts on aluminium and lightweight metal profiles.",
+      "status": "Active",
+      "location": "Production Hall 3 – Sector E",
+      "nextMaintenance": "2027-01-18",
+      "id": 6
+    },
+    {
+      "name": "Welding Machine2",
+      "machineType": "Ferrox W-400",
+      "description": "MIG welding system for general fabrication and structural metal assembly.",
+      "status": "Active",
+      "location": "Production Hall 1 – Sector B",
+      "nextMaintenance": "2026-12-03",
+      "id": 7
+    },
+    {
+      "name": "Turning Machine1",
+      "machineType": "Machina CT-250",
+      "description": "CNC turning machine for cylindrical components, shafts and precision metal parts.",
+      "status": "Active",
+      "location": "Production Hall 2 – Sector F",
+      "nextMaintenance": "2027-02-11",
+      "id": 8
+    },
+    {
+      "name": "Laser Cutting Machine1",
+      "machineType": "Novex LaserCut 3015",
+      "description": "Fiber laser cutting system for high-precision processing of sheet metal and plate material.",
+      "status": "Active",
+      "location": "Production Hall 3 – Sector A",
+      "nextMaintenance": "2026-10-22",
+      "id": 9
+    },
+    {
+      "name": "Press Brake1",
+      "machineType": "Formex PB-3200",
+      "description": "Hydraulic press brake for forming and bending sheet metal components.",
+      "status": "Warning",
+      "location": "Production Hall 1 – Sector D",
+      "nextMaintenance": "2026-09-16",
+      "id": 10
+    },
+    {
+      "name": "CNC-Machine4",
+      "machineType": "Mecora MX-1200",
+      "description": "High-capacity CNC milling machine for complex components and large-format machining.",
+      "status": "Active",
+      "location": "Production Hall 3 – Sector C",
+      "nextMaintenance": "2027-03-07",
+      "id": 11
+    },
+    {
+      "name": "Welding Machine3",
+      "machineType": "Ferrox W-600",
+      "description": "Heavy-duty MIG welding machine designed for high-volume and continuous production welding.",
+      "status": "Active",
+      "location": "Production Hall 2 – Sector E",
+      "nextMaintenance": "2027-04-19",
+      "id": 12
     }
   ],
-  "maintenance": []
+  "maintenance": [],
+  "spareParts": [
+    {
+      "name": "Hydraulic Pump",
+      "manufacturerNumber": "VX8-HYD-00421",
+      "compatibleMachineType": "Mecora VX-800",
+      "quantityInStock": 3,
+      "description": "Main hydraulic pump supplying the clamping and positioning circuits.",
+      "id": 1
+    },
+    {
+      "name": "Hydraulic Filter",
+      "manufacturerNumber": "VX8-HF-1786",
+      "compatibleMachineType": "Mecora VX-800",
+      "quantityInStock": 5,
+      "description": "Fine filter element for the hydraulic oil circuit.",
+      "id": 2
+    },
+    {
+      "name": "Coolant Pump",
+      "manufacturerNumber": "VX8-CP-03194",
+      "compatibleMachineType": "Mecora VX-800",
+      "quantityInStock": 2,
+      "description": "Electric pump for circulating coolant during machining operations.",
+      "id": 3
+    },
+    {
+      "name": "Spindle Drive Belt",
+      "manufacturerNumber": "VX8-SB-882",
+      "compatibleMachineType": "Mecora VX-800",
+      "quantityInStock": 7,
+      "description": "Reinforced drive belt connecting the spindle motor to the main spindle.",
+      "id": 4
+    },
+    {
+      "name": "Spindle Bearing Set",
+      "manufacturerNumber": "VX8-BRG-12047",
+      "compatibleMachineType": "Mecora VX-800",
+      "quantityInStock": 2,
+      "description": "Precision bearing set for the main spindle assembly.",
+      "id": 5
+    },
+    {
+      "name": "HSK Tool Holder",
+      "manufacturerNumber": "VX8-TH-0048",
+      "compatibleMachineType": "Mecora VX-800",
+      "quantityInStock": 12,
+      "description": "Precision tool holder for securing milling cutters in the spindle.",
+      "id": 6
+    },
+    {
+      "name": "Hydraulic Clamping Cylinder",
+      "manufacturerNumber": "MX12-HC-719",
+      "compatibleMachineType": "Mecora MX-1200",
+      "quantityInStock": 2,
+      "description": "Hydraulic cylinder used for automated workpiece clamping.",
+      "id": 7
+    },
+    {
+      "name": "Hydraulic Filter Element",
+      "manufacturerNumber": "MX12-HF-2841",
+      "compatibleMachineType": "Mecora MX-1200",
+      "quantityInStock": 6,
+      "description": "High-capacity filter element for the hydraulic power unit.",
+      "id": 8
+    },
+    {
+      "name": "Coolant Spray Nozzle",
+      "manufacturerNumber": "MX12-CN-067",
+      "compatibleMachineType": "Mecora MX-1200",
+      "quantityInStock": 10,
+      "description": "Adjustable nozzle for directing coolant onto the cutting area.",
+      "id": 9
+    },
+    {
+      "name": "Main Drive Motor",
+      "manufacturerNumber": "MX12-DM-48392",
+      "compatibleMachineType": "Mecora MX-1200",
+      "quantityInStock": 1,
+      "description": "Replacement motor for the machine's main drive system.",
+      "id": 10
+    },
+    {
+      "name": "Linear Guide Rail",
+      "manufacturerNumber": "MX12-LG-9A17",
+      "compatibleMachineType": "Mecora MX-1200",
+      "quantityInStock": 4,
+      "description": "Hardened guide rail for precise linear movement of the machine axis.",
+      "id": 11
+    },
+    {
+      "name": "Carbide Saw Blade 550 mm",
+      "manufacturerNumber": "DS550/17-8842",
+      "compatibleMachineType": "Altrix DS-550",
+      "quantityInStock": 8,
+      "description": "Carbide-tipped blade designed for precision cutting of aluminium profiles.",
+      "id": 12
+    },
+    {
+      "name": "Saw Blade Flange",
+      "manufacturerNumber": "DS550-FL/391",
+      "compatibleMachineType": "Altrix DS-550",
+      "quantityInStock": 4,
+      "description": "Precision mounting flange for securing the main saw blade.",
+      "id": 13
+    },
+    {
+      "name": "Profile Clamping Cylinder",
+      "manufacturerNumber": "DS550.PC.74016",
+      "compatibleMachineType": "Altrix DS-550",
+      "quantityInStock": 3,
+      "description": "Pneumatic cylinder for securing profiles during the cutting cycle.",
+      "id": 14
+    },
+    {
+      "name": "Clamping Pad",
+      "manufacturerNumber": "DS550/CP-2087",
+      "compatibleMachineType": "Altrix DS-550",
+      "quantityInStock": 15,
+      "description": "Replaceable contact pad for secure and damage-free profile clamping.",
+      "id": 15
+    },
+    {
+      "name": "Blade Guard Assembly",
+      "manufacturerNumber": "DS550-BG-51",
+      "compatibleMachineType": "Altrix DS-550",
+      "quantityInStock": 2,
+      "description": "Protective guard assembly surrounding the rotating saw blade.",
+      "id": 16
+    },
+    {
+      "name": "Carbide Saw Blade 700 mm",
+      "manufacturerNumber": "DMS700/04-7619",
+      "compatibleMachineType": "Altrix DMS-700",
+      "quantityInStock": 5,
+      "description": "Large-diameter carbide blade for high-precision profile cutting.",
+      "id": 17
+    },
+    {
+      "name": "Pneumatic Control Valve",
+      "manufacturerNumber": "DMS700.PV.481",
+      "compatibleMachineType": "Altrix DMS-700",
+      "quantityInStock": 6,
+      "description": "Control valve regulating pneumatic clamping functions.",
+      "id": 18
+    },
+    {
+      "name": "Automatic Clamping Cylinder",
+      "manufacturerNumber": "DMS700/CC-9034",
+      "compatibleMachineType": "Altrix DMS-700",
+      "quantityInStock": 2,
+      "description": "Pneumatic cylinder for the automatic profile clamping system.",
+      "id": 19
+    },
+    {
+      "name": "MIG Welding Torch",
+      "manufacturerNumber": "FW4.03871",
+      "compatibleMachineType": "Ferrox W-400",
+      "quantityInStock": 4,
+      "description": "MIG welding torch assembly for standard production welding.",
+      "id": 20
+    },
+    {
+      "name": "Copper Contact Tip",
+      "manufacturerNumber": "FW4.CT.0176",
+      "compatibleMachineType": "Ferrox W-400",
+      "quantityInStock": 25,
+      "description": "Copper contact tip for reliable welding wire guidance.",
+      "id": 21
+    },
+    {
+      "name": "Gas Diffuser Nozzle",
+      "manufacturerNumber": "FW4-9-4821",
+      "compatibleMachineType": "Ferrox W-400",
+      "quantityInStock": 20,
+      "description": "Gas nozzle providing consistent shielding gas coverage around the weld.",
+      "id": 22
+    },
+    {
+      "name": "Wire Feed Roller",
+      "manufacturerNumber": "FW4.77103",
+      "compatibleMachineType": "Ferrox W-400",
+      "quantityInStock": 6,
+      "description": "Grooved drive roller for controlled welding wire feeding.",
+      "id": 23
+    },
+    {
+      "name": "Welding Power Cable",
+      "manufacturerNumber": "FW4/WC/5508",
+      "compatibleMachineType": "Ferrox W-400",
+      "quantityInStock": 3,
+      "description": "Flexible high-current cable connecting the welding unit to the torch.",
+      "id": 24
+    },
+    {
+      "name": "Heavy-Duty Welding Torch",
+      "manufacturerNumber": "FW6.10482",
+      "compatibleMachineType": "Ferrox W-600",
+      "quantityInStock": 3,
+      "description": "Heavy-duty MIG welding torch designed for high-duty-cycle operation.",
+      "id": 25
+    },
+    {
+      "name": "High-Current Contact Tip",
+      "manufacturerNumber": "FW6.CT.0294",
+      "compatibleMachineType": "Ferrox W-600",
+      "quantityInStock": 18,
+      "description": "High-current copper contact tip for continuous welding applications.",
+      "id": 26
+    },
+    {
+      "name": "Wire Feed Motor",
+      "manufacturerNumber": "FW6-88417",
+      "compatibleMachineType": "Ferrox W-600",
+      "quantityInStock": 2,
+      "description": "Drive motor for the welding wire feed mechanism.",
+      "id": 27
+    },
+    {
+      "name": "Three-Jaw Chuck Assembly",
+      "manufacturerNumber": "CT250-AX-719",
+      "compatibleMachineType": "Machina CT-250",
+      "quantityInStock": 2,
+      "description": "Self-centering three-jaw chuck for secure workpiece holding.",
+      "id": 28
+    },
+    {
+      "name": "Turning Tool Holder",
+      "manufacturerNumber": "CT250-TH-84",
+      "compatibleMachineType": "Machina CT-250",
+      "quantityInStock": 10,
+      "description": "Rigid tool holder for standard external and internal turning tools.",
+      "id": 29
+    },
+    {
+      "name": "Coolant Circulation Pump",
+      "manufacturerNumber": "CT250.003817",
+      "compatibleMachineType": "Machina CT-250",
+      "quantityInStock": 3,
+      "description": "Pump for circulating coolant through the turning machine system.",
+      "id": 30
+    },
+    {
+      "name": "Chuck Jaw Set",
+      "manufacturerNumber": "CT250/J-4412",
+      "compatibleMachineType": "Machina CT-250",
+      "quantityInStock": 4,
+      "description": "Hardened replacement jaw set for the main three-jaw chuck.",
+      "id": 31
+    },
+    {
+      "name": "Laser Protection Window",
+      "manufacturerNumber": "LC3015#004872",
+      "compatibleMachineType": "Novex LaserCut 3015",
+      "quantityInStock": 3,
+      "description": "Protective optical window shielding the laser focusing assembly.",
+      "id": 32
+    },
+    {
+      "name": "Laser Cutting Nozzle",
+      "manufacturerNumber": "LC3015-NZ-17A",
+      "compatibleMachineType": "Novex LaserCut 3015",
+      "quantityInStock": 20,
+      "description": "Precision cutting nozzle for directing assist gas onto the cutting point.",
+      "id": 33
+    },
+    {
+      "name": "Focus Lens",
+      "manufacturerNumber": "LC3015/FL/8821",
+      "compatibleMachineType": "Novex LaserCut 3015",
+      "quantityInStock": 4,
+      "description": "Optical lens used to focus the laser beam onto the material surface.",
+      "id": 34
+    },
+    {
+      "name": "Air Filter Element",
+      "manufacturerNumber": "LC3015.AF.319",
+      "compatibleMachineType": "Novex LaserCut 3015",
+      "quantityInStock": 8,
+      "description": "Replacement filter element for the machine's compressed-air supply.",
+      "id": 35
+    },
+    {
+      "name": "Hydraulic Filter Element",
+      "manufacturerNumber": "PB32-7K91-204",
+      "compatibleMachineType": "Formex PB-3200",
+      "quantityInStock": 6,
+      "description": "Fine hydraulic filter element for the press brake power unit.",
+      "id": 36
+    },
+    {
+      "name": "Cylinder Seal Kit",
+      "manufacturerNumber": "PB32/SEAL/4187",
+      "compatibleMachineType": "Formex PB-3200",
+      "quantityInStock": 4,
+      "description": "Complete seal kit for servicing the main hydraulic cylinders.",
+      "id": 37
+    },
+    {
+      "name": "Foot Pedal Assembly",
+      "manufacturerNumber": "PB32.FP.082",
+      "compatibleMachineType": "Formex PB-3200",
+      "quantityInStock": 2,
+      "description": "Replacement foot pedal assembly for machine operation control.",
+      "id": 38
+    },
+    {
+      "name": "Hydraulic Pressure Sensor",
+      "manufacturerNumber": "PB32-PS-66301",
+      "compatibleMachineType": "Formex PB-3200",
+      "quantityInStock": 3,
+      "description": "Pressure sensor for monitoring the hydraulic system pressure.",
+      "id": 39
+    },
+    {
+      "name": "Linear Position Encoder",
+      "manufacturerNumber": "PB32/LE/9146",
+      "compatibleMachineType": "Formex PB-3200",
+      "quantityInStock": 2,
+      "description": "Precision encoder for measuring the position of the bending axis.",
+      "id": 40
+    }
+  ]
 }
