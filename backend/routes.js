@@ -1,12 +1,12 @@
 import express from 'express';
-import authMiddleware from '../middleware/authMiddleware.js';
+import authMiddleware from './middleware.js';
 import {
     getAllAssets,
     getAssetById,
     createAsset,
     updateAsset,
     deleteAsset
-} from '../controllers/assetController.js';
+} from './controllers.js';
 
 const router = express.Router();
 

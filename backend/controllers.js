@@ -1,4 +1,4 @@
-import assetRepository from '../data/assetRepository.js';
+import assetRepository from './data.js';
 
 export const getAllAssets = async (req, res) => {
     try {
