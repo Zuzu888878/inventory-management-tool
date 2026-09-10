@@ -1,6 +1,6 @@
 import dotenv from 'dotenv';
 import app from './app.js';
-import pool from './cofig/db.js';
+
 
 dotenv.config();
 
