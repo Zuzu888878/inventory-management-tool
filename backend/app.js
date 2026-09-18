@@ -4,7 +4,7 @@ import assetRoutes from './routes.js';
 
 const app = express();
 
-// Middleware for parsing JSON request bodies
+// Middleware for parsing JSON request bodies.
 app.use(express.json());
 
 // Simple root endpoint for testing the API status
