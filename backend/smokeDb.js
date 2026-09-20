@@ -1,4 +1,5 @@
 import pool from './config.js';
+import { hashPassword } from './passwords.js';
 
 const client = await pool.connect();
 
@@ -37,6 +38,18 @@ try {
 
   if (joinedResult.rowCount !== 1) {
     throw new Error('Maintenance-to-asset relationship could not be read');
+  }
+
+  const passwordHash = await hashPassword('smoke-test-password');
+  const userResult = await client.query(
+    `INSERT INTO users (username, display_name, password_hash, role)
+     VALUES ($1, $2, $3, $4)
+     RETURNING id, role`,
+    [`smoke.${Date.now()}`, 'Smoke test user', passwordHash, 'viewer']
+  );
+
+  if (userResult.rows[0].role !== 'viewer') {
+    throw new Error('User role could not be persisted');
   }
 
   console.log('Database smoke test passed');

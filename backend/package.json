@@ -8,6 +8,7 @@
     "start": "node server.js",
     "dev": "node --watch server.js",
     "db:init": "node initDb.js",
+    "db:seed-admin": "node seedAdmin.js",
     "db:smoke": "node smokeDb.js",
     "test": "node --test"
   },

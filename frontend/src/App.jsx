@@ -80,6 +80,7 @@ function App() {
 
             <Route path="/users" element={<UsersPage />} />
             <Route path="/users/new" element={<UsersFormPage />} />
+            <Route path="/users/:id/edit" element={<UsersFormPage />} />
           </Route>
         </Route>
 

@@ -5,6 +5,7 @@ import pool from '../config.js';
 import assetRepository from '../data.js';
 import maintenanceRepository from '../maintenanceData.js';
 import sparePartsRepository from '../sparePartsData.js';
+import usersRepository from '../usersData.js';
 
 let server;
 let baseUrl;
@@ -12,6 +13,7 @@ let nextId;
 let assets;
 let spareParts;
 let maintenanceRecords;
+let users;
 
 const clone = (value) => structuredClone(value);
 const getById = (items, id) => items.find((item) => String(item.id) === String(id)) || null;
@@ -62,6 +64,23 @@ before(async () => {
   maintenanceRepository.updateMaintenance = async (id, record) => updateById(maintenanceRecords, id, record);
   maintenanceRepository.deleteMaintenance = async (id) => deleteById(maintenanceRecords, id);
 
+  usersRepository.getAllUsers = async () => clone(users);
+  usersRepository.getUserById = async (id) => clone(getById(users, id));
+  usersRepository.getUserByUsername = async (username) =>
+    clone(users.find((user) => user.username === username.toLowerCase()) || null);
+  usersRepository.createUser = async ({ passwordHash, ...user }) => {
+    assert.ok(passwordHash.startsWith('scrypt$'));
+    const created = { ...clone(user), id: nextId++ };
+    users.push(created);
+    return clone(created);
+  };
+  usersRepository.updateUser = async (id, { passwordHash, ...user }) => {
+    if (passwordHash) assert.ok(passwordHash.startsWith('scrypt$'));
+    return updateById(users, id, user);
+  };
+  usersRepository.deleteUser = async (id) => deleteById(users, id);
+  usersRepository.countActiveAdmins = async () => users.filter((user) => user.role === 'admin' && user.isActive).length;
+
   server = app.listen(0, '127.0.0.1');
   await new Promise((resolve, reject) => {
     server.once('listening', resolve);
@@ -76,6 +95,7 @@ beforeEach(() => {
   assets = [];
   spareParts = [];
   maintenanceRecords = [];
+  users = [];
   process.env.API_TOKEN = 'test-api-token';
 });
 
@@ -97,6 +117,8 @@ async function assertCrud({ path, createBody, updateBody }) {
   const created = await request(path, { method: 'POST', body: JSON.stringify(createBody) });
   assert.equal(created.response.status, 201);
   assert.equal(created.body.id, 1);
+  assert.equal('password' in created.body, false);
+  assert.equal('passwordHash' in created.body, false);
 
   const listed = await request(path);
   assert.equal(listed.response.status, 200);
@@ -181,4 +203,47 @@ test('maintenance API supports create, list, get, update, and delete', async () 
       status: 'completed',
     },
   });
+});
+
+test('user API hashes passwords and supports create, list, get, update, and delete', async () => {
+  await assertCrud({
+    path: '/api/users',
+    createBody: {
+      username: 'operator.one',
+      displayName: 'Operator One',
+      password: 'initial-secure-password',
+      role: 'editor',
+      isActive: true,
+    },
+    updateBody: {
+      username: 'operator.one',
+      displayName: 'Operator One Updated',
+      role: 'viewer',
+      isActive: true,
+    },
+  });
+});
+
+test('user API protects the last active administrator', async () => {
+  users.push({
+    id: 1,
+    username: 'admin',
+    displayName: 'Administrator',
+    role: 'admin',
+    isActive: true,
+  });
+
+  const deleted = await request('/api/users/1', { method: 'DELETE' });
+  assert.equal(deleted.response.status, 409);
+
+  const demoted = await request('/api/users/1', {
+    method: 'PUT',
+    body: JSON.stringify({
+      username: 'admin',
+      displayName: 'Administrator',
+      role: 'viewer',
+      isActive: true,
+    }),
+  });
+  assert.equal(demoted.response.status, 409);
 });

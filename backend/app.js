@@ -2,6 +2,7 @@ import express from 'express';
 import assetRoutes from './routes.js';
 import sparePartsRoutes from './sparePartsRoutes.js';
 import maintenanceRoutes from './maintenanceRoutes.js';
+import usersRoutes from './usersRoutes.js';
 import { login } from './controllers.js';
 
 const app = express();
@@ -20,5 +21,6 @@ app.post('/api/login', login);
 app.use('/api/assets', assetRoutes);
 app.use('/api/spare-parts', sparePartsRoutes);
 app.use('/api/maintenance', maintenanceRoutes);
+app.use('/api/users', usersRoutes);
 
 export default app;

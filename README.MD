@@ -12,6 +12,7 @@ A React frontend and Express/PostgreSQL backend for managing assets and spare pa
    cd backend
    npm install
    npm run db:init
+   npm run db:seed-admin
    ```
 
 4. Start the backend with `npm run dev`.
@@ -23,7 +24,7 @@ A React frontend and Express/PostgreSQL backend for managing assets and spare pa
    npm run dev
    ```
 
-Open the URL printed by Vite and sign in with `APP_USERNAME` and `APP_PASSWORD` from the backend environment file.
+Open the URL printed by Vite and sign in with `APP_USERNAME` and `APP_PASSWORD` from the backend environment file. The seed command creates that account in the `users` table with an `admin` role and a salted scrypt password hash. Running it again does not overwrite an existing account.
 
 ## Verification
 
@@ -47,5 +48,7 @@ Never commit `backend/.env`. If it has previously been committed, rotate `API_TO
 - Asset list, details, create, edit, and delete
 - Spare-part list, details, create, edit, and delete
 - Maintenance list, details, create, edit, and delete, linked to assets
+- Database-backed users with `admin`, `editor`, and `viewer` roles and secure password hashes
+- User list, create, edit, activate/deactivate, password reset, and delete
 
-User management is still under development.
+Database-backed authentication and role-based authorization are still under development.

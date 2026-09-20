@@ -50,3 +50,19 @@ CREATE INDEX IF NOT EXISTS maintenance_records_asset_id_idx
     ON maintenance_records (asset_id);
 CREATE INDEX IF NOT EXISTS maintenance_records_scheduled_date_idx
     ON maintenance_records (scheduled_date);
+
+CREATE TABLE IF NOT EXISTS users (
+    id BIGSERIAL PRIMARY KEY,
+    username VARCHAR(100) NOT NULL UNIQUE,
+    display_name VARCHAR(255) NOT NULL,
+    password_hash TEXT NOT NULL,
+    role VARCHAR(50) NOT NULL DEFAULT 'viewer'
+        CHECK (role IN ('admin', 'editor', 'viewer')),
+    is_active BOOLEAN NOT NULL DEFAULT TRUE,
+    created_at TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    CHECK (username = LOWER(username)),
+    CHECK (username ~ '^[a-z0-9._-]{3,100}$')
+);
+
+CREATE INDEX IF NOT EXISTS users_role_idx ON users (role);
