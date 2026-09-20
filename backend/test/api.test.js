@@ -1,9 +1,11 @@
 import assert from 'node:assert/strict';
 import { after, before, beforeEach, test } from 'node:test';
 import app from '../app.js';
+import { createAuthToken } from '../authTokens.js';
 import pool from '../config.js';
 import assetRepository from '../data.js';
 import maintenanceRepository from '../maintenanceData.js';
+import { hashPassword } from '../passwords.js';
 import sparePartsRepository from '../sparePartsData.js';
 import usersRepository from '../usersData.js';
 
@@ -14,6 +16,8 @@ let assets;
 let spareParts;
 let maintenanceRecords;
 let users;
+let authToken;
+let loginPasswordHash;
 
 const clone = (value) => structuredClone(value);
 const getById = (items, id) => items.find((item) => String(item.id) === String(id)) || null;
@@ -33,6 +37,7 @@ before(async () => {
   process.env.API_TOKEN = 'test-api-token';
   process.env.APP_USERNAME = 'test-user';
   process.env.APP_PASSWORD = 'test-password';
+  loginPasswordHash = await hashPassword('test-password');
 
   assetRepository.getAllAssets = async () => clone(assets);
   assetRepository.getAssetById = async (id) => clone(getById(assets, id));
@@ -68,6 +73,18 @@ before(async () => {
   usersRepository.getUserById = async (id) => clone(getById(users, id));
   usersRepository.getUserByUsername = async (username) =>
     clone(users.find((user) => user.username === username.toLowerCase()) || null);
+  usersRepository.getUserCredentialsByUsername = async (username) => {
+    const normalizedUsername = username.toLowerCase();
+    if (!['test-user', 'inactive-user'].includes(normalizedUsername)) return null;
+    return {
+      id: normalizedUsername === 'test-user' ? 99 : 100,
+      username: normalizedUsername,
+      displayName: 'Test User',
+      role: 'admin',
+      isActive: normalizedUsername === 'test-user',
+      passwordHash: loginPasswordHash,
+    };
+  };
   usersRepository.createUser = async ({ passwordHash, ...user }) => {
     assert.ok(passwordHash.startsWith('scrypt$'));
     const created = { ...clone(user), id: nextId++ };
@@ -80,6 +97,8 @@ before(async () => {
   };
   usersRepository.deleteUser = async (id) => deleteById(users, id);
   usersRepository.countActiveAdmins = async () => users.filter((user) => user.role === 'admin' && user.isActive).length;
+
+  authToken = createAuthToken({ id: 99, username: 'test-user', role: 'admin' });
 
   server = app.listen(0, '127.0.0.1');
   await new Promise((resolve, reject) => {
@@ -104,7 +123,7 @@ after(async () => {
   await pool.end();
 });
 
-async function request(path, { token = 'test-api-token', ...options } = {}) {
+async function request(path, { token = authToken, ...options } = {}) {
   const headers = new Headers(options.headers);
   if (token !== null) headers.set('Authorization', `Bearer ${token}`);
   if (options.body) headers.set('Content-Type', 'application/json');
@@ -154,7 +173,18 @@ test('login rejects invalid credentials and returns a token for valid credential
     body: JSON.stringify({ username: 'test-user', password: 'test-password' }),
   });
   assert.equal(valid.response.status, 200);
-  assert.equal(valid.body.token, 'test-api-token');
+  assert.equal(valid.body.token.split('.').length, 3);
+  assert.equal(valid.body.user.username, 'test-user');
+  assert.equal(valid.body.user.role, 'admin');
+});
+
+test('login rejects inactive users', async () => {
+  const result = await request('/api/login', {
+    token: null,
+    method: 'POST',
+    body: JSON.stringify({ username: 'inactive-user', password: 'test-password' }),
+  });
+  assert.equal(result.response.status, 401);
 });
 
 test('protected routes reject missing and invalid authorization', async () => {
@@ -246,4 +276,10 @@ test('user API protects the last active administrator', async () => {
     }),
   });
   assert.equal(demoted.response.status, 409);
+});
+
+test('user API is restricted to administrators', async () => {
+  const viewerToken = createAuthToken({ id: 100, username: 'viewer', role: 'viewer' });
+  const result = await request('/api/users', { token: viewerToken });
+  assert.equal(result.response.status, 403);
 });

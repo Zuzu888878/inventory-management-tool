@@ -24,7 +24,7 @@ A React frontend and Express/PostgreSQL backend for managing assets and spare pa
    npm run dev
    ```
 
-Open the URL printed by Vite and sign in with `APP_USERNAME` and `APP_PASSWORD` from the backend environment file. The seed command creates that account in the `users` table with an `admin` role and a salted scrypt password hash. Running it again does not overwrite an existing account.
+Open the URL printed by Vite and sign in with a username and password stored in the `users` table. The seed command creates the initial account from `APP_USERNAME` and `APP_PASSWORD` with an `admin` role and a salted scrypt password hash. Running it again does not overwrite an existing account. Successful login returns an expiring signed token; configure its lifetime with `AUTH_TOKEN_TTL_SECONDS`.
 
 ## Verification
 
@@ -51,4 +51,4 @@ Never commit `backend/.env`. If it has previously been committed, rotate `API_TO
 - Database-backed users with `admin`, `editor`, and `viewer` roles and secure password hashes
 - User list, create, edit, activate/deactivate, password reset, and delete
 
-Database-backed authentication and role-based authorization are still under development.
+User management is restricted to administrators. Broader role-based permissions for inventory operations are still under development.

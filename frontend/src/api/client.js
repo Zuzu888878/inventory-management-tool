@@ -1,4 +1,5 @@
 const TOKEN_KEY = 'apiToken';
+const USER_KEY = 'currentUser';
 
 export async function request(url, options = {}) {
   const token = localStorage.getItem(TOKEN_KEY);
@@ -22,16 +23,26 @@ export async function request(url, options = {}) {
   return response.json();
 }
 
-export function saveToken(token) {
+export function saveSession(token, user) {
   localStorage.setItem(TOKEN_KEY, token);
+  localStorage.setItem(USER_KEY, JSON.stringify(user));
   localStorage.setItem('authenticated', 'true');
 }
 
 export function clearToken() {
   localStorage.removeItem(TOKEN_KEY);
+  localStorage.removeItem(USER_KEY);
   localStorage.removeItem('authenticated');
 }
 
 export function hasToken() {
   return Boolean(localStorage.getItem(TOKEN_KEY));
+}
+
+export function getCurrentUser() {
+  try {
+    return JSON.parse(localStorage.getItem(USER_KEY));
+  } catch {
+    return null;
+  }
 }

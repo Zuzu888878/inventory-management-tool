@@ -1,19 +1,37 @@
 import assetRepository from './data.js';
+import { createAuthToken } from './authTokens.js';
+import { verifyPassword } from './passwords.js';
+import usersRepository from './usersData.js';
 
-export const login = (req, res) => {
+export const login = async (req, res) => {
   const { username, password } = req.body;
-  const expectedUsername = process.env.APP_USERNAME;
-  const expectedPassword = process.env.APP_PASSWORD;
 
-  if (!expectedUsername || !expectedPassword || !process.env.API_TOKEN) {
+  if (!process.env.API_TOKEN) {
     return res.status(503).json({ message: 'Login is not configured' });
   }
 
-  if (username !== expectedUsername || password !== expectedPassword) {
+  if (typeof username !== 'string' || typeof password !== 'string') {
     return res.status(401).json({ message: 'Invalid username or password' });
   }
 
-  res.json({ token: process.env.API_TOKEN });
+  try {
+    const user = await usersRepository.getUserCredentialsByUsername(username);
+    if (!user || !user.isActive || !(await verifyPassword(password, user.passwordHash))) {
+      return res.status(401).json({ message: 'Invalid username or password' });
+    }
+
+    res.json({
+      token: createAuthToken(user),
+      user: {
+        id: user.id,
+        username: user.username,
+        displayName: user.displayName,
+        role: user.role,
+      },
+    });
+  } catch (error) {
+    res.status(500).json({ message: 'Login failed', error: error.message });
+  }
 };
 
 export const getAllAssets = async (req, res) => {

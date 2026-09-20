@@ -1,4 +1,4 @@
-import { request, saveToken } from './client.js';
+import { request, saveSession } from './client.js';
 
 export async function login(username, password) {
   const result = await request('/api/login', {
@@ -7,6 +7,6 @@ export async function login(username, password) {
     body: JSON.stringify({ username, password }),
   });
 
-  saveToken(result.token);
+  saveSession(result.token, result.user);
   return result;
 }

@@ -1,10 +1,11 @@
 import express from 'express';
-import authMiddleware from './middleware.js';
+import authMiddleware, { requireRole } from './middleware.js';
 import { createUser, deleteUser, getAllUsers, getUserById, updateUser } from './usersControllers.js';
 
 const router = express.Router();
 
 router.use(authMiddleware);
+router.use(requireRole('admin'));
 router.get('/', getAllUsers);
 router.get('/:id', getUserById);
 router.post('/', createUser);

@@ -12,7 +12,7 @@ import SparePartFormPage from './pages/SparePartFormPage.jsx';
 import SparePartDetailsPage from './pages/SparePartDetailsPage.jsx';
 import UsersPage from './pages/UsersPage.jsx';
 import { UsersFormPage } from './pages/UsersFormPage.jsx';
-import { clearToken, hasToken } from './api/client.js';
+import { clearToken, getCurrentUser, hasToken } from './api/client.js';
 
 const isAuthenticated = () => hasToken();
 
@@ -28,6 +28,7 @@ function ProtectedRoute() {
 
 function Layout() {
   const navigate = useNavigate();
+  const currentUser = getCurrentUser();
 
   function logout() {
     clearToken();
@@ -41,7 +42,7 @@ function Layout() {
         <Link to="/assets">Assets</Link>
         <Link to="/maintenance">Maintenance</Link>
         <Link to="/spare-parts">Spare Parts</Link>
-        <Link to="/users">Users</Link>
+        {currentUser?.role === 'admin' && <Link to="/users">Users</Link>}
         <button type="button" onClick={logout}>
           Logout
         </button>
