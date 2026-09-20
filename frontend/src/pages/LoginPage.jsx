@@ -26,10 +26,16 @@ function LoginPage() {
   }
 
   return (
-    <main>
-      <h1>Login</h1>
+    <main className="login-shell">
+      <div className="login-card">
+        <div className="login-brand">
+          <span className="brand-mark">L</span>
+          <span>Leets Inventory</span>
+        </div>
+        <h1>Welcome back</h1>
+        <p className="muted">Sign in to manage your inventory.</p>
       {error && <p role="alert">{error}</p>}
-      <form onSubmit={login}>
+      <form className="login-form" onSubmit={login}>
         <label>
           Username
           <input name="username" required />
@@ -44,6 +50,7 @@ function LoginPage() {
           {submitting ? 'Logging in...' : 'Login'}
         </button>
       </form>
+      </div>
     </main>
   );
 }

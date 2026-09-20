@@ -64,7 +64,7 @@ function SparePartDetailsPage() {
         <button type="button">Edit</button>
       </Link>
 
-      <button type="button" onClick={removeSparePart}>
+      <button className="button-destructive" type="button" onClick={removeSparePart}>
         Delete
       </button>
 

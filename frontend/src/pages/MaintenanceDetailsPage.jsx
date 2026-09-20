@@ -62,7 +62,7 @@ function MaintenanceDetailsPage() {
       <Link to={`/maintenance/${record.id}/edit`}>
         <button type="button">Edit</button>
       </Link>
-      <button type="button" onClick={removeRecord}>
+      <button className="button-destructive" type="button" onClick={removeRecord}>
         Delete
       </button>
       <Link to="/maintenance">

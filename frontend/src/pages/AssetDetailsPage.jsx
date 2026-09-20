@@ -50,7 +50,7 @@ function AssetDetailsPage() {
         <Link to={`/assets/${id}/edit`}>
           <button type="button">Edit</button>
         </Link>
-        <button type="button" onClick={removeAsset}>
+      <button className="button-destructive" type="button" onClick={removeAsset}>
           Delete
         </button>
         <Link to="/assets">

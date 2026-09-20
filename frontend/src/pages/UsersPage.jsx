@@ -57,7 +57,7 @@ function UsersPage() {
                 <td>{user.isActive ? 'Active' : 'Inactive'}</td>
                 <td>
                   <Link to={`/users/${user.id}/edit`}>Edit</Link>{' '}
-                  <button type="button" onClick={() => removeUser(user)}>
+                  <button className="button-destructive" type="button" onClick={() => removeUser(user)}>
                     Delete
                   </button>
                 </td>

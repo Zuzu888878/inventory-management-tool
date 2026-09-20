@@ -36,21 +36,30 @@ function Layout() {
   }
 
   return (
-    <>
-      <nav>
-        <Link to="/dashboard">Dashboard</Link>
-        <Link to="/assets">Assets</Link>
-        <Link to="/maintenance">Maintenance</Link>
-        <Link to="/spare-parts">Spare Parts</Link>
-        {currentUser?.role === 'admin' && <Link to="/users">Users</Link>}
-        <button type="button" onClick={logout}>
-          Logout
-        </button>
-      </nav>
-      <main>
+    <div className="app-shell">
+      <header className="topbar">
+        <Link className="brand" to="/dashboard">
+          <span className="brand-mark">L</span>
+          <span>Leets Inventory</span>
+        </Link>
+        <nav className="nav-links" aria-label="Main navigation">
+          <Link to="/dashboard">Dashboard</Link>
+          <Link to="/assets">Assets</Link>
+          <Link to="/maintenance">Maintenance</Link>
+          <Link to="/spare-parts">Spare Parts</Link>
+          {currentUser?.role === 'admin' && <Link to="/users">Users</Link>}
+        </nav>
+        <div className="topbar-actions">
+          {currentUser && <span className="user-badge">{currentUser.displayName || currentUser.username}</span>}
+          <button className="button button-ghost" type="button" onClick={logout}>
+            Log out
+          </button>
+        </div>
+      </header>
+      <main className="page-content">
         <Outlet />
       </main>
-    </>
+    </div>
   );
 }
 
