@@ -1,11 +1,22 @@
 import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
-import { getAssets } from '../api/assets.js';
+import { deleteAsset, getAssets } from '../api/assets.js';
+import { Icon } from '../components/Icon.jsx';
+import { formatDate } from '../utils/formatDate.js';
+import { SortButton, TableToolbar } from '../components/TableToolbar.jsx';
+import { useTableControls } from '../hooks/useTableControls.js';
 
 function AssetsPage() {
   const [assets, setAssets] = useState([]);
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(true);
+  const [statusFilter, setStatusFilter] = useState('all');
+
+  const { rows, search, setSearch, sort, toggleSort } = useTableControls(assets, {
+    searchFields: ['assetCode', 'name', 'category', 'location'],
+    filter: (asset) => statusFilter === 'all' || asset.status === statusFilter,
+    initialSort: { key: 'assetCode', direction: 'asc' },
+  });
 
   useEffect(() => {
     getAssets()
@@ -14,13 +25,42 @@ function AssetsPage() {
       .finally(() => setLoading(false));
   }, []);
 
+  async function removeAsset(asset) {
+    if (!window.confirm(`Delete asset "${asset.name || asset.assetCode}"?`)) return;
+    setError('');
+    try {
+      await deleteAsset(asset.id);
+      setAssets((currentAssets) => currentAssets.filter((currentAsset) => currentAsset.id !== asset.id));
+    } catch (requestError) {
+      setError(requestError.message);
+    }
+  }
+
   return (
     <>
-      <h1>Assets</h1>
+      <div className="page-heading">
+        <h1>Assets</h1>
+        <Link to="/assets/new">
+          <button className="button" type="button">
+            <Icon name="plus" /> New Asset
+          </button>
+        </Link>
+      </div>
 
-      <Link to="/assets/new">
-        <button type="button">New Asset</button>
-      </Link>
+      <TableToolbar search={search} onSearch={setSearch} placeholder="Search assets...">
+        <select
+          value={statusFilter}
+          onChange={(event) => setStatusFilter(event.target.value)}
+          aria-label="Filter by status"
+        >
+          <option value="all">All statuses</option>
+          <option value="active">Active</option>
+          <option value="maintenance">Maintenance</option>
+          <option value="warning">Warning</option>
+          <option value="critical">Critical</option>
+          <option value="offline">Offline</option>
+        </select>
+      </TableToolbar>
 
       {loading && <p>Loading...</p>}
 
@@ -32,27 +72,45 @@ function AssetsPage() {
         <table>
           <thead>
             <tr>
-              <th scope="col">Asset Code</th>
-              <th scope="col">Name</th>
-              <th scope="col">Category</th>
-              <th scope="col">Status</th>
-              <th scope="col">Location</th>
-              <th scope="col">Next Maintenance</th>
+              <th scope="col">
+                <SortButton label="Asset Code" sortKey="assetCode" sort={sort} onSort={toggleSort} />
+              </th>
+              <th scope="col">
+                <SortButton label="Name" sortKey="name" sort={sort} onSort={toggleSort} />
+              </th>
+              <th scope="col">
+                <SortButton label="Category" sortKey="category" sort={sort} onSort={toggleSort} />
+              </th>
+              <th scope="col">
+                <SortButton label="Status" sortKey="status" sort={sort} onSort={toggleSort} />
+              </th>
+              <th scope="col">
+                <SortButton label="Location" sortKey="location" sort={sort} onSort={toggleSort} />
+              </th>
+              <th scope="col">
+                <SortButton label="Next Maintenance" sortKey="nextMaintenanceDate" sort={sort} onSort={toggleSort} />
+              </th>
               <th scope="col">Actions</th>
             </tr>
           </thead>
 
           <tbody>
-            {assets.map((asset) => (
+            {rows.map((asset) => (
               <tr key={asset.id}>
                 <td>{asset.assetCode || 'Not set'}</td>
                 <td>{asset.name || `Asset ${asset.id}`}</td>
                 <td>{asset.category || 'Not set'}</td>
                 <td>{asset.status || 'Not set'}</td>
                 <td>{asset.location || 'Not set'}</td>
-                <td>{asset.nextMaintenanceDate?.slice(0, 10) || 'Not set'}</td>
+                <td>{formatDate(asset.nextMaintenanceDate)}</td>
                 <td>
-                  <Link to={`/assets/${asset.id}`}>View</Link> <Link to={`/assets/${asset.id}/edit`}>Edit</Link>
+                  <Link to={`/assets/${asset.id}`}>View</Link>{' '}
+                  <Link to={`/assets/${asset.id}/edit`}>
+                    <Icon name="pencil" /> Edit
+                  </Link>{' '}
+                  <button className="button-destructive" type="button" onClick={() => removeAsset(asset)}>
+                    <Icon name="trash" /> Delete
+                  </button>
                 </td>
               </tr>
             ))}

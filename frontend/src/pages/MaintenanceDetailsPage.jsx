@@ -1,6 +1,8 @@
 import { useEffect, useState } from 'react';
 import { Link, useNavigate, useParams } from 'react-router-dom';
 import { deleteMaintenanceRecord, getMaintenanceRecord } from '../api/maintenance.js';
+import { formatDate } from '../utils/formatDate.js';
+import { Icon } from '../components/Icon.jsx';
 
 function MaintenanceDetailsPage() {
   const { id } = useParams();
@@ -33,41 +35,61 @@ function MaintenanceDetailsPage() {
 
   return (
     <>
-      <h1>{record.maintenanceType}</h1>
-      <p>
-        <strong>Asset:</strong>{' '}
-        <Link to={`/assets/${record.assetId}`}>
-          {record.assetCode} — {record.assetName}
+      <div className="detail-heading">
+        <h1>{record.maintenanceType}</h1>
+        <Link to="/maintenance">
+          <button className="button-outline" type="button">
+            <Icon name="arrowLeft" /> Back
+          </button>
         </Link>
-      </p>
-      <p>
-        <strong>Scheduled date:</strong> {record.scheduledDate?.slice(0, 10)}
-      </p>
-      <p>
-        <strong>Completed date:</strong> {record.completedDate?.slice(0, 10) || 'Not completed'}
-      </p>
-      <p>
-        <strong>Status:</strong> {record.status.replace('_', ' ')}
-      </p>
-      <p>
-        <strong>Technician:</strong> {record.technician || 'Not assigned'}
-      </p>
-      <p>
-        <strong>Cost:</strong> {record.cost === null ? 'Not set' : record.cost.toFixed(2)}
-      </p>
-      <p>
-        <strong>Notes:</strong> {record.notes || 'Not set'}
-      </p>
+      </div>
+      <section className="detail-card">
+        <div className="detail-grid">
+          <div className="detail-item">
+            <span>Asset</span>
+            <strong>
+              <Link to={`/assets/${record.assetId}`}>
+                {record.assetCode} — {record.assetName}
+              </Link>
+            </strong>
+          </div>
+          <div className="detail-item">
+            <span>Status</span>
+            <strong>{record.status.replace('_', ' ')}</strong>
+          </div>
+          <div className="detail-item">
+            <span>Scheduled date</span>
+            <strong>{formatDate(record.scheduledDate)}</strong>
+          </div>
+          <div className="detail-item">
+            <span>Completed date</span>
+            <strong>{record.completedDate ? formatDate(record.completedDate) : 'Not completed'}</strong>
+          </div>
+          <div className="detail-item">
+            <span>Technician</span>
+            <strong>{record.technician || 'Not assigned'}</strong>
+          </div>
+          <div className="detail-item">
+            <span>Cost</span>
+            <strong>{record.cost === null ? 'Not set' : record.cost.toFixed(2)}</strong>
+          </div>
+          <div className="detail-item detail-wide">
+            <span>Notes</span>
+            <strong>{record.notes || 'Not set'}</strong>
+          </div>
+        </div>
+      </section>
 
-      <Link to={`/maintenance/${record.id}/edit`}>
-        <button type="button">Edit</button>
-      </Link>
-      <button className="button-destructive" type="button" onClick={removeRecord}>
-        Delete
-      </button>
-      <Link to="/maintenance">
-        <button type="button">Back to Maintenance</button>
-      </Link>
+      <div className="actions">
+        <Link to={`/maintenance/${record.id}/edit`}>
+          <button className="button-outline" type="button">
+            <Icon name="pencil" /> Edit
+          </button>
+        </Link>
+        <button className="button-destructive" type="button" onClick={removeRecord}>
+          <Icon name="trash" /> Delete
+        </button>
+      </div>
     </>
   );
 }

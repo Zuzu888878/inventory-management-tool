@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { Link, useNavigate, useParams } from 'react-router-dom';
 import { createUser, getUser, updateUser } from '../api/users.js';
+import { Icon } from '../components/Icon.jsx';
 
 export function UsersFormPage() {
   const { id } = useParams();
@@ -93,11 +94,15 @@ export function UsersFormPage() {
             <input type="checkbox" checked={isActive} onChange={(event) => setIsActive(event.target.checked)} /> Active
           </span>
         </label>
-        <button type="submit">Save</button>
+        <button className="button" type="submit">
+          <Icon name="save" /> Save
+        </button>
       </form>
 
       <Link to="/users">
-        <button type="button">Cancel</button>
+        <button className="button-outline" type="button">
+          <Icon name="arrowLeft" /> Cancel
+        </button>
       </Link>
     </>
   );

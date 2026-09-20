@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import { Link, useNavigate, useParams } from 'react-router-dom';
 import { getAssets } from '../api/assets.js';
 import { createMaintenanceRecord, getMaintenanceRecord, updateMaintenanceRecord } from '../api/maintenance.js';
+import { Icon } from '../components/Icon.jsx';
 
 function MaintenanceFormPage() {
   const { id } = useParams();
@@ -135,13 +136,15 @@ function MaintenanceFormPage() {
           <textarea value={notes} onChange={(event) => setNotes(event.target.value)} />
         </label>
         <br />
-        <button type="submit" disabled={assets.length === 0}>
-          Save
+        <button className="button" type="submit" disabled={assets.length === 0}>
+          <Icon name="save" /> Save
         </button>
       </form>
 
       <Link to="/maintenance">
-        <button type="button">Cancel</button>
+        <button className="button-outline" type="button">
+          <Icon name="arrowLeft" /> Cancel
+        </button>
       </Link>
     </>
   );

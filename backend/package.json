@@ -8,7 +8,9 @@
     "start": "node server.js",
     "dev": "node --watch server.js",
     "db:init": "node initDb.js",
+    "db:seed": "npm run db:seed-admin && npm run db:seed-demo",
     "db:seed-admin": "node seedAdmin.js",
+    "db:seed-demo": "node seedDemo.js",
     "db:smoke": "node smokeDb.js",
     "test": "node --test"
   },

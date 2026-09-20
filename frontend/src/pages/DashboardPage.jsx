@@ -1,8 +1,8 @@
 import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { getDashboard } from '../api/dashboard.js';
+import { formatDate } from '../utils/formatDate.js';
 
-const formatDate = (date) => date?.slice(0, 10) || 'Not set';
 const scheduleLabel = (item) => {
   if (item.daysUntil < 0) return `${Math.abs(item.daysUntil)} day(s) overdue`;
   if (item.daysUntil === 0) return 'Due today';
@@ -70,7 +70,7 @@ function DashboardPage() {
             <span>{maintenance.open} open</span>
             <span>{maintenance.inProgress} in progress</span>
             <span>{maintenance.completedThisMonth} completed this month</span>
-            <span>£{maintenance.costThisMonth.toFixed(2)} spent this month</span>
+            <span>{maintenance.costThisMonth.toFixed(2)} CHF spent this month</span>
           </div>
           {dashboard.schedule.length === 0 ? (
             <p>No overdue or upcoming maintenance.</p>

@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { Link, useNavigate, useParams } from 'react-router-dom';
 import { createAsset, getAsset, updateAsset } from '../api/assets.js';
+import { Icon } from '../components/Icon.jsx';
 
 function AssetFormPage() {
   const { id } = useParams();
@@ -164,11 +165,15 @@ function AssetFormPage() {
 
         <br />
 
-        <button type="submit">Save</button>
+        <button className="button" type="submit">
+          <Icon name="save" /> Save
+        </button>
       </form>
 
       <Link to="/assets">
-        <button type="button">Cancel</button>
+        <button className="button-outline" type="button">
+          <Icon name="arrowLeft" /> Cancel
+        </button>
       </Link>
     </>
   );

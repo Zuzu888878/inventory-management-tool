@@ -1,11 +1,20 @@
 import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { deleteUser, getUsers } from '../api/users.js';
+import { Icon } from '../components/Icon.jsx';
+import { SortButton, TableToolbar } from '../components/TableToolbar.jsx';
+import { useTableControls } from '../hooks/useTableControls.js';
 
 function UsersPage() {
   const [users, setUsers] = useState([]);
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(true);
+  const [roleFilter, setRoleFilter] = useState('all');
+  const { rows, search, setSearch, sort, toggleSort } = useTableControls(users, {
+    searchFields: ['username', 'displayName', 'role'],
+    filter: (user) => roleFilter === 'all' || user.role === roleFilter,
+    initialSort: { key: 'username', direction: 'asc' },
+  });
 
   useEffect(() => {
     getUsers()
@@ -28,10 +37,23 @@ function UsersPage() {
 
   return (
     <>
-      <h1>Users</h1>
-      <Link to="/users/new">
-        <button type="button">New User</button>
-      </Link>
+      <div className="page-heading">
+        <h1>Users</h1>
+        <Link to="/users/new">
+          <button className="button" type="button">
+            <Icon name="plus" /> New User
+          </button>
+        </Link>
+      </div>
+
+      <TableToolbar search={search} onSearch={setSearch} placeholder="Search users...">
+        <select value={roleFilter} onChange={(event) => setRoleFilter(event.target.value)} aria-label="Filter by role">
+          <option value="all">All roles</option>
+          <option value="admin">Admin</option>
+          <option value="editor">Editor</option>
+          <option value="viewer">Viewer</option>
+        </select>
+      </TableToolbar>
 
       {loading && <p>Loading...</p>}
       {error && <p>{error}</p>}
@@ -41,24 +63,34 @@ function UsersPage() {
         <table>
           <thead>
             <tr>
-              <th scope="col">Username</th>
-              <th scope="col">Display name</th>
-              <th scope="col">Role</th>
-              <th scope="col">Status</th>
+              <th scope="col">
+                <SortButton label="Username" sortKey="username" sort={sort} onSort={toggleSort} />
+              </th>
+              <th scope="col">
+                <SortButton label="Display name" sortKey="displayName" sort={sort} onSort={toggleSort} />
+              </th>
+              <th scope="col">
+                <SortButton label="Role" sortKey="role" sort={sort} onSort={toggleSort} />
+              </th>
+              <th scope="col">
+                <SortButton label="Status" sortKey="isActive" sort={sort} onSort={toggleSort} />
+              </th>
               <th scope="col">Actions</th>
             </tr>
           </thead>
           <tbody>
-            {users.map((user) => (
+            {rows.map((user) => (
               <tr key={user.id}>
                 <td>{user.username}</td>
                 <td>{user.displayName}</td>
                 <td>{user.role}</td>
                 <td>{user.isActive ? 'Active' : 'Inactive'}</td>
                 <td>
-                  <Link to={`/users/${user.id}/edit`}>Edit</Link>{' '}
+                  <Link to={`/users/${user.id}/edit`}>
+                    <Icon name="pencil" /> Edit
+                  </Link>{' '}
                   <button className="button-destructive" type="button" onClick={() => removeUser(user)}>
-                    Delete
+                    <Icon name="trash" /> Delete
                   </button>
                 </td>
               </tr>

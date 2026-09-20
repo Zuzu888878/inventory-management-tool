@@ -1,6 +1,8 @@
 import { useEffect, useState } from 'react';
 import { Link, useNavigate, useParams } from 'react-router-dom';
 import { deleteAsset, getAsset } from '../api/assets.js';
+import { formatDate } from '../utils/formatDate.js';
+import { Icon } from '../components/Icon.jsx';
 
 function AssetDetailsPage() {
   const { id } = useParams();
@@ -33,29 +35,67 @@ function AssetDetailsPage() {
 
   return (
     <>
-      <h1>{asset.name}</h1>
-      <ul>
-        <li>Asset Code: {asset.assetCode || 'Not set'}</li>
-        <li>Category: {asset.category || 'Not set'}</li>
-        <li>Serial Number: {asset.serialNumber || 'Not set'}</li>
-        <li>Status: {asset.status || 'Not set'}</li>
-        <li>Location: {asset.location || 'Not set'}</li>
-        <li>Supplier: {asset.supplier || 'Not set'}</li>
-        <li>Purchase Date: {asset.purchaseDate?.slice(0, 10) || 'Not set'}</li>
-        <li>Next Maintenance: {asset.nextMaintenanceDate?.slice(0, 10) || 'Not set'}</li>
-        <li>IoT State: {asset.iotState || 'Not set'}</li>
-        <li>Notes: {asset.notes || 'Not set'}</li>
-      </ul>
+      <div className="detail-heading">
+        <h1>{asset.name}</h1>
+        <Link to="/assets">
+          <button className="button-outline" type="button">
+            <Icon name="arrowLeft" /> Back
+          </button>
+        </Link>
+      </div>
+      <section className="detail-card">
+        <div className="detail-grid">
+          <div className="detail-item">
+            <span>Asset code</span>
+            <strong>{asset.assetCode || 'Not set'}</strong>
+          </div>
+          <div className="detail-item">
+            <span>Category</span>
+            <strong>{asset.category || 'Not set'}</strong>
+          </div>
+          <div className="detail-item">
+            <span>Serial number</span>
+            <strong>{asset.serialNumber || 'Not set'}</strong>
+          </div>
+          <div className="detail-item">
+            <span>Status</span>
+            <strong>{asset.status || 'Not set'}</strong>
+          </div>
+          <div className="detail-item">
+            <span>Location</span>
+            <strong>{asset.location || 'Not set'}</strong>
+          </div>
+          <div className="detail-item">
+            <span>Supplier</span>
+            <strong>{asset.supplier || 'Not set'}</strong>
+          </div>
+          <div className="detail-item">
+            <span>Purchase date</span>
+            <strong>{formatDate(asset.purchaseDate)}</strong>
+          </div>
+          <div className="detail-item">
+            <span>Next maintenance</span>
+            <strong>{formatDate(asset.nextMaintenanceDate)}</strong>
+          </div>
+          <div className="detail-item">
+            <span>IoT state</span>
+            <strong>{asset.iotState || 'Not set'}</strong>
+          </div>
+          <div className="detail-item detail-wide">
+            <span>Notes</span>
+            <strong>{asset.notes || 'Not set'}</strong>
+          </div>
+        </div>
+      </section>
       <div className="actions">
         <Link to={`/assets/${id}/edit`}>
-          <button type="button">Edit</button>
+          <button className="button-outline" type="button">
+            <Icon name="pencil" /> Edit
+          </button>
         </Link>
-      <button className="button-destructive" type="button" onClick={removeAsset}>
-          Delete
+        <button className="button-destructive" type="button" onClick={removeAsset}>
+          <Icon name="trash" /> Delete
         </button>
-        <Link to="/assets">
-          <button type="button">Back</button>
-        </Link>
       </div>
     </>
   );

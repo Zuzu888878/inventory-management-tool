@@ -46,7 +46,7 @@ function LoginPage() {
           <input name="password" type="password" required />
         </label>
         <br />
-        <button type="submit" disabled={submitting}>
+        <button className="button" type="submit" disabled={submitting}>
           {submitting ? 'Logging in...' : 'Login'}
         </button>
       </form>

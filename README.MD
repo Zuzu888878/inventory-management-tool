@@ -12,7 +12,7 @@ A React frontend and Express/PostgreSQL backend for managing assets and spare pa
    cd backend
    npm install
    npm run db:init
-   npm run db:seed-admin
+   npm run db:seed # creates the admin account and demo workspace data
    ```
 
 4. Start the backend with `npm run dev`.

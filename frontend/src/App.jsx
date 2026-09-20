@@ -13,6 +13,8 @@ import SparePartDetailsPage from './pages/SparePartDetailsPage.jsx';
 import UsersPage from './pages/UsersPage.jsx';
 import { UsersFormPage } from './pages/UsersFormPage.jsx';
 import { clearToken, getCurrentUser, hasToken } from './api/client.js';
+import { Icon } from './components/Icon.jsx';
+import Breadcrumbs from './components/Breadcrumbs.jsx';
 
 const isAuthenticated = () => hasToken();
 
@@ -43,20 +45,38 @@ function Layout() {
           <span>Leets Inventory</span>
         </Link>
         <nav className="nav-links" aria-label="Main navigation">
-          <Link to="/dashboard">Dashboard</Link>
-          <Link to="/assets">Assets</Link>
-          <Link to="/maintenance">Maintenance</Link>
-          <Link to="/spare-parts">Spare Parts</Link>
-          {currentUser?.role === 'admin' && <Link to="/users">Users</Link>}
+          <Link to="/dashboard">
+            <Icon name="dashboard" />
+            Dashboard
+          </Link>
+          <Link to="/assets">
+            <Icon name="assets" />
+            Assets
+          </Link>
+          <Link to="/maintenance">
+            <Icon name="wrench" />
+            Maintenance
+          </Link>
+          <Link to="/spare-parts">
+            <Icon name="package" />
+            Spare Parts
+          </Link>
+          {currentUser?.role === 'admin' && (
+            <Link to="/users">
+              <Icon name="users" />
+              Users
+            </Link>
+          )}
         </nav>
         <div className="topbar-actions">
           {currentUser && <span className="user-badge">{currentUser.displayName || currentUser.username}</span>}
           <button className="button button-ghost" type="button" onClick={logout}>
-            Log out
+            <Icon name="logout" /> Log out
           </button>
         </div>
       </header>
       <main className="page-content">
+        <Breadcrumbs />
         <Outlet />
       </main>
     </div>
