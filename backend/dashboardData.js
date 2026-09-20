@@ -25,11 +25,13 @@ const getDashboard = async () => {
     pool.query(`
       SELECT maintenance_records.id, maintenance_records.asset_id,
              maintenance_records.maintenance_type, maintenance_records.scheduled_date,
-             maintenance_records.status, maintenance_records.technician,
+             maintenance_records.status, maintenance_records.technician, maintenance_records.technician_id,
+             users.display_name AS technician_name,
              assets.asset_code, assets.name AS asset_name,
              (maintenance_records.scheduled_date - CURRENT_DATE)::INTEGER AS days_until
       FROM maintenance_records
       JOIN assets ON assets.id = maintenance_records.asset_id
+      LEFT JOIN users ON users.id = maintenance_records.technician_id
       WHERE maintenance_records.status IN ('planned', 'in_progress')
         AND maintenance_records.scheduled_date <= CURRENT_DATE + 30
       ORDER BY maintenance_records.scheduled_date, maintenance_records.id
@@ -76,7 +78,8 @@ const getDashboard = async () => {
       maintenanceType: row.maintenance_type,
       scheduledDate: row.scheduled_date,
       status: row.status,
-      technician: row.technician,
+      technicianId: row.technician_id ? Number(row.technician_id) : null,
+      technician: row.technician_name || row.technician || null,
       daysUntil: row.days_until,
     })),
     lowStockItems: lowStock.rows.map((row) => ({

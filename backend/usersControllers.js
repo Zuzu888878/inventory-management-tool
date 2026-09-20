@@ -36,6 +36,18 @@ export const getAllUsers = async (req, res) => {
   }
 };
 
+export const getTechnicians = async (req, res) => {
+  try {
+    const users = await usersRepository.getAllUsers();
+    const technicians = users
+      .filter((user) => user.isActive)
+      .map(({ id, username, displayName, role }) => ({ id, username, displayName, role }));
+    res.json(technicians);
+  } catch (error) {
+    sendUserError(res, error, 'load');
+  }
+};
+
 export const getUserById = async (req, res) => {
   try {
     const user = await usersRepository.getUserById(req.params.id);

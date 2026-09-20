@@ -299,3 +299,18 @@ test('user API is restricted to administrators', async () => {
   const result = await request('/api/users', { token: viewerToken });
   assert.equal(result.response.status, 403);
 });
+
+test('technicians list API is accessible to all authenticated users and returns active users', async () => {
+  users.push(
+    { id: 1, username: 'tech.active', displayName: 'Active Technician', role: 'editor', isActive: true },
+    { id: 2, username: 'tech.inactive', displayName: 'Inactive Technician', role: 'editor', isActive: false }
+  );
+
+  const viewerToken = createAuthToken({ id: 100, username: 'viewer', role: 'viewer' });
+  const result = await request('/api/users/technicians', { token: viewerToken });
+  assert.equal(result.response.status, 200);
+  assert.equal(result.body.length, 1);
+  assert.equal(result.body[0].username, 'tech.active');
+  assert.equal(result.body[0].displayName, 'Active Technician');
+  assert.equal(result.body[0].passwordHash, undefined);
+});

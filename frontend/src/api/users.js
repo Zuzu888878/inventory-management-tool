@@ -6,6 +6,10 @@ export function getUsers() {
   return request(USERS_URL);
 }
 
+export function getTechnicians() {
+  return request(`${USERS_URL}/technicians`);
+}
+
 export function getUser(id) {
   return request(`${USERS_URL}/${id}`);
 }

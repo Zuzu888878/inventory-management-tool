@@ -30,27 +30,6 @@ CREATE TABLE IF NOT EXISTS spare_parts (
 
 CREATE INDEX IF NOT EXISTS spare_parts_name_idx ON spare_parts (name);
 
-CREATE TABLE IF NOT EXISTS maintenance_records (
-    id BIGSERIAL PRIMARY KEY,
-    asset_id BIGINT NOT NULL REFERENCES assets(id) ON DELETE RESTRICT,
-    maintenance_type VARCHAR(255) NOT NULL,
-    scheduled_date DATE NOT NULL,
-    completed_date DATE,
-    status VARCHAR(50) NOT NULL DEFAULT 'planned'
-        CHECK (status IN ('planned', 'in_progress', 'completed', 'cancelled')),
-    technician VARCHAR(255),
-    cost NUMERIC(12, 2) CHECK (cost >= 0),
-    notes TEXT NOT NULL DEFAULT '',
-    created_at TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    updated_at TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    CHECK (completed_date IS NULL OR completed_date >= scheduled_date)
-);
-
-CREATE INDEX IF NOT EXISTS maintenance_records_asset_id_idx
-    ON maintenance_records (asset_id);
-CREATE INDEX IF NOT EXISTS maintenance_records_scheduled_date_idx
-    ON maintenance_records (scheduled_date);
-
 CREATE TABLE IF NOT EXISTS users (
     id BIGSERIAL PRIMARY KEY,
     username VARCHAR(100) NOT NULL UNIQUE,
@@ -66,3 +45,30 @@ CREATE TABLE IF NOT EXISTS users (
 );
 
 CREATE INDEX IF NOT EXISTS users_role_idx ON users (role);
+
+CREATE TABLE IF NOT EXISTS maintenance_records (
+    id BIGSERIAL PRIMARY KEY,
+    asset_id BIGINT NOT NULL REFERENCES assets(id) ON DELETE RESTRICT,
+    maintenance_type VARCHAR(255) NOT NULL,
+    scheduled_date DATE NOT NULL,
+    completed_date DATE,
+    status VARCHAR(50) NOT NULL DEFAULT 'planned'
+        CHECK (status IN ('planned', 'in_progress', 'completed', 'cancelled')),
+    technician VARCHAR(255),
+    technician_id BIGINT REFERENCES users(id) ON DELETE SET NULL,
+    cost NUMERIC(12, 2) CHECK (cost >= 0),
+    notes TEXT NOT NULL DEFAULT '',
+    created_at TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    CHECK (completed_date IS NULL OR completed_date >= scheduled_date)
+);
+
+ALTER TABLE maintenance_records
+    ADD COLUMN IF NOT EXISTS technician_id BIGINT REFERENCES users(id) ON DELETE SET NULL;
+
+CREATE INDEX IF NOT EXISTS maintenance_records_asset_id_idx
+    ON maintenance_records (asset_id);
+CREATE INDEX IF NOT EXISTS maintenance_records_scheduled_date_idx
+    ON maintenance_records (scheduled_date);
+CREATE INDEX IF NOT EXISTS maintenance_records_technician_id_idx
+    ON maintenance_records (technician_id);

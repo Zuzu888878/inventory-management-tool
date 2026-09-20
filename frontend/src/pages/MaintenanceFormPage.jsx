@@ -2,18 +2,22 @@ import { useEffect, useState } from 'react';
 import { Link, useNavigate, useParams } from 'react-router-dom';
 import { getAssets } from '../api/assets.js';
 import { createMaintenanceRecord, getMaintenanceRecord, updateMaintenanceRecord } from '../api/maintenance.js';
+import { getTechnicians } from '../api/users.js';
 import { Icon } from '../components/Icon.jsx';
+import { TechnicianSearchSelect } from '../components/TechnicianSearchSelect.jsx';
 
 function MaintenanceFormPage() {
   const { id } = useParams();
   const navigate = useNavigate();
   const isEditing = Boolean(id);
   const [assets, setAssets] = useState([]);
+  const [technicians, setTechnicians] = useState([]);
   const [assetId, setAssetId] = useState('');
   const [maintenanceType, setMaintenanceType] = useState('');
   const [scheduledDate, setScheduledDate] = useState('');
   const [completedDate, setCompletedDate] = useState('');
   const [status, setStatus] = useState('planned');
+  const [technicianId, setTechnicianId] = useState('');
   const [technician, setTechnician] = useState('');
   const [cost, setCost] = useState('');
   const [notes, setNotes] = useState('');
@@ -21,18 +25,20 @@ function MaintenanceFormPage() {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const requests = [getAssets()];
+    const requests = [getAssets(), getTechnicians().catch(() => [])];
     if (isEditing) requests.push(getMaintenanceRecord(id));
 
     Promise.all(requests)
-      .then(([assetList, record]) => {
+      .then(([assetList, techList, record]) => {
         setAssets(assetList);
+        setTechnicians(techList || []);
         if (!record) return;
         setAssetId(String(record.assetId));
         setMaintenanceType(record.maintenanceType || '');
         setScheduledDate(record.scheduledDate?.slice(0, 10) || '');
         setCompletedDate(record.completedDate?.slice(0, 10) || '');
         setStatus(record.status || 'planned');
+        setTechnicianId(record.technicianId ? String(record.technicianId) : '');
         setTechnician(record.technician || '');
         setCost(record.cost ?? '');
         setNotes(record.notes || '');
@@ -52,7 +58,8 @@ function MaintenanceFormPage() {
         scheduledDate,
         completedDate: completedDate || null,
         status,
-        technician,
+        technicianId: technicianId ? Number(technicianId) : null,
+        technician: technician || null,
         cost: cost === '' ? null : Number(cost),
         notes,
       };
@@ -121,9 +128,17 @@ function MaintenanceFormPage() {
           </select>
         </label>
         <br />
-        <label>
-          Technician
-          <input value={technician} onChange={(event) => setTechnician(event.target.value)} />
+        <label className="technician-field-label">
+          Technician (User)
+          <TechnicianSearchSelect
+            technicians={technicians}
+            selectedId={technicianId}
+            selectedName={technician}
+            onChange={({ id: selectedTechId, name: selectedTechName }) => {
+              setTechnicianId(selectedTechId ? String(selectedTechId) : '');
+              setTechnician(selectedTechName || '');
+            }}
+          />
         </label>
         <br />
         <label>

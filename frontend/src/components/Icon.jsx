@@ -37,6 +37,12 @@ const paths = {
       <path d="M21 19V5a2 2 0 0 0-2-2h-6" />
     </>
   ),
+  login: (
+    <>
+      <path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4" />
+      <path d="M10 17l5-5-5-5M15 12H3" />
+    </>
+  ),
   plus: (
     <>
       <path d="M12 5v14M5 12h14" />
@@ -56,6 +62,49 @@ const paths = {
   arrowLeft: (
     <>
       <path d="m12 19-7-7 7-7M5 12h14" />
+    </>
+  ),
+  arrowRight: (
+    <>
+      <path d="m12 5 7 7-7 7M19 12H5" />
+    </>
+  ),
+  chevronLeft: (
+    <>
+      <path d="m15 18-6-6 6-6" />
+    </>
+  ),
+  chevronRight: (
+    <>
+      <path d="m9 18 6-6-6-6" />
+    </>
+  ),
+  eye: (
+    <>
+      <path d="M2 12s3.6-7 10-7 10 7 10 7-3.6 7-10 7-10-7-10-7Z" />
+      <circle cx="12" cy="12" r="3" />
+    </>
+  ),
+  search: (
+    <>
+      <circle cx="11" cy="11" r="8" />
+      <path d="m21 21-4.35-4.35" />
+    </>
+  ),
+  x: (
+    <>
+      <path d="M18 6 6 18M6 6l12 12" />
+    </>
+  ),
+  user: (
+    <>
+      <path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2" />
+      <circle cx="12" cy="7" r="4" />
+    </>
+  ),
+  check: (
+    <>
+      <path d="M20 6 9 17l-5-5" />
     </>
   ),
   save: (

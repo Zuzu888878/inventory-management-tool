@@ -1,9 +1,11 @@
 import pool from './config.js';
 
 const selectMaintenance = `
-  SELECT maintenance_records.*, assets.asset_code, assets.name AS asset_name
+  SELECT maintenance_records.*, assets.asset_code, assets.name AS asset_name,
+         users.display_name AS technician_name, users.username AS technician_username
   FROM maintenance_records
   JOIN assets ON assets.id = maintenance_records.asset_id
+  LEFT JOIN users ON users.id = maintenance_records.technician_id
 `;
 
 const mapMaintenance = (row) => ({
@@ -15,7 +17,9 @@ const mapMaintenance = (row) => ({
   scheduledDate: row.scheduled_date,
   completedDate: row.completed_date,
   status: row.status,
-  technician: row.technician,
+  technicianId: row.technician_id ? Number(row.technician_id) : null,
+  technician: row.technician_name || row.technician || (row.technician_id ? `User #${row.technician_id}` : null),
+  technicianUsername: row.technician_username || null,
   cost: row.cost === null ? null : Number(row.cost),
   notes: row.notes,
   createdAt: row.created_at,
@@ -36,8 +40,8 @@ const createMaintenance = async (maintenance) => {
   const result = await pool.query(
     `INSERT INTO maintenance_records (
       asset_id, maintenance_type, scheduled_date, completed_date,
-      status, technician, cost, notes
-    ) VALUES ($1, $2, $3, $4, $5, $6, $7, $8)
+      status, technician, technician_id, cost, notes
+    ) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9)
     RETURNING id`,
     [
       maintenance.assetId,
@@ -46,6 +50,7 @@ const createMaintenance = async (maintenance) => {
       maintenance.completedDate || null,
       maintenance.status || 'planned',
       maintenance.technician || null,
+      maintenance.technicianId || null,
       maintenance.cost ?? null,
       maintenance.notes || '',
     ]
@@ -62,10 +67,11 @@ const updateMaintenance = async (id, maintenance) => {
          completed_date = $4,
          status = $5,
          technician = $6,
-         cost = $7,
-         notes = $8,
+         technician_id = $7,
+         cost = $8,
+         notes = $9,
          updated_at = CURRENT_TIMESTAMP
-     WHERE id = $9
+     WHERE id = $10
      RETURNING id`,
     [
       maintenance.assetId,
@@ -74,6 +80,7 @@ const updateMaintenance = async (id, maintenance) => {
       maintenance.completedDate || null,
       maintenance.status || 'planned',
       maintenance.technician || null,
+      maintenance.technicianId || null,
       maintenance.cost ?? null,
       maintenance.notes || '',
       id,
