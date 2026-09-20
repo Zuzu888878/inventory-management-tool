@@ -4,6 +4,7 @@ import app from '../app.js';
 import { createAuthToken } from '../authTokens.js';
 import pool from '../config.js';
 import assetRepository from '../data.js';
+import dashboardRepository from '../dashboardData.js';
 import maintenanceRepository from '../maintenanceData.js';
 import { hashPassword } from '../passwords.js';
 import sparePartsRepository from '../sparePartsData.js';
@@ -97,6 +98,14 @@ before(async () => {
   };
   usersRepository.deleteUser = async (id) => deleteById(users, id);
   usersRepository.countActiveAdmins = async () => users.filter((user) => user.role === 'admin' && user.isActive).length;
+  dashboardRepository.getDashboard = async () => ({
+    assets: { total: 2, active: 1, needsAttention: 1, offline: 0 },
+    spareParts: { totalItems: 3, totalUnits: 8, lowStock: 1, outOfStock: 0 },
+    maintenance: { open: 1, overdue: 1, dueSoon: 0, inProgress: 0, completedThisMonth: 0, costThisMonth: 0 },
+    schedule: [],
+    lowStockItems: [],
+    generatedAt: new Date().toISOString(),
+  });
 
   authToken = createAuthToken({ id: 99, username: 'test-user', role: 'admin' });
 
@@ -193,6 +202,13 @@ test('protected routes reject missing and invalid authorization', async () => {
 
   const invalid = await request('/api/assets', { token: 'wrong' });
   assert.equal(invalid.response.status, 403);
+});
+
+test('dashboard API returns operational summary for authenticated users', async () => {
+  const result = await request('/api/dashboard');
+  assert.equal(result.response.status, 200);
+  assert.equal(result.body.assets.total, 2);
+  assert.equal(result.body.maintenance.overdue, 1);
 });
 
 test('protected routes fail closed when API_TOKEN is not configured', async () => {

@@ -45,6 +45,7 @@ Never commit `backend/.env`. If it has previously been committed, rotate `API_TO
 ## Available features
 
 - Authenticated login and logout
+- Operational dashboard with asset health, stock alerts, and maintenance schedule
 - Asset list, details, create, edit, and delete
 - Spare-part list, details, create, edit, and delete
 - Maintenance list, details, create, edit, and delete, linked to assets
