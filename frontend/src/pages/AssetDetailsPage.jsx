@@ -34,11 +34,17 @@ function AssetDetailsPage() {
   return (
     <>
       <h1>{asset.name}</h1>
-      <p>{asset.description}</p>
       <ul>
+        <li>Asset Code: {asset.assetCode || 'Not set'}</li>
+        <li>Category: {asset.category || 'Not set'}</li>
+        <li>Serial Number: {asset.serialNumber || 'Not set'}</li>
         <li>Status: {asset.status || 'Not set'}</li>
         <li>Location: {asset.location || 'Not set'}</li>
-        <li>Next Maintenance: {asset.nextMaintenance || 'Not set'}</li>
+        <li>Supplier: {asset.supplier || 'Not set'}</li>
+        <li>Purchase Date: {asset.purchaseDate?.slice(0, 10) || 'Not set'}</li>
+        <li>Next Maintenance: {asset.nextMaintenanceDate?.slice(0, 10) || 'Not set'}</li>
+        <li>IoT State: {asset.iotState || 'Not set'}</li>
+        <li>Notes: {asset.notes || 'Not set'}</li>
       </ul>
       <div className="actions">
         <Link to={`/assets/${id}/edit`}>

@@ -1,19 +1,6 @@
+import { request } from './client.js';
+
 const ASSETS_URL = '/api/assets';
-
-async function request(url, options) {
-  const response = await fetch(url, options);
-
-  if (!response.ok) {
-    const error = await response.json().catch(() => null);
-    throw new Error(error?.message || 'Request failed');
-  }
-
-  if (response.status === 204) {
-    return null;
-  }
-
-  return response.json();
-}
 
 export function getAssets() {
   return request(ASSETS_URL);

@@ -1,18 +1,34 @@
 import { useLocation, useNavigate } from 'react-router-dom';
+import { useState } from 'react';
+import { login as authenticate } from '../api/auth.js';
 
 function LoginPage() {
   const navigate = useNavigate();
   const location = useLocation();
+  const [error, setError] = useState('');
+  const [submitting, setSubmitting] = useState(false);
 
-  function login(event) {
+  async function login(event) {
     event.preventDefault();
-    localStorage.setItem('authenticated', 'true');
-    navigate(location.state?.from?.pathname || '/dashboard', { replace: true });
+    setError('');
+    setSubmitting(true);
+
+    const form = new FormData(event.currentTarget);
+
+    try {
+      await authenticate(form.get('username'), form.get('password'));
+      navigate(location.state?.from?.pathname || '/dashboard', { replace: true });
+    } catch (requestError) {
+      setError(requestError.message);
+    } finally {
+      setSubmitting(false);
+    }
   }
 
   return (
     <main>
       <h1>Login</h1>
+      {error && <p role="alert">{error}</p>}
       <form onSubmit={login}>
         <label>
           Username
@@ -24,7 +40,9 @@ function LoginPage() {
           <input name="password" type="password" required />
         </label>
         <br />
-        <button type="submit">Login</button>
+        <button type="submit" disabled={submitting}>
+          {submitting ? 'Logging in...' : 'Login'}
+        </button>
       </form>
     </main>
   );

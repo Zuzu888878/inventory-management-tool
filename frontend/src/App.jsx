@@ -11,9 +11,10 @@ import SparePartsPage from './pages/SparePartsPage.jsx';
 import SparePartFormPage from './pages/SparePartFormPage.jsx';
 import SparePartDetailsPage from './pages/SparePartDetailsPage.jsx';
 import UsersPage from './pages/UsersPage.jsx';
-import {UsersFormPage} from "./pages/UsersFormPage.jsx";
+import { UsersFormPage } from './pages/UsersFormPage.jsx';
+import { clearToken, hasToken } from './api/client.js';
 
-const isAuthenticated = () => localStorage.getItem('authenticated') === 'true';
+const isAuthenticated = () => hasToken();
 
 function ProtectedRoute() {
   const location = useLocation();
@@ -22,14 +23,14 @@ function ProtectedRoute() {
     return <Navigate to="/login" replace state={{ from: location }} />;
   }
 
-  return <div style={{border:"red 1px solid"}}><Outlet  /></div>;
+  return <Outlet />;
 }
 
 function Layout() {
   const navigate = useNavigate();
 
   function logout() {
-    localStorage.removeItem('authenticated');
+    clearToken();
     navigate('/login', { replace: true });
   }
 

@@ -1,17 +1,23 @@
 const authMiddleware = (req, res, next) => {
-    const authHeader = req.header('Authorization');
+  const apiToken = process.env.API_TOKEN;
 
-    if (!authHeader) {
-        return res.status(401).json({ message: 'Access denied. No authorization header provided.' });
-    }
+  if (!apiToken) {
+    return res.status(503).json({ message: 'Authentication is not configured.' });
+  }
 
-    const expectedToken = `Bearer ${process.env.API_TOKEN}`;
+  const authHeader = req.header('Authorization');
 
-    if (authHeader !== expectedToken) {
-        return res.status(403).json({ message: 'Invalid token.' });
-    }
+  if (!authHeader) {
+    return res.status(401).json({ message: 'Access denied. No authorization header provided.' });
+  }
 
-    next();
+  const expectedToken = `Bearer ${apiToken}`;
+
+  if (authHeader !== expectedToken) {
+    return res.status(403).json({ message: 'Invalid token.' });
+  }
+
+  next();
 };
 
 export default authMiddleware;
