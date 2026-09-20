@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import { deleteMaintenanceRecord, getMaintenanceRecords } from '../api/maintenance.js';
 import { Icon } from '../components/Icon.jsx';
 import { formatDate } from '../utils/formatDate.js';
-import { SortButton, TableToolbar } from '../components/TableToolbar.jsx';
+import { Pagination, SortButton, TableToolbar } from '../components/TableToolbar.jsx';
 import { useTableControls } from '../hooks/useTableControls.js';
 
 const statusLabel = (status) =>
@@ -15,10 +15,23 @@ function MaintenancePage() {
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(true);
   const [statusFilter, setStatusFilter] = useState('all');
-  const { rows, search, setSearch, sort, toggleSort } = useTableControls(records, {
+  const {
+    rows,
+    search,
+    setSearch,
+    sort,
+    toggleSort,
+    page,
+    setPage,
+    pageSize,
+    setPageSize,
+    totalPages,
+    totalItems,
+  } = useTableControls(records, {
     searchFields: ['assetCode', 'assetName', 'maintenanceType', 'technician'],
     filter: (record) => statusFilter === 'all' || record.status === statusFilter,
     initialSort: { key: 'scheduledDate', direction: 'asc' },
+    defaultPageSize: 20,
   });
 
   useEffect(() => {
@@ -53,7 +66,10 @@ function MaintenancePage() {
       <TableToolbar search={search} onSearch={setSearch} placeholder="Search maintenance...">
         <select
           value={statusFilter}
-          onChange={(event) => setStatusFilter(event.target.value)}
+          onChange={(event) => {
+            setStatusFilter(event.target.value);
+            setPage(1);
+          }}
           aria-label="Filter by status"
         >
           <option value="all">All statuses</option>
@@ -69,50 +85,69 @@ function MaintenancePage() {
       {!loading && !error && records.length === 0 && <p>No maintenance records found.</p>}
 
       {records.length > 0 && (
-        <table>
-          <thead>
-            <tr>
-              <th scope="col">
-                <SortButton label="Scheduled date" sortKey="scheduledDate" sort={sort} onSort={toggleSort} />
-              </th>
-              <th scope="col">
-                <SortButton label="Asset" sortKey="assetCode" sort={sort} onSort={toggleSort} />
-              </th>
-              <th scope="col">
-                <SortButton label="Type" sortKey="maintenanceType" sort={sort} onSort={toggleSort} />
-              </th>
-              <th scope="col">
-                <SortButton label="Status" sortKey="status" sort={sort} onSort={toggleSort} />
-              </th>
-              <th scope="col">
-                <SortButton label="Technician" sortKey="technician" sort={sort} onSort={toggleSort} />
-              </th>
-              <th scope="col">Actions</th>
-            </tr>
-          </thead>
-          <tbody>
-            {rows.map((record) => (
-              <tr key={record.id}>
-                <td>{formatDate(record.scheduledDate)}</td>
-                <td>
-                  {record.assetCode} — {record.assetName}
-                </td>
-                <td>{record.maintenanceType}</td>
-                <td>{statusLabel(record.status)}</td>
-                <td>{record.technician || 'Not assigned'}</td>
-                <td>
-                  <Link to={`/maintenance/${record.id}`}>View</Link>{' '}
-                  <Link to={`/maintenance/${record.id}/edit`}>
-                    <Icon name="pencil" /> Edit
-                  </Link>{' '}
-                  <button className="button-destructive" type="button" onClick={() => removeRecord(record)}>
-                    <Icon name="trash" /> Delete
-                  </button>
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
+        <>
+          <div className="table-container">
+            <table>
+              <thead>
+                <tr>
+                  <th scope="col">
+                    <SortButton label="Scheduled date" sortKey="scheduledDate" sort={sort} onSort={toggleSort} />
+                  </th>
+                  <th scope="col">
+                    <SortButton label="Asset" sortKey="assetCode" sort={sort} onSort={toggleSort} />
+                  </th>
+                  <th scope="col">
+                    <SortButton label="Type" sortKey="maintenanceType" sort={sort} onSort={toggleSort} />
+                  </th>
+                  <th scope="col">
+                    <SortButton label="Status" sortKey="status" sort={sort} onSort={toggleSort} />
+                  </th>
+                  <th scope="col">
+                    <SortButton label="Technician" sortKey="technician" sort={sort} onSort={toggleSort} />
+                  </th>
+                  <th scope="col" className="actions-col">Actions</th>
+                </tr>
+              </thead>
+              <tbody>
+                {rows.map((record) => (
+                  <tr key={record.id}>
+                    <td className="cell-nowrap">{formatDate(record.scheduledDate)}</td>
+                    <td className="cell-name">
+                      {record.assetCode} — {record.assetName}
+                    </td>
+                    <td>{record.maintenanceType}</td>
+                    <td>
+                      <span className={`status-badge status-${record.status}`}>{statusLabel(record.status)}</span>
+                    </td>
+                    <td>{record.technician || 'Not assigned'}</td>
+                    <td className="actions-cell">
+                      <div className="table-actions">
+                        <Link to={`/maintenance/${record.id}`}>
+                          <Icon name="eye" /> View
+                        </Link>
+                        <Link to={`/maintenance/${record.id}/edit`}>
+                          <Icon name="pencil" /> Edit
+                        </Link>
+                        <button className="button-destructive" type="button" onClick={() => removeRecord(record)}>
+                          <Icon name="trash" /> Delete
+                        </button>
+                      </div>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+
+          <Pagination
+            page={page}
+            totalPages={totalPages}
+            totalItems={totalItems}
+            pageSize={pageSize}
+            onPageChange={setPage}
+            onPageSizeChange={setPageSize}
+          />
+        </>
       )}
     </>
   );

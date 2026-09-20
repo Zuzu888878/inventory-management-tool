@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { deleteSparePart, getSpareParts } from '../api/spareParts.js';
 import { Icon } from '../components/Icon.jsx';
-import { SortButton, TableToolbar } from '../components/TableToolbar.jsx';
+import { Pagination, SortButton, TableToolbar } from '../components/TableToolbar.jsx';
 import { useTableControls } from '../hooks/useTableControls.js';
 
 function SparePartsPage() {
@@ -10,7 +10,19 @@ function SparePartsPage() {
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(true);
   const [stockFilter, setStockFilter] = useState('all');
-  const { rows, search, setSearch, sort, toggleSort } = useTableControls(spareParts, {
+  const {
+    rows,
+    search,
+    setSearch,
+    sort,
+    toggleSort,
+    page,
+    setPage,
+    pageSize,
+    setPageSize,
+    totalPages,
+    totalItems,
+  } = useTableControls(spareParts, {
     searchFields: ['name', 'manufacturerNumber', 'compatibleMachineType'],
     filter: (part) => {
       if (stockFilter === 'out') return part.quantityInStock === 0;
@@ -18,6 +30,7 @@ function SparePartsPage() {
       return true;
     },
     initialSort: { key: 'name', direction: 'asc' },
+    defaultPageSize: 20,
   });
 
   useEffect(() => {
@@ -52,7 +65,10 @@ function SparePartsPage() {
       <TableToolbar search={search} onSearch={setSearch} placeholder="Search spare parts...">
         <select
           value={stockFilter}
-          onChange={(event) => setStockFilter(event.target.value)}
+          onChange={(event) => {
+            setStockFilter(event.target.value);
+            setPage(1);
+          }}
           aria-label="Filter by stock"
         >
           <option value="all">All stock levels</option>
@@ -68,48 +84,71 @@ function SparePartsPage() {
       {!loading && !error && spareParts.length === 0 && <p>No spare parts found.</p>}
 
       {spareParts.length > 0 && (
-        <table>
-          <thead>
-            <tr>
-              <th scope="col">
-                <SortButton label="Name" sortKey="name" sort={sort} onSort={toggleSort} />
-              </th>
-              <th scope="col">
-                <SortButton label="Manufacturer Number" sortKey="manufacturerNumber" sort={sort} onSort={toggleSort} />
-              </th>
-              <th scope="col">
-                <SortButton
-                  label="Compatible Machine Type"
-                  sortKey="compatibleMachineType"
-                  sort={sort}
-                  onSort={toggleSort}
-                />
-              </th>
-              <th scope="col">
-                <SortButton label="Quantity in Stock" sortKey="quantityInStock" sort={sort} onSort={toggleSort} />
-              </th>
-              <th scope="col">Actions</th>
-            </tr>
-          </thead>
+        <>
+          <div className="table-container">
+            <table>
+              <thead>
+                <tr>
+                  <th scope="col">
+                    <SortButton label="Name" sortKey="name" sort={sort} onSort={toggleSort} />
+                  </th>
+                  <th scope="col">
+                    <SortButton label="Manufacturer Number" sortKey="manufacturerNumber" sort={sort} onSort={toggleSort} />
+                  </th>
+                  <th scope="col">
+                    <SortButton
+                      label="Compatible Machine Type"
+                      sortKey="compatibleMachineType"
+                      sort={sort}
+                      onSort={toggleSort}
+                    />
+                  </th>
+                  <th scope="col">
+                    <SortButton label="Quantity in Stock" sortKey="quantityInStock" sort={sort} onSort={toggleSort} />
+                  </th>
+                  <th scope="col" className="actions-col">Actions</th>
+                </tr>
+              </thead>
 
-          <tbody>
-            {rows.map((sparePart) => (
-              <tr key={sparePart.id}>
-                <td>{sparePart.name || `Spare Part ${sparePart.id}`}</td>
-                <td>{sparePart.manufacturerNumber || 'Not set'}</td>
-                <td>{sparePart.compatibleMachineType || 'Not set'}</td>
-                <td>{sparePart.quantityInStock ?? 0}</td>
-                <td>
-                  <Link to={`/spare-parts/${sparePart.id}`}>View</Link>{' '}
-                  <Link to={`/spare-parts/${sparePart.id}/edit`}>Edit</Link>{' '}
-                  <button className="button-destructive" type="button" onClick={() => removeSparePart(sparePart)}>
-                    Delete
-                  </button>
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
+              <tbody>
+                {rows.map((sparePart) => (
+                  <tr key={sparePart.id}>
+                    <td className="cell-name">{sparePart.name || `Spare Part ${sparePart.id}`}</td>
+                    <td className="cell-code">{sparePart.manufacturerNumber || 'Not set'}</td>
+                    <td>{sparePart.compatibleMachineType || 'Not set'}</td>
+                    <td>
+                      <span className={sparePart.quantityInStock === 0 ? 'text-danger' : sparePart.quantityInStock <= 5 ? 'text-warning' : ''}>
+                        {sparePart.quantityInStock ?? 0}
+                      </span>
+                    </td>
+                    <td className="actions-cell">
+                      <div className="table-actions">
+                        <Link to={`/spare-parts/${sparePart.id}`}>
+                          <Icon name="eye" /> View
+                        </Link>
+                        <Link to={`/spare-parts/${sparePart.id}/edit`}>
+                          <Icon name="pencil" /> Edit
+                        </Link>
+                        <button className="button-destructive" type="button" onClick={() => removeSparePart(sparePart)}>
+                          <Icon name="trash" /> Delete
+                        </button>
+                      </div>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+
+          <Pagination
+            page={page}
+            totalPages={totalPages}
+            totalItems={totalItems}
+            pageSize={pageSize}
+            onPageChange={setPage}
+            onPageSizeChange={setPageSize}
+          />
+        </>
       )}
     </>
   );

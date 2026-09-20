@@ -1,6 +1,7 @@
 import { useLocation, useNavigate } from 'react-router-dom';
 import { useState } from 'react';
 import { login as authenticate } from '../api/auth.js';
+import { Icon } from '../components/Icon.jsx';
 
 function LoginPage() {
   const navigate = useNavigate();
@@ -47,7 +48,7 @@ function LoginPage() {
         </label>
         <br />
         <button className="button" type="submit" disabled={submitting}>
-          {submitting ? 'Logging in...' : 'Login'}
+          <Icon name="login" /> {submitting ? 'Logging in...' : 'Login'}
         </button>
       </form>
       </div>

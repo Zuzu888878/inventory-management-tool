@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import { deleteAsset, getAssets } from '../api/assets.js';
 import { Icon } from '../components/Icon.jsx';
 import { formatDate } from '../utils/formatDate.js';
-import { SortButton, TableToolbar } from '../components/TableToolbar.jsx';
+import { Pagination, SortButton, TableToolbar } from '../components/TableToolbar.jsx';
 import { useTableControls } from '../hooks/useTableControls.js';
 
 function AssetsPage() {
@@ -12,10 +12,23 @@ function AssetsPage() {
   const [loading, setLoading] = useState(true);
   const [statusFilter, setStatusFilter] = useState('all');
 
-  const { rows, search, setSearch, sort, toggleSort } = useTableControls(assets, {
+  const {
+    rows,
+    search,
+    setSearch,
+    sort,
+    toggleSort,
+    page,
+    setPage,
+    pageSize,
+    setPageSize,
+    totalPages,
+    totalItems,
+  } = useTableControls(assets, {
     searchFields: ['assetCode', 'name', 'category', 'location'],
     filter: (asset) => statusFilter === 'all' || asset.status === statusFilter,
     initialSort: { key: 'assetCode', direction: 'asc' },
+    defaultPageSize: 20,
   });
 
   useEffect(() => {
@@ -50,7 +63,10 @@ function AssetsPage() {
       <TableToolbar search={search} onSearch={setSearch} placeholder="Search assets...">
         <select
           value={statusFilter}
-          onChange={(event) => setStatusFilter(event.target.value)}
+          onChange={(event) => {
+            setStatusFilter(event.target.value);
+            setPage(1);
+          }}
           aria-label="Filter by status"
         >
           <option value="all">All statuses</option>
@@ -69,53 +85,72 @@ function AssetsPage() {
       {!loading && !error && assets.length === 0 && <p>No assets found.</p>}
 
       {assets.length > 0 && (
-        <table>
-          <thead>
-            <tr>
-              <th scope="col">
-                <SortButton label="Asset Code" sortKey="assetCode" sort={sort} onSort={toggleSort} />
-              </th>
-              <th scope="col">
-                <SortButton label="Name" sortKey="name" sort={sort} onSort={toggleSort} />
-              </th>
-              <th scope="col">
-                <SortButton label="Category" sortKey="category" sort={sort} onSort={toggleSort} />
-              </th>
-              <th scope="col">
-                <SortButton label="Status" sortKey="status" sort={sort} onSort={toggleSort} />
-              </th>
-              <th scope="col">
-                <SortButton label="Location" sortKey="location" sort={sort} onSort={toggleSort} />
-              </th>
-              <th scope="col">
-                <SortButton label="Next Maintenance" sortKey="nextMaintenanceDate" sort={sort} onSort={toggleSort} />
-              </th>
-              <th scope="col">Actions</th>
-            </tr>
-          </thead>
+        <>
+          <div className="table-container">
+            <table>
+              <thead>
+                <tr>
+                  <th scope="col">
+                    <SortButton label="Asset Code" sortKey="assetCode" sort={sort} onSort={toggleSort} />
+                  </th>
+                  <th scope="col">
+                    <SortButton label="Name" sortKey="name" sort={sort} onSort={toggleSort} />
+                  </th>
+                  <th scope="col">
+                    <SortButton label="Category" sortKey="category" sort={sort} onSort={toggleSort} />
+                  </th>
+                  <th scope="col">
+                    <SortButton label="Status" sortKey="status" sort={sort} onSort={toggleSort} />
+                  </th>
+                  <th scope="col">
+                    <SortButton label="Location" sortKey="location" sort={sort} onSort={toggleSort} />
+                  </th>
+                  <th scope="col">
+                    <SortButton label="Next Maintenance" sortKey="nextMaintenanceDate" sort={sort} onSort={toggleSort} />
+                  </th>
+                  <th scope="col" className="actions-col">Actions</th>
+                </tr>
+              </thead>
 
-          <tbody>
-            {rows.map((asset) => (
-              <tr key={asset.id}>
-                <td>{asset.assetCode || 'Not set'}</td>
-                <td>{asset.name || `Asset ${asset.id}`}</td>
-                <td>{asset.category || 'Not set'}</td>
-                <td>{asset.status || 'Not set'}</td>
-                <td>{asset.location || 'Not set'}</td>
-                <td>{formatDate(asset.nextMaintenanceDate)}</td>
-                <td>
-                  <Link to={`/assets/${asset.id}`}>View</Link>{' '}
-                  <Link to={`/assets/${asset.id}/edit`}>
-                    <Icon name="pencil" /> Edit
-                  </Link>{' '}
-                  <button className="button-destructive" type="button" onClick={() => removeAsset(asset)}>
-                    <Icon name="trash" /> Delete
-                  </button>
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
+              <tbody>
+                {rows.map((asset) => (
+                  <tr key={asset.id}>
+                    <td className="cell-code">{asset.assetCode || 'Not set'}</td>
+                    <td className="cell-name">{asset.name || `Asset ${asset.id}`}</td>
+                    <td>{asset.category || 'Not set'}</td>
+                    <td>
+                      <span className={`status-badge status-${asset.status}`}>{asset.status || 'Not set'}</span>
+                    </td>
+                    <td>{asset.location || 'Not set'}</td>
+                    <td className="cell-nowrap">{formatDate(asset.nextMaintenanceDate)}</td>
+                    <td className="actions-cell">
+                      <div className="table-actions">
+                        <Link to={`/assets/${asset.id}`}>
+                          <Icon name="eye" /> View
+                        </Link>
+                        <Link to={`/assets/${asset.id}/edit`}>
+                          <Icon name="pencil" /> Edit
+                        </Link>
+                        <button className="button-destructive" type="button" onClick={() => removeAsset(asset)}>
+                          <Icon name="trash" /> Delete
+                        </button>
+                      </div>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+
+          <Pagination
+            page={page}
+            totalPages={totalPages}
+            totalItems={totalItems}
+            pageSize={pageSize}
+            onPageChange={setPage}
+            onPageSizeChange={setPageSize}
+          />
+        </>
       )}
     </>
   );

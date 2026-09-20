@@ -1,4 +1,4 @@
-import { BrowserRouter, Link, Navigate, Outlet, Route, Routes, useLocation, useNavigate } from 'react-router-dom';
+import { BrowserRouter, Link, Navigate, NavLink, Outlet, Route, Routes, useLocation, useNavigate } from 'react-router-dom';
 import AssetDetailsPage from './pages/AssetDetailsPage.jsx';
 import AssetFormPage from './pages/AssetFormPage.jsx';
 import AssetsPage from './pages/AssetsPage.jsx';
@@ -30,12 +30,20 @@ function ProtectedRoute() {
 
 function Layout() {
   const navigate = useNavigate();
+  const location = useLocation();
   const currentUser = getCurrentUser();
 
   function logout() {
     clearToken();
     navigate('/login', { replace: true });
   }
+
+  const isTabActive = (path) => {
+    if (path === '/dashboard') {
+      return location.pathname === '/dashboard' || location.pathname === '/';
+    }
+    return location.pathname.startsWith(path);
+  };
 
   return (
     <div className="app-shell">
@@ -45,27 +53,47 @@ function Layout() {
           <span>Leets Inventory</span>
         </Link>
         <nav className="nav-links" aria-label="Main navigation">
-          <Link to="/dashboard">
+          <NavLink
+            to="/dashboard"
+            className={isTabActive('/dashboard') ? 'active' : ''}
+            aria-current={isTabActive('/dashboard') ? 'page' : undefined}
+          >
             <Icon name="dashboard" />
             Dashboard
-          </Link>
-          <Link to="/assets">
+          </NavLink>
+          <NavLink
+            to="/assets"
+            className={isTabActive('/assets') ? 'active' : ''}
+            aria-current={isTabActive('/assets') ? 'page' : undefined}
+          >
             <Icon name="assets" />
             Assets
-          </Link>
-          <Link to="/maintenance">
+          </NavLink>
+          <NavLink
+            to="/maintenance"
+            className={isTabActive('/maintenance') ? 'active' : ''}
+            aria-current={isTabActive('/maintenance') ? 'page' : undefined}
+          >
             <Icon name="wrench" />
             Maintenance
-          </Link>
-          <Link to="/spare-parts">
+          </NavLink>
+          <NavLink
+            to="/spare-parts"
+            className={isTabActive('/spare-parts') ? 'active' : ''}
+            aria-current={isTabActive('/spare-parts') ? 'page' : undefined}
+          >
             <Icon name="package" />
             Spare Parts
-          </Link>
+          </NavLink>
           {currentUser?.role === 'admin' && (
-            <Link to="/users">
+            <NavLink
+              to="/users"
+              className={isTabActive('/users') ? 'active' : ''}
+              aria-current={isTabActive('/users') ? 'page' : undefined}
+            >
               <Icon name="users" />
               Users
-            </Link>
+            </NavLink>
           )}
         </nav>
         <div className="topbar-actions">

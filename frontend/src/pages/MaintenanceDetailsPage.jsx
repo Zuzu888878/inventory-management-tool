@@ -70,7 +70,7 @@ function MaintenanceDetailsPage() {
             <strong>{record.technician || 'Not assigned'}</strong>
           </div>
           <div className="detail-item">
-            <span>Cost</span>
+            <span>Cost (CHF)</span>
             <strong>{record.cost === null ? 'Not set' : record.cost.toFixed(2)}</strong>
           </div>
           <div className="detail-item detail-wide">

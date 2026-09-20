@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { getDashboard } from '../api/dashboard.js';
 import { formatDate } from '../utils/formatDate.js';
+import { Icon } from '../components/Icon.jsx';
 
 const scheduleLabel = (item) => {
   if (item.daysUntil < 0) return `${Math.abs(item.daysUntil)} day(s) overdue`;
@@ -64,7 +65,9 @@ function DashboardPage() {
         <article className="dashboard-panel">
           <div className="panel-heading">
             <h2>Maintenance schedule</h2>
-            <Link to="/maintenance">View all</Link>
+            <Link to="/maintenance">
+              View all <Icon name="arrowRight" />
+            </Link>
           </div>
           <div className="dashboard-summary">
             <span>{maintenance.open} open</span>
@@ -75,41 +78,51 @@ function DashboardPage() {
           {dashboard.schedule.length === 0 ? (
             <p>No overdue or upcoming maintenance.</p>
           ) : (
-            <table>
-              <thead>
-                <tr>
-                  <th scope="col">Due</th>
-                  <th scope="col">Asset</th>
-                  <th scope="col">Work</th>
-                  <th scope="col">Status</th>
-                </tr>
-              </thead>
-              <tbody>
-                {dashboard.schedule.map((item) => (
-                  <tr key={item.id}>
-                    <td>
-                      <Link to={`/maintenance/${item.id}`}>{formatDate(item.scheduledDate)}</Link>
-                      <br />
-                      <small className={item.daysUntil < 0 ? 'text-danger' : ''}>{scheduleLabel(item)}</small>
-                    </td>
-                    <td>
-                      <Link to={`/assets/${item.assetId}`}>{item.assetCode}</Link>
-                      <br />
-                      <small>{item.assetName}</small>
-                    </td>
-                    <td>{item.maintenanceType}</td>
-                    <td>{item.status.replace('_', ' ')}</td>
+            <div className="table-container">
+              <table>
+                <thead>
+                  <tr>
+                    <th scope="col">Due</th>
+                    <th scope="col">Asset</th>
+                    <th scope="col">Work</th>
+                    <th scope="col">Status</th>
                   </tr>
-                ))}
-              </tbody>
-            </table>
+                </thead>
+                <tbody>
+                  {dashboard.schedule.map((item) => (
+                    <tr key={item.id}>
+                      <td className="cell-nowrap">
+                        <Link to={`/maintenance/${item.id}`} className="table-link">
+                          {formatDate(item.scheduledDate)}
+                        </Link>
+                        <div className={`cell-subtext ${item.daysUntil < 0 ? 'text-danger' : ''}`}>
+                          {scheduleLabel(item)}
+                        </div>
+                      </td>
+                      <td>
+                        <Link to={`/assets/${item.assetId}`} className="table-link">
+                          {item.assetCode}
+                        </Link>
+                        <div className="cell-subtext">{item.assetName}</div>
+                      </td>
+                      <td>{item.maintenanceType}</td>
+                      <td>
+                        <span className={`status-badge status-${item.status}`}>{item.status.replace('_', ' ')}</span>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
           )}
         </article>
 
         <article className="dashboard-panel">
           <div className="panel-heading">
             <h2>Stock alerts</h2>
-            <Link to="/spare-parts">View all</Link>
+            <Link to="/spare-parts">
+              View all <Icon name="arrowRight" />
+            </Link>
           </div>
           <div className="dashboard-summary">
             <span>{spareParts.totalItems} part types</span>
@@ -118,28 +131,34 @@ function DashboardPage() {
           {dashboard.lowStockItems.length === 0 ? (
             <p>No stock alerts.</p>
           ) : (
-            <table>
-              <thead>
-                <tr>
-                  <th scope="col">Part</th>
-                  <th scope="col">Quantity</th>
-                  <th scope="col">Action</th>
-                </tr>
-              </thead>
-              <tbody>
-                {dashboard.lowStockItems.map((part) => (
-                  <tr key={part.id}>
-                    <td>{part.name}</td>
-                    <td className={part.quantityInStock === 0 ? 'text-danger' : 'text-warning'}>
-                      {part.quantityInStock}
-                    </td>
-                    <td>
-                      <Link to={`/spare-parts/${part.id}`}>Review</Link>
-                    </td>
+            <div className="table-container">
+              <table>
+                <thead>
+                  <tr>
+                    <th scope="col">Part</th>
+                    <th scope="col">Quantity</th>
+                    <th scope="col" className="actions-col">Action</th>
                   </tr>
-                ))}
-              </tbody>
-            </table>
+                </thead>
+                <tbody>
+                  {dashboard.lowStockItems.map((part) => (
+                    <tr key={part.id}>
+                      <td className="cell-name">{part.name}</td>
+                      <td className={part.quantityInStock === 0 ? 'text-danger' : 'text-warning'}>
+                        {part.quantityInStock}
+                      </td>
+                      <td className="actions-cell">
+                        <div className="table-actions">
+                          <Link to={`/spare-parts/${part.id}`}>
+                            <Icon name="eye" /> Review
+                          </Link>
+                        </div>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
           )}
         </article>
       </section>

@@ -1,10 +1,15 @@
 import { useMemo, useState } from 'react';
 
-export function useTableControls(items, { searchFields = [], filter = () => true, initialSort }) {
+export function useTableControls(
+  items,
+  { searchFields = [], filter = () => true, initialSort, defaultPageSize = 20 } = {}
+) {
   const [search, setSearch] = useState('');
   const [sort, setSort] = useState(initialSort);
+  const [page, setPage] = useState(1);
+  const [pageSize, setPageSize] = useState(defaultPageSize);
 
-  const rows = useMemo(() => {
+  const filteredAndSortedRows = useMemo(() => {
     const term = search.trim().toLowerCase();
     const result = items.filter((item) => {
       const matchesSearch =
@@ -26,6 +31,20 @@ export function useTableControls(items, { searchFields = [], filter = () => true
     });
   }, [filter, items, search, searchFields, sort]);
 
+  const totalItems = filteredAndSortedRows.length;
+  const totalPages = Math.max(1, Math.ceil(totalItems / pageSize));
+  const currentPage = Math.min(Math.max(1, page), totalPages);
+
+  const rows = useMemo(() => {
+    const start = (currentPage - 1) * pageSize;
+    return filteredAndSortedRows.slice(start, start + pageSize);
+  }, [filteredAndSortedRows, currentPage, pageSize]);
+
+  function handleSearch(value) {
+    setSearch(value);
+    setPage(1);
+  }
+
   function toggleSort(key) {
     setSort((current) => ({
       key,
@@ -33,5 +52,23 @@ export function useTableControls(items, { searchFields = [], filter = () => true
     }));
   }
 
-  return { rows, search, setSearch, sort, toggleSort };
+  function handlePageSizeChange(newPageSize) {
+    setPageSize(newPageSize);
+    setPage(1);
+  }
+
+  return {
+    rows,
+    allRows: filteredAndSortedRows,
+    search,
+    setSearch: handleSearch,
+    sort,
+    toggleSort,
+    page: currentPage,
+    setPage,
+    pageSize,
+    setPageSize: handlePageSizeChange,
+    totalPages,
+    totalItems,
+  };
 }
