@@ -11,6 +11,7 @@ function AssetFormPage() {
   const [assetCode, setAssetCode] = useState('');
   const [name, setName] = useState('');
   const [category, setCategory] = useState('');
+  const [machineType, setMachineType] = useState('');
   const [serialNumber, setSerialNumber] = useState('');
   const [status, setStatus] = useState('active');
   const [location, setLocation] = useState('');
@@ -29,6 +30,7 @@ function AssetFormPage() {
         setAssetCode(asset.assetCode || '');
         setName(asset.name || '');
         setCategory(asset.category || '');
+        setMachineType(asset.machineType || '');
         setSerialNumber(asset.serialNumber || '');
         setStatus(asset.status || 'active');
         setLocation(asset.location || '');
@@ -50,6 +52,7 @@ function AssetFormPage() {
         assetCode,
         name,
         category,
+        machineType,
         serialNumber,
         status,
         location,
@@ -91,6 +94,13 @@ function AssetFormPage() {
         <label>
           Category
           <input value={category} onChange={(event) => setCategory(event.target.value)} required />
+        </label>
+
+        <br/>
+
+        <label>
+          Machine Type
+          <input value={machineType} onChange={(event) => setMachineType(event.target.value)}/>
         </label>
 
         <br />

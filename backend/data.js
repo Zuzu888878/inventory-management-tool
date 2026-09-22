@@ -5,6 +5,7 @@ const mapAsset = (row) => ({
     assetCode: row.asset_code,
     name: row.name,
     category: row.category,
+    machineType: row.machine_type,
     serialNumber: row.serial_number,
     location: row.location,
     status: row.status,
@@ -38,6 +39,7 @@ const createAsset = async (asset) => {
       asset_code,
       name,
       category,
+      machine_type,
       serial_number,
       location,
       status,
@@ -46,12 +48,13 @@ const createAsset = async (asset) => {
       next_maintenance_date,
       iot_state,
       notes
-    ) VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11)
+    ) VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12)
     RETURNING *`,
         [
             asset.assetCode,
             asset.name,
             asset.category,
+            asset.machineType,
             asset.serialNumber,
             asset.location,
             asset.status || 'active',
@@ -72,21 +75,23 @@ const updateAsset = async (id, asset) => {
      SET asset_code = $1,
          name = $2,
          category = $3,
-         serial_number = $4,
-         location = $5,
-         status = $6,
-         supplier = $7,
-         purchase_date = $8,
-         next_maintenance_date = $9,
-         iot_state = $10,
-         notes = $11,
+         machine_type = $4,
+         serial_number = $5,
+         location = $6,
+         status = $7,
+         supplier = $8,
+         purchase_date = $9,
+         next_maintenance_date = $10,
+         iot_state = $11,
+         notes = $12,
          updated_at = CURRENT_TIMESTAMP
-     WHERE id = $12
+     WHERE id = $13
      RETURNING *`,
         [
             asset.assetCode,
             asset.name,
             asset.category,
+            asset.machineType,
             asset.serialNumber,
             asset.location,
             asset.status,

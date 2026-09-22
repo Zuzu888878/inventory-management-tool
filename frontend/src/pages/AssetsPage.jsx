@@ -28,7 +28,7 @@ function AssetsPage() {
     searchFields: ['assetCode', 'name', 'category', 'location'],
     filter: (asset) => statusFilter === 'all' || asset.status === statusFilter,
     initialSort: { key: 'assetCode', direction: 'asc' },
-    defaultPageSize: 20,
+    defaultPageSize: 100,
   });
 
   useEffect(() => {
@@ -89,35 +89,39 @@ function AssetsPage() {
           <div className="table-container">
             <table>
               <thead>
-                <tr>
-                  <th scope="col">
-                    <SortButton label="Asset Code" sortKey="assetCode" sort={sort} onSort={toggleSort} />
-                  </th>
-                  <th scope="col">
-                    <SortButton label="Name" sortKey="name" sort={sort} onSort={toggleSort} />
-                  </th>
-                  <th scope="col">
-                    <SortButton label="Category" sortKey="category" sort={sort} onSort={toggleSort} />
-                  </th>
-                  <th scope="col">
-                    <SortButton label="Status" sortKey="status" sort={sort} onSort={toggleSort} />
-                  </th>
-                  <th scope="col">
-                    <SortButton label="Location" sortKey="location" sort={sort} onSort={toggleSort} />
-                  </th>
-                  <th scope="col">
-                    <SortButton label="Next Maintenance" sortKey="nextMaintenanceDate" sort={sort} onSort={toggleSort} />
-                  </th>
-                  <th scope="col" className="actions-col">Actions</th>
-                </tr>
+              <tr>
+                <th scope="col">
+                  <SortButton label="Asset Code" sortKey="assetCode" sort={sort} onSort={toggleSort}/>
+                </th>
+                <th scope="col">
+                  <SortButton label="Name" sortKey="name" sort={sort} onSort={toggleSort}/>
+                </th>
+                <th scope="col">
+                  <SortButton label="Category" sortKey="category" sort={sort} onSort={toggleSort}/>
+                </th>
+                <th scope="col">
+                  <SortButton label="Machine Type" sortKey="machineType" sort={sort} onSort={toggleSort}/>
+                </th>
+                <th scope="col">
+                  <SortButton label="Status" sortKey="status" sort={sort} onSort={toggleSort}/>
+                </th>
+                <th scope="col">
+                  <SortButton label="Location" sortKey="location" sort={sort} onSort={toggleSort}/>
+                </th>
+                <th scope="col">
+                  <SortButton label="Next Maintenance" sortKey="nextMaintenanceDate" sort={sort} onSort={toggleSort}/>
+                </th>
+                <th scope="col" className="actions-col">Actions</th>
+              </tr>
               </thead>
 
               <tbody>
-                {rows.map((asset) => (
+              {rows.map((asset) => (
                   <tr key={asset.id}>
                     <td className="cell-code">{asset.assetCode || 'Not set'}</td>
                     <td className="cell-name">{asset.name || `Asset ${asset.id}`}</td>
                     <td>{asset.category || 'Not set'}</td>
+                    <td>{asset.machineType || 'Not set'}</td>
                     <td>
                       <span className={`status-badge status-${asset.status}`}>{asset.status || 'Not set'}</span>
                     </td>
@@ -126,18 +130,18 @@ function AssetsPage() {
                     <td className="actions-cell">
                       <div className="table-actions">
                         <Link to={`/assets/${asset.id}`}>
-                          <Icon name="eye" /> View
+                          <Icon name="eye"/> View
                         </Link>
                         <Link to={`/assets/${asset.id}/edit`}>
-                          <Icon name="pencil" /> Edit
+                          <Icon name="pencil"/> Edit
                         </Link>
                         <button className="button-destructive" type="button" onClick={() => removeAsset(asset)}>
-                          <Icon name="trash" /> Delete
+                          <Icon name="trash"/> Delete
                         </button>
                       </div>
                     </td>
                   </tr>
-                ))}
+              ))}
               </tbody>
             </table>
           </div>

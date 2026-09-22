@@ -54,6 +54,10 @@ function AssetDetailsPage() {
             <strong>{asset.category || 'Not set'}</strong>
           </div>
           <div className="detail-item">
+            <span>Machine Type</span>
+            <strong>{asset.machineType || 'Not set'}</strong>
+          </div>
+          <div className="detail-item">
             <span>Serial number</span>
             <strong>{asset.serialNumber || 'Not set'}</strong>
           </div>
@@ -89,7 +93,7 @@ function AssetDetailsPage() {
       </section>
       <div className="actions">
         <Link to={`/assets/${id}/edit`}>
-          <button className="button-outline" type="button">
+        <button className="button-outline" type="button">
             <Icon name="pencil" /> Edit
           </button>
         </Link>
