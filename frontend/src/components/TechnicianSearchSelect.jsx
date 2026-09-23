@@ -226,16 +226,6 @@ export function TechnicianSearchSelect({
         </div>
       )}
 
-      {selectedTech && !isOpen && (
-        <div className="technician-linked-indicator">
-          <span className="technician-linked-pill">
-            <Icon name="user" size={13} />
-            <strong>{selectedTech.displayName}</strong>
-            <span className="technician-pill-username">@{selectedTech.username}</span>
-            <span className={`role-badge role-${selectedTech.role}`}>{selectedTech.role}</span>
-          </span>
-        </div>
-      )}
     </div>
   );
 }

@@ -26,6 +26,30 @@ export function updateSparePart(id, sparePart) {
   });
 }
 
+export async function adjustSparePartStock(id, amount) {
+  if (!Number.isSafeInteger(amount) || amount === 0) {
+    throw new Error('Enter a whole number greater than zero.');
+  }
+
+  const current = await getSparePart(id);
+  const currentQuantity = Number(current.quantityInStock);
+  const nextQuantity = currentQuantity + amount;
+  if (!Number.isSafeInteger(nextQuantity) || nextQuantity > 2147483647) {
+    throw new Error('The resulting stock quantity is too large.');
+  }
+  if (nextQuantity < 0) {
+    throw new Error(`Only ${currentQuantity} ${currentQuantity === 1 ? 'unit is' : 'units are'} available.`);
+  }
+
+  return updateSparePart(id, {
+    name: current.name,
+    manufacturerNumber: current.manufacturerNumber,
+    compatibleMachineType: current.compatibleMachineType,
+    description: current.description,
+    quantityInStock: nextQuantity,
+  });
+}
+
 export function deleteSparePart(id) {
   return request(`${SPARE_PARTS_URL}/${id}`, {
     method: 'DELETE',

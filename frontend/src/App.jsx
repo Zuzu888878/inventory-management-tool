@@ -107,6 +107,10 @@ function Layout() {
         <Breadcrumbs />
         <Outlet />
       </main>
+      <footer className="site-footer">
+        <span className="site-footer-company">Leets Inventory</span>
+        <span className="site-footer-copyright">© {new Date().getFullYear()} Leets AG</span>
+      </footer>
     </div>
   );
 }
