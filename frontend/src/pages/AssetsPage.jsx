@@ -2,7 +2,6 @@ import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { deleteAsset, getAssets } from '../api/assets.js';
 import { Icon } from '../components/Icon.jsx';
-import { formatDate } from '../utils/formatDate.js';
 import { Pagination, SortButton, TableToolbar } from '../components/TableToolbar.jsx';
 import { useTableControls } from '../hooks/useTableControls.js';
 
@@ -100,16 +99,10 @@ function AssetsPage() {
                   <SortButton label="Category" sortKey="category" sort={sort} onSort={toggleSort}/>
                 </th>
                 <th scope="col">
-                  <SortButton label="Machine Type" sortKey="machineType" sort={sort} onSort={toggleSort}/>
-                </th>
-                <th scope="col">
                   <SortButton label="Status" sortKey="status" sort={sort} onSort={toggleSort}/>
                 </th>
                 <th scope="col">
                   <SortButton label="Location" sortKey="location" sort={sort} onSort={toggleSort}/>
-                </th>
-                <th scope="col">
-                  <SortButton label="Next Maintenance" sortKey="nextMaintenanceDate" sort={sort} onSort={toggleSort}/>
                 </th>
                 <th scope="col" className="actions-col">Actions</th>
               </tr>
@@ -121,12 +114,10 @@ function AssetsPage() {
                     <td className="cell-code">{asset.assetCode || 'Not set'}</td>
                     <td className="cell-name">{asset.name || `Asset ${asset.id}`}</td>
                     <td>{asset.category || 'Not set'}</td>
-                    <td>{asset.machineType || 'Not set'}</td>
                     <td>
                       <span className={`status-badge status-${asset.status}`}>{asset.status || 'Not set'}</span>
                     </td>
                     <td>{asset.location || 'Not set'}</td>
-                    <td className="cell-nowrap">{formatDate(asset.nextMaintenanceDate)}</td>
                     <td className="actions-cell">
                       <div className="table-actions">
                         <Link to={`/assets/${asset.id}`}>

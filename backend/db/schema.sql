@@ -3,6 +3,7 @@ CREATE TABLE IF NOT EXISTS assets (
     asset_code VARCHAR(100) NOT NULL UNIQUE,
     name VARCHAR(255) NOT NULL,
     category VARCHAR(255) NOT NULL,
+    machine_type VARCHAR(255),
     serial_number VARCHAR(255),
     location VARCHAR(255),
     status VARCHAR(50) NOT NULL DEFAULT 'active',
@@ -14,6 +15,9 @@ CREATE TABLE IF NOT EXISTS assets (
     created_at TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP
 );
+
+ALTER TABLE assets
+    ADD COLUMN IF NOT EXISTS machine_type VARCHAR(255);
 
 CREATE INDEX IF NOT EXISTS assets_created_at_idx ON assets (created_at DESC);
 

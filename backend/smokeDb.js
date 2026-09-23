@@ -7,12 +7,16 @@ try {
   await client.query('BEGIN');
 
   const assetResult = await client.query(
-    `INSERT INTO assets (asset_code, name, category)
-     VALUES ($1, $2, $3)
-     RETURNING id`,
-    [`SMOKE-${Date.now()}`, 'Smoke test asset', 'test']
+    `INSERT INTO assets (asset_code, name, category, machine_type)
+     VALUES ($1, $2, $3, $4)
+     RETURNING id, machine_type`,
+    [`SMOKE-${Date.now()}`, 'Smoke test asset', 'test', 'Smoke machine type']
   );
   const assetId = assetResult.rows[0].id;
+
+  if (assetResult.rows[0].machine_type !== 'Smoke machine type') {
+    throw new Error('Asset machine type could not be persisted');
+  }
 
   await client.query(
     `INSERT INTO spare_parts (name, quantity_in_stock)
