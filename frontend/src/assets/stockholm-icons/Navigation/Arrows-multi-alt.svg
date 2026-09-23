@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="24px" height="24px" viewBox="0 0 24 24" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+  <!-- Generator: Sketch 50.2 (55047) - http://www.bohemiancoding.com/sketch -->
+
+
+  <defs></defs>
+  <g
+          id="Stockholm-icons-/-Navigation-/-Arrows-h"
+          stroke="none"
+          stroke-width="1"
+          fill="none"
+          fill-rule="evenodd">
+    <polygon
+            id="Bound"
+            points="0 0 24 0 24 24 0 24" />
+    <rect
+            id="Rectangle-15"
+            fill="#000000"
+            opacity="0.3"
+            x="1"
+            y="11"
+            width="5"
+            height="2"
+            rx="1"
+            style="stroke-width:0.707107" />
+    <path
+            d="m 3.292893,7.1156123 c -0.390524,-0.3588417 -0.390524,-0.9406392 0,-1.299481 0.390525,-0.3588417 1.023689,-0.3588417 1.414214,0 l 6,5.5132297 c 0.378579,0.347866 0.391824,0.907999 0.03005,1.270646 l -5.5,5.513231 C 4.863962,18.487329 4.231394,18.512601 3.824275,18.169688 3.417156,17.826773 3.389653,17.245525 3.762845,16.871434 l 4.853017,-4.864696 z"
+            id="Path-94"
+            fill="#000000"
+            fill-rule="nonzero"
+            style="stroke-width:0.958578" />
+    <rect
+            id="Rectangle-15-9"
+            fill="#000000"
+            opacity="0.3"
+            x="-23"
+            y="11"
+            width="5"
+            height="2"
+            rx="1"
+            style="stroke-width:0.707107"
+            transform="scale(-1,1)" />
+    <path
+            d="m 20.707107,7.1156123 c 0.390524,-0.3588417 0.390524,-0.9406392 0,-1.299481 -0.390525,-0.3588417 -1.023689,-0.3588417 -1.414214,0 l -6,5.5132297 c -0.378579,0.347866 -0.391824,0.907999 -0.03005,1.270646 l 5.5,5.513231 c 0.373195,0.374091 1.005763,0.399363 1.412882,0.05645 0.407119,-0.342915 0.434622,-0.924163 0.06143,-1.298254 l -4.853017,-4.864696 z"
+            id="Path-94-6"
+            fill="#000000"
+            fill-rule="nonzero"
+            style="stroke-width:0.958578" />
+  </g>
+</svg>

@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   width="80"
+   height="24"
+   viewBox="0 0 80 24"
+   version="1.1"
+   id="svg1"
+   xmlns="http://www.w3.org/2000/svg">
+  <title
+     id="title1">Zug-Fhrerstand-A</title>
+  <defs
+     id="defs1" />
+  <g
+     id="layer1">
+    <path
+       d="m 76.491634,18.363635 v 0.689656 h -1.496961 l 2.851354,-2.068964 c 0.213851,-1.379311 0.142568,-2.194358 0.142568,-3.69906 0,0 0,-6.2695925 -0.07129,-8.2758625 C 77.489605,4.3197495 76.848051,4.2570536 76.206496,3.9435741 74.21055,2.8777427 74.424402,2 73.28386,2 H 14.831094 C 11.979741,2.0627 8.9858187,2.3134795 7.987844,4.2570536 L 3.2831091,13.598746 c -0.6415545,1.191222 -0.570271,2.695925 0.3564202,3.887147 L 4.993922,18.990596 H 3.496961 V 17.98746 L 2,18.300939 v 2.695925 H 3.496961 V 20.30721 H 9.4135213 C 9.8412251,21.310344 10.981766,22 12.264876,22 c 1.211826,0 2.352368,-0.689656 2.851354,-1.69279 h 2.352367 C 17.896301,21.310344 19.036843,22 20.248668,22 c 1.211826,0 2.352368,-0.689656 2.780071,-1.69279 H 39.994298 56.959856 C 57.458843,21.310344 58.528101,22 59.739926,22 c 1.211826,0 2.352368,-0.689656 2.780071,-1.69279 h 2.352368 C 65.300067,21.310344 66.440609,22 67.723718,22 c 1.211826,0 2.352368,-0.689656 2.851355,-1.69279 h 5.916561 v 0.689654 h 1.496961 V 18.300939 Z M 10.340211,11.968652 H 6.1344639 L 9.5560896,4.8840127 C 9.8412251,4.3197495 11.124334,3.9435741 12.407443,3.7554864 Z"
+       id="path3"
+       style="stroke-width:0.891362" />
+    <rect
+       style="fill:#ffffff;fill-opacity:1;stroke-width:1.76777"
+       id="rect4"
+       width="5"
+       height="10"
+       x="41"
+       y="8"
+       rx="1"
+       ry="1" />
+    <rect
+       style="fill:#ffffff;fill-opacity:1;stroke-width:1.76777"
+       id="rect4-3"
+       width="5"
+       height="10"
+       x="47"
+       y="8"
+       rx="1"
+       ry="1" />
+    <rect
+       style="fill:#ffffff;fill-opacity:1;stroke-width:1.36931"
+       id="rect4-3-7"
+       width="6.000001"
+       height="4.9999995"
+       x="34"
+       y="8"
+       rx="1"
+       ry="1" />
+    <rect
+       style="fill:#ffffff;fill-opacity:1;stroke-width:1.36931"
+       id="rect4-3-7-2"
+       width="6.000001"
+       height="4.9999995"
+       x="27"
+       y="8"
+       rx="1"
+       ry="1" />
+    <rect
+       style="fill:#ffffff;fill-opacity:1;stroke-width:1.36931"
+       id="rect4-3-7-2-2"
+       width="6.000001"
+       height="4.9999995"
+       x="20"
+       y="8"
+       rx="1"
+       ry="1" />
+    <rect
+       style="fill:#ffffff;fill-opacity:1;stroke-width:1.36931"
+       id="rect4-3-7-2-2-8"
+       width="6.000001"
+       height="4.9999995"
+       x="53"
+       y="8"
+       ry="1.0078125"
+       rx="1" />
+    <rect
+       style="fill:#ffffff;fill-opacity:1;stroke-width:1.36931"
+       id="rect4-3-7-2-2-85"
+       width="6.000001"
+       height="4.9999995"
+       x="60"
+       y="8"
+       rx="1"
+       ry="1" />
+    <rect
+       style="fill:#ffffff;fill-opacity:1;stroke-width:1.36931"
+       id="rect4-3-7-2-2-83"
+       width="6.000001"
+       height="4.9999995"
+       x="67"
+       y="8"
+       rx="1"
+       ry="1" />
+    <rect
+       style="fill:#ffffff;fill-opacity:1;stroke-width:1.5"
+       id="rect4-3-7-4-6-5"
+       width="4"
+       height="8"
+       x="14"
+       y="6"
+       rx="1"
+       ry="1" />
+    <rect
+       style="fill:#040404;fill-opacity:1;stroke-width:0.69282"
+       id="rect5"
+       width="3"
+       height="4"
+       x="42"
+       y="9" />
+    <rect
+       style="fill:#040404;fill-opacity:1;stroke-width:0.489898"
+       id="rect5-7"
+       width="1.999999"
+       height="2"
+       x="15.000001"
+       y="7" />
+    <rect
+       style="fill:#040404;fill-opacity:1;stroke-width:0.69282"
+       id="rect5-6"
+       width="3"
+       height="4"
+       x="48"
+       y="9" />
+  </g>
+</svg>
