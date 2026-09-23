@@ -3,7 +3,11 @@ import dotenv from 'dotenv';
 
 dotenv.config();
 
-const { Pool } = pg;
+const { Pool, types } = pg;
+
+// PostgreSQL DATE values do not contain a time or timezone. Keep them as
+// YYYY-MM-DD strings so JSON serialization cannot shift them to another day.
+types.setTypeParser(types.builtins.DATE, (value) => value);
 
 const pool = new Pool({
     host: process.env.DB_HOST || 'localhost',
