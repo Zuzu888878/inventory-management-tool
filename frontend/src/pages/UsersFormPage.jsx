@@ -53,57 +53,26 @@ export function UsersFormPage() {
   return (
     <>
       <h1>{isEditing ? 'Edit User' : 'New User'}</h1>
-      {error && <p>{error}</p>}
+      {error && <p className="form-error" role="alert">{error}</p>}
 
-      <form onSubmit={saveUser}>
-        <label>
-          Username
-          <input
-            value={username}
-            onChange={(event) => setUsername(event.target.value)}
-            minLength="3"
-            maxLength="100"
-            pattern="[A-Za-z0-9._-]+"
-            required
-          />
-        </label>
-        <label>
-          Display name
-          <input value={displayName} onChange={(event) => setDisplayName(event.target.value)} required />
-        </label>
-        <label>
-          {isEditing ? 'New password (leave blank to keep current password)' : 'Password'}
-          <input
-            type="password"
-            value={password}
-            onChange={(event) => setPassword(event.target.value)}
-            required={!isEditing}
-            autoComplete="new-password"
-          />
-        </label>
-        <label>
-          Role
-          <select value={role} onChange={(event) => setRole(event.target.value)}>
-            <option value="admin">Admin</option>
-            <option value="editor">Editor</option>
-            <option value="viewer">Viewer</option>
-          </select>
-        </label>
-        <label>
-          <span>
-            <input type="checkbox" checked={isActive} onChange={(event) => setIsActive(event.target.checked)} /> Active
-          </span>
-        </label>
-        <button className="button" type="submit">
-          <Icon name="save" /> Save
-        </button>
+      <form className="entity-form" onSubmit={saveUser}>
+        <section className="form-section">
+          <div className="form-section-heading"><div><h2>User profile</h2><p>Choose a recognisable name and a unique sign-in handle.</p></div></div>
+          <div className="form-grid">
+            <label>Display name<input value={displayName} onChange={(event) => setDisplayName(event.target.value)} autoComplete="name" required /></label>
+            <label>Username<input value={username} onChange={(event) => setUsername(event.target.value)} minLength="3" maxLength="100" pattern="[A-Za-z0-9._-]+" autoComplete="username" spellCheck="false" required /></label>
+          </div>
+        </section>
+        <section className="form-section">
+          <div className="form-section-heading"><div><h2>Access</h2><p>Control the role, account state, and password.</p></div></div>
+          <div className="form-grid">
+            <label>Role<select value={role} onChange={(event) => setRole(event.target.value)}><option value="admin">Admin</option><option value="editor">Editor</option><option value="viewer">Viewer</option></select></label>
+            <label>{isEditing ? 'New password' : 'Password'}<input type="password" value={password} onChange={(event) => setPassword(event.target.value)} required={!isEditing} autoComplete="new-password" placeholder={isEditing ? 'Leave blank to keep current password' : ''} /></label>
+            <label className="toggle-field"><input type="checkbox" checked={isActive} onChange={(event) => setIsActive(event.target.checked)} /><span><strong>Active account</strong><small>Allow this user to sign in and access the workspace.</small></span></label>
+          </div>
+        </section>
+        <div className="form-actions"><button className="button" type="submit"><Icon name="save" /> Save user</button><Link className="button-outline" to="/users"><Icon name="arrowLeft" /> Cancel</Link></div>
       </form>
-
-      <Link to="/users">
-        <button className="button-outline" type="button">
-          <Icon name="arrowLeft" /> Cancel
-        </button>
-      </Link>
     </>
   );
 }

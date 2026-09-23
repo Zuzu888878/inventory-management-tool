@@ -54,59 +54,26 @@ function SparePartFormPage() {
     <>
       <h1>{isEditing ? 'Edit Spare Part' : 'New Spare Part'}</h1>
 
-      {error && <p>{error}</p>}
+      {error && <p className="form-error" role="alert">{error}</p>}
 
-      <form onSubmit={saveSparePart}>
-        <label>
-          Name
-          <input value={name} onChange={(event) => setName(event.target.value)} required />
-        </label>
-
-        <br />
-
-        <label>
-          Manufacturer Number
-          <input value={manufacturerNumber} onChange={(event) => setManufacturerNumber(event.target.value)} />
-        </label>
-
-        <br />
-
-        <label>
-          Compatible Machine Type
-          <input value={compatibleMachineType} onChange={(event) => setCompatibleMachineType(event.target.value)} />
-        </label>
-
-        <br />
-
-        <label>
-          Quantity in Stock
-          <input
-            type="number"
-            min="0"
-            value={quantityInStock}
-            onChange={(event) => setQuantityInStock(event.target.value)}
-          />
-        </label>
-
-        <br />
-
-        <label>
-          Description
-          <input value={description} onChange={(event) => setDescription(event.target.value)} />
-        </label>
-
-        <br />
-
-        <button className="button" type="submit">
-          <Icon name="save" /> Save
-        </button>
+      <form className="entity-form" onSubmit={saveSparePart}>
+        <section className="form-section">
+          <div className="form-section-heading"><div><h2>Part details</h2><p>Use a clear name and supplier reference for quick identification.</p></div></div>
+          <div className="form-grid">
+            <label>Part name<input value={name} onChange={(event) => setName(event.target.value)} autoComplete="off" required /></label>
+            <label>Manufacturer number<input value={manufacturerNumber} onChange={(event) => setManufacturerNumber(event.target.value)} autoComplete="off" /></label>
+            <label className="form-field-wide">Compatible machine type<input value={compatibleMachineType} onChange={(event) => setCompatibleMachineType(event.target.value)} placeholder="e.g. CNC mill" /></label>
+          </div>
+        </section>
+        <section className="form-section">
+          <div className="form-section-heading"><div><h2>Inventory</h2><p>Set the quantity currently available for use.</p></div></div>
+          <div className="form-grid">
+            <label>Quantity in stock<input type="number" min="0" step="1" inputMode="numeric" value={quantityInStock} onChange={(event) => setQuantityInStock(event.target.value)} required /></label>
+            <label className="form-field-wide">Description<textarea value={description} onChange={(event) => setDescription(event.target.value)} placeholder="Specifications, storage location, or fitting notes…" /></label>
+          </div>
+        </section>
+        <div className="form-actions"><button className="button" type="submit"><Icon name="save" /> Save part</button><Link className="button-outline" to="/spare-parts"><Icon name="arrowLeft" /> Cancel</Link></div>
       </form>
-
-      <Link to="/spare-parts">
-        <button className="button-outline" type="button">
-          <Icon name="arrowLeft" /> Cancel
-        </button>
-      </Link>
     </>
   );
 }

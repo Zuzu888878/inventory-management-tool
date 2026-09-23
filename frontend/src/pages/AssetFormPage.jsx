@@ -74,117 +74,42 @@ function AssetFormPage() {
   return (
     <>
       <h1>{isEditing ? `Edit Asset` : 'New Asset'}</h1>
-      {error && <p>{error}</p>}
+      {error && <p className="form-error" role="alert">{error}</p>}
 
-      <form onSubmit={saveAsset}>
-        <label>
-          Asset Code
-          <input value={assetCode} onChange={(event) => setAssetCode(event.target.value)} required />
-        </label>
+      <form className="entity-form" onSubmit={saveAsset}>
+        <section className="form-section">
+          <div className="form-section-heading"><div><h2>Identity</h2><p>The details used to find and identify this asset.</p></div></div>
+          <div className="form-grid">
+            <label>Asset code<input value={assetCode} onChange={(event) => setAssetCode(event.target.value)} autoComplete="off" required /></label>
+            <label>Asset name<input value={name} onChange={(event) => setName(event.target.value)} autoComplete="off" required /></label>
+            <label>Category<input value={category} onChange={(event) => setCategory(event.target.value)} list="asset-categories" required /></label>
+            <label>Machine type<input value={machineType} onChange={(event) => setMachineType(event.target.value)} placeholder="e.g. CNC mill" /></label>
+            <label className="form-field-wide">Serial number<input value={serialNumber} onChange={(event) => setSerialNumber(event.target.value)} autoComplete="off" /></label>
+          </div>
+          <datalist id="asset-categories"><option value="Machine" /><option value="Tool" /><option value="Vehicle" /><option value="Equipment" /></datalist>
+        </section>
 
-        <br />
+        <section className="form-section">
+          <div className="form-section-heading"><div><h2>Operations</h2><p>Current condition, location, and connected-device state.</p></div></div>
+          <div className="form-grid">
+            <label>Status<select value={status} onChange={(event) => setStatus(event.target.value)}><option value="active">Active</option><option value="maintenance">Maintenance</option><option value="warning">Warning</option><option value="critical">Critical</option><option value="offline">Offline</option></select></label>
+            <label>IoT state<select value={iotState} onChange={(event) => setIotState(event.target.value)}><option value="unknown">Unknown</option><option value="online">Online</option><option value="offline">Offline</option></select></label>
+            <label>Location<input value={location} onChange={(event) => setLocation(event.target.value)} autoComplete="off" /></label>
+            <label>Supplier<input value={supplier} onChange={(event) => setSupplier(event.target.value)} autoComplete="organization" /></label>
+          </div>
+        </section>
 
-        <label>
-          Name
-          <input value={name} onChange={(event) => setName(event.target.value)} required />
-        </label>
+        <section className="form-section">
+          <div className="form-section-heading"><div><h2>Lifecycle</h2><p>Dates for ownership and preventive maintenance planning.</p></div></div>
+          <div className="form-grid">
+            <label>Purchase date<input type="date" value={purchaseDate} onChange={(event) => setPurchaseDate(event.target.value)} /></label>
+            <label>Next maintenance<input type="date" min={purchaseDate || undefined} value={nextMaintenanceDate} onChange={(event) => setNextMaintenanceDate(event.target.value)} /></label>
+            <label className="form-field-wide">Notes<textarea value={notes} onChange={(event) => setNotes(event.target.value)} placeholder="Useful operating, warranty, or handover notes…" /></label>
+          </div>
+        </section>
 
-        <br />
-
-        <label>
-          Category
-          <input value={category} onChange={(event) => setCategory(event.target.value)} required />
-        </label>
-
-        <br/>
-
-        <label>
-          Machine Type
-          <input value={machineType} onChange={(event) => setMachineType(event.target.value)}/>
-        </label>
-
-        <br />
-
-        <label>
-          Serial Number
-          <input value={serialNumber} onChange={(event) => setSerialNumber(event.target.value)} />
-        </label>
-
-        <br />
-
-        <label>
-          Status
-          <select value={status} onChange={(event) => setStatus(event.target.value)}>
-            <option value="active">Active</option>
-            <option value="maintenance">Maintenance</option>
-            <option value="warning">Warning</option>
-            <option value="critical">Critical</option>
-            <option value="offline">Offline</option>
-          </select>
-        </label>
-
-        <br />
-
-        <label>
-          Location
-          <input value={location} onChange={(event) => setLocation(event.target.value)} />
-        </label>
-
-        <br />
-
-        <label>
-          Supplier
-          <input value={supplier} onChange={(event) => setSupplier(event.target.value)} />
-        </label>
-
-        <br />
-
-        <label>
-          Purchase Date
-          <input type="date" value={purchaseDate} onChange={(event) => setPurchaseDate(event.target.value)} />
-        </label>
-
-        <br />
-
-        <label>
-          Next Maintenance
-          <input
-            type="date"
-            value={nextMaintenanceDate}
-            onChange={(event) => setNextMaintenanceDate(event.target.value)}
-          />
-        </label>
-
-        <br />
-
-        <label>
-          IoT State
-          <select value={iotState} onChange={(event) => setIotState(event.target.value)}>
-            <option value="unknown">Unknown</option>
-            <option value="online">Online</option>
-            <option value="offline">Offline</option>
-          </select>
-        </label>
-
-        <br />
-
-        <label>
-          Notes
-          <textarea value={notes} onChange={(event) => setNotes(event.target.value)} />
-        </label>
-
-        <br />
-
-        <button className="button" type="submit">
-          <Icon name="save" /> Save
-        </button>
+        <div className="form-actions"><button className="button" type="submit"><Icon name="save" /> Save asset</button><Link className="button-outline" to="/assets"><Icon name="arrowLeft" /> Cancel</Link></div>
       </form>
-
-      <Link to="/assets">
-        <button className="button-outline" type="button">
-          <Icon name="arrowLeft" /> Cancel
-        </button>
-      </Link>
     </>
   );
 }
