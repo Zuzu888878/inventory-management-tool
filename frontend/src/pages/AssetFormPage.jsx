@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import { Link, useNavigate, useParams } from 'react-router-dom';
 import { createAsset, getAsset, updateAsset } from '../api/assets.js';
 import { Icon } from '../components/Icon.jsx';
+import { CategorySearchSelect } from '../components/CategorySearchSelect.jsx';
 
 function AssetFormPage() {
   const { id } = useParams();
@@ -82,11 +83,10 @@ function AssetFormPage() {
           <div className="form-grid">
             <label>Asset code<input value={assetCode} onChange={(event) => setAssetCode(event.target.value)} autoComplete="off" required /></label>
             <label>Asset name<input value={name} onChange={(event) => setName(event.target.value)} autoComplete="off" required /></label>
-            <label>Category<input value={category} onChange={(event) => setCategory(event.target.value)} list="asset-categories" required /></label>
+            <label>Category<CategorySearchSelect value={category} onChange={setCategory} /></label>
             <label>Machine type<input value={machineType} onChange={(event) => setMachineType(event.target.value)} placeholder="e.g. CNC mill" /></label>
             <label className="form-field-wide">Serial number<input value={serialNumber} onChange={(event) => setSerialNumber(event.target.value)} autoComplete="off" /></label>
           </div>
-          <datalist id="asset-categories"><option value="Machine" /><option value="Tool" /><option value="Vehicle" /><option value="Equipment" /></datalist>
         </section>
 
         <section className="form-section">
