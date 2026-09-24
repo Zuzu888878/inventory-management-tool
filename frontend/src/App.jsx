@@ -124,6 +124,7 @@ function App() {
         <Route element={<ProtectedRoute />}>
           <Route element={<Layout />}>
             <Route path="/dashboard" element={<DashboardPage />} />
+            <Route path="/dashboard/:tab" element={<DashboardPage />} />
 
             <Route path="/assets" element={<AssetsPage />} />
             <Route path="/assets/new" element={<AssetFormPage />} />
