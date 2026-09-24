@@ -2,100 +2,189 @@ import pool from './config.js';
 import { hashPassword } from './passwords.js';
 
 const demoAssets = [
-  ['DEMO-LATHE-01', 'CNC Precision Lathe', 'Machining', 'Mecora VX-800', 'warning', 'online', 'Workshop Bay 1', 'SN-LAT-2021', 'Haas Automation', '2021-03-15', -14],
-  ['DEMO-MILL-01', 'Vertical Milling Machine', 'Machining', 'Mecora MX-1200', 'active', 'online', 'Workshop Bay 1', 'SN-MIL-4091', 'DMG Mori', '2020-07-20', 7],
-  ['DEMO-COMP-01', 'Workshop Air Compressor', 'Utilities', 'Comprax AC-750', 'maintenance', 'offline', 'Utility Room A', 'SN-CMP-1102', 'Atlas Copco', '2019-11-10', 0],
-  ['DEMO-PUMP-01', 'Hydraulic Test Pump', 'Testing', 'Hydronix HP-800', 'active', 'online', 'Testing Lab', 'SN-PMP-8831', 'Bosch Rexroth', '2022-01-05', -45],
-  ['DEMO-ROBOT-01', '6-Axis Articulated Robot', 'Robotics', 'Robexa AR-600', 'active', 'online', 'Assembly Cell 1', 'SN-ROB-9901', 'KUKA', '2023-02-18', 21],
-  ['DEMO-ROBOT-02', 'Delta Pick & Place Robot', 'Robotics', 'Robexa DP-400', 'active', 'online', 'Packaging Line A', 'SN-ROB-9902', 'ABB', '2023-04-12', 35],
-  ['DEMO-LASER-01', 'Fiber Laser Cutter 4kW', 'Fabrication', 'Novatek LC-4000', 'warning', 'online', 'Fabrication Hall', 'SN-LSR-5510', 'TRUMPF', '2022-06-30', -3],
-  ['DEMO-BRAKE-01', 'CNC Press Brake 150T', 'Fabrication', 'Mechara PB-150', 'active', 'online', 'Fabrication Hall', 'SN-BRK-3320', 'Amada', '2021-09-14', 45],
-  ['DEMO-CONV-01', 'Main Production Conveyor', 'Material Handling', 'Convega CV-1200', 'critical', 'offline', 'Central Bay', 'SN-CNV-0012', 'FlexLink', '2018-05-22', -1],
-  ['DEMO-CONV-02', 'Packaging Sorter Conveyor', 'Material Handling', 'Convega PS-800', 'active', 'online', 'Packaging Line B', 'SN-CNV-0015', 'Interroll', '2021-12-01', 60],
-  ['DEMO-INJ-01', 'Plastic Injection Molder 200T', 'Molding', 'Injectra IM-200', 'active', 'online', 'Molding Shop', 'SN-INJ-7711', 'Engel', '2020-10-10', 14],
-  ['DEMO-INJ-02', 'Electric Injection Machine', 'Molding', 'Injectra EM-180', 'maintenance', 'offline', 'Molding Shop', 'SN-INJ-7712', 'Arburg', '2022-08-19', 2],
-  ['DEMO-GEN-01', 'Emergency Diesel Generator 500kVA', 'Utilities', 'Genvora DG-500', 'active', 'unknown', 'Utility Yard', 'SN-GEN-6601', 'Cummins', '2019-04-05', 90],
-  ['DEMO-CHILL-01', 'Industrial Water Chiller', 'Utilities', 'Chillonix WC-900', 'active', 'online', 'Utility Yard', 'SN-CHL-2201', 'Daikin', '2021-01-15', 18],
-  ['DEMO-OVEN-01', 'Curing & Annealing Oven', 'Thermal Processing', 'Thermexa IO-800', 'active', 'online', 'Heat Treat Bay', 'SN-OVN-8812', 'Nabertherm', '2020-03-25', 28],
-  ['DEMO-WELD-01', 'TIG Robotic Welding Cell', 'Fabrication', 'Ferrox W-400', 'active', 'online', 'Welding Shop', 'SN-WLD-4411', 'Fronius', '2022-11-08', 42],
-  ['DEMO-WELD-02', 'MIG Automated Station', 'Fabrication', 'Ferrox W-600', 'offline', 'offline', 'Welding Shop', 'SN-WLD-4412', 'Lincoln Electric', '2021-05-19', -10],
-  ['DEMO-CMM-01', 'Coordinate Measuring Machine', 'Quality Control', 'Metrixa CMM-500', 'active', 'online', 'Metrology Lab', 'SN-CMM-1001', 'Zeiss', '2023-01-10', 15],
-  ['DEMO-OPT-01', '3D Optical Surface Scanner', 'Quality Control', 'Optivex OS-300', 'active', 'online', 'Metrology Lab', 'SN-OPT-2002', 'GOM', '2023-08-14', 50],
-  ['DEMO-PRINT-01', 'Industrial SLA 3D Printer', 'Prototyping', 'Printara SLA-500', 'active', 'online', 'R&D Studio', 'SN-PRN-3011', 'Formlabs', '2022-09-01', 8],
-  ['DEMO-PRINT-02', 'Metal Powder Bed Fusion 3D', 'Prototyping', 'Printara MP-900', 'warning', 'online', 'R&D Studio', 'SN-PRN-3012', 'EOS', '2023-03-11', -5],
-  ['DEMO-PACK-01', 'Automated Case Erector', 'Packaging', 'Packora PE-700', 'active', 'online', 'Packaging Line A', 'SN-PCK-5011', 'Lantech', '2021-08-20', 30],
-  ['DEMO-PACK-02', 'Pallet Wrapping Turntable', 'Packaging', 'Packora PW-600', 'active', 'online', 'Shipping Dock', 'SN-PCK-5012', 'Robopac', '2020-12-12', 75],
-  ['DEMO-FORK-01', 'Electric Forklift 2.5T', 'Vehicles', 'Forka FT-250', 'active', 'online', 'Warehouse Bay', 'SN-FRK-9001', 'Jungheinrich', '2022-05-05', 12],
-  ['DEMO-FORK-02', 'Reach Truck 1.6T', 'Vehicles', 'Forka RT-160', 'active', 'online', 'Warehouse Bay', 'SN-FRK-9002', 'Linde', '2021-10-30', 25],
-  ['DEMO-CRANE-01', 'Overhead Gantry Crane 10T', 'Lifting', 'Cranex CG-1000', 'active', 'unknown', 'Heavy Fab Hall', 'SN-CRN-0001', 'Konecranes', '2017-02-14', 60],
-  ['DEMO-DUST-01', 'Central Dust Extraction Unit', 'HVAC', 'Dustra DE-600', 'active', 'online', 'Roof Plant 1', 'SN-DST-1122', 'Nederman', '2020-04-18', 40],
-  ['DEMO-FURN-01', 'Induction Melting Furnace', 'Foundry', 'Furnexa MF-1200', 'maintenance', 'offline', 'Foundry Area', 'SN-FRN-7001', 'Inductotherm', '2019-09-09', 1],
-  ['DEMO-SAW-01', 'Automatic Bandsaw', 'Machining', 'Sawtek BS-700', 'active', 'online', 'Raw Material Store', 'SN-SAW-3310', 'Kasto', '2021-04-20', 22],
-  ['DEMO-GRIND-01', 'Surface Grinding Machine', 'Machining', 'Grindora SG-500', 'active', 'online', 'Precision Toolroom', 'SN-GRD-5501', 'Studer', '2022-07-15', 33],
+  ['CNC-LATHE-01', 'CNC Turning Center - Bar Line 1', 'CNC Machining', 'ST-30Y', 'warning', 'online', 'Machining Hall A', 'ST30Y-21-1048', 'Haas Automation', '2021-03-15', -14],
+  ['CNC-LATHE-02', 'CNC Turning Center - Bar Line 2', 'CNC Machining', 'NLX 2500', 'active', 'online', 'Machining Hall A', 'NLX25-20-8831', 'DMG Mori', '2020-07-20', 18],
+  ['CNC-LATHE-03', 'CNC Swiss-Type Lathe', 'CNC Machining', 'Cincom L32', 'active', 'online', 'Machining Hall A', 'L32-22-4410', 'Citizen Machinery', '2022-04-11', 31],
+
+  ['CNC-MILL-01', '3-Axis Vertical Machining Center', 'CNC Machining', 'VF-4SS', 'active', 'online', 'Machining Hall B', 'VF4SS-19-4071', 'Haas Automation', '2019-09-03', 7],
+  ['CNC-MILL-02', '5-Axis Machining Center', 'CNC Machining', 'DMU 50', 'active', 'online', 'Machining Hall B', 'DMU50-23-1904', 'DMG Mori', '2023-01-18', 45],
+  ['CNC-MILL-03', 'Horizontal Machining Center', 'CNC Machining', 'NHX 4000', 'maintenance', 'offline', 'Machining Hall B', 'NHX4-18-2199', 'DMG Mori', '2018-11-28', 0],
+
+  ['SAW-BAR-01', 'Automatic Steel Bar Bandsaw', 'Cutting', 'KASTOwin A 4.6', 'active', 'online', 'Raw Material Bay', 'KASTO-21-3310', 'KASTO', '2021-04-20', 22],
+  ['SAW-TUBE-01', 'Automatic Tube & Profile Bandsaw', 'Cutting', 'HBE 411A', 'active', 'online', 'Raw Material Bay', 'BEHR-20-1127', 'Behringer', '2020-06-12', 40],
+  ['SAW-COLD-01', 'Cold Saw for Precision Blanks', 'Cutting', 'CS-350 NC', 'warning', 'online', 'Raw Material Bay', 'CS350-19-5033', 'MEP', '2019-05-16', -4],
+
+  ['BARFEED-01', 'Automatic Bar Feeder', 'Material Handling', 'Quick Load Servo 80', 'active', 'online', 'Machining Hall A', 'QL80-21-7780', 'LNS', '2021-03-15', 28],
+
+  ['HEADER-01', 'Cold Header - Bolt Former 4 Die', 'Fastener Production', 'BF-4D-12', 'active', 'online', 'Fastener Hall', 'BF4D-20-1012', 'Sakamura', '2020-02-10', 12],
+  ['HEADER-02', 'Cold Header - Bolt Former 5 Die', 'Fastener Production', 'BF-5D-16', 'warning', 'online', 'Fastener Hall', 'BF5D-19-2091', 'National Machinery', '2019-08-22', -6],
+  ['NUTFORMER-01', 'Nut Former 6 Station', 'Fastener Production', 'NF-6S-M16', 'active', 'online', 'Fastener Hall', 'NF6S-22-3314', 'Chun Zu', '2022-02-14', 35],
+
+  ['THREAD-ROLL-01', 'Flat-Die Thread Rolling Machine', 'Fastener Production', 'TR-25', 'active', 'online', 'Fastener Hall', 'TR25-21-6008', 'Seny', '2021-10-01', 14],
+  ['THREAD-ROLL-02', 'Flat-Die Thread Rolling Machine', 'Fastener Production', 'TR-40', 'active', 'online', 'Fastener Hall', 'TR40-20-6011', 'Seny', '2020-12-09', 27],
+  ['THREAD-ROLL-03', 'Planetary Thread Roller', 'Fastener Production', 'PTR-M20', 'maintenance', 'offline', 'Fastener Hall', 'PTR20-18-5120', 'E.W. Menn', '2018-05-30', 1],
+
+  ['NUT-TAP-01', 'Automatic Nut Tapping Machine', 'Fastener Production', 'NTM-M16', 'active', 'online', 'Fastener Hall', 'NTM16-22-7104', 'San Shing', '2022-07-11', 19],
+  ['NUT-TAP-02', 'Automatic Nut Tapping Machine', 'Fastener Production', 'NTM-M24', 'active', 'online', 'Fastener Hall', 'NTM24-21-7108', 'San Shing', '2021-09-02', 42],
+
+  ['SORTER-01', 'Optical Bolt & Nut Sorting Machine', 'Quality Control', 'VISI-SORT 360', 'active', 'online', 'Inspection & Packing', 'VS360-23-9011', 'Dimac', '2023-05-04', 50],
+  ['PACK-01', 'Automatic Fastener Counting & Bagging Line', 'Packaging', 'FCB-50', 'active', 'online', 'Inspection & Packing', 'FCB50-22-3044', 'WeighPack', '2022-08-18', 33],
+
+  ['LASER-01', 'Fiber Laser Cutter 4 kW', 'Sheet Metal', 'TruLaser 3030 fiber', 'warning', 'online', 'Fabrication Hall', 'TL3030-22-5510', 'TRUMPF', '2022-06-30', -3],
+  ['PRESSBRAKE-01', 'CNC Press Brake 170 t', 'Sheet Metal', 'HG 1703', 'active', 'online', 'Fabrication Hall', 'HG1703-21-3320', 'Amada', '2021-09-14', 45],
+  ['PRESSBRAKE-02', 'CNC Press Brake 100 t', 'Sheet Metal', 'TruBend 3100', 'active', 'online', 'Fabrication Hall', 'TB3100-20-2910', 'TRUMPF', '2020-10-06', 62],
+
+  ['WELD-ROBOT-01', 'Robotic MIG/MAG Welding Cell', 'Welding', 'KR CYBERTECH + TPS/i', 'active', 'online', 'Welding Bay', 'KUKA-22-4411', 'KUKA / Fronius', '2022-11-08', 42],
+  ['WELD-MIG-01', 'Manual MIG/MAG Welding Station', 'Welding', 'Powertec i500S', 'active', 'online', 'Welding Bay', 'LE-21-4412', 'Lincoln Electric', '2021-05-19', 24],
+  ['WELD-TIG-01', 'TIG Welding Station', 'Welding', 'MagicWave 3000', 'active', 'online', 'Welding Bay', 'FR-20-4480', 'Fronius', '2020-03-27', 56],
+
+  ['GRINDER-CYL-01', 'CNC Cylindrical Grinder', 'Grinding', 'S33', 'active', 'online', 'Precision Finishing', 'S33-22-5501', 'Studer', '2022-07-15', 33],
+  ['GRINDER-SURF-01', 'Surface Grinder', 'Grinding', 'PLANOMAT HP', 'active', 'online', 'Precision Finishing', 'PLAN-19-5508', 'Blohm', '2019-12-02', 26],
+
+  ['DEBURR-01', 'Vibratory Deburring Machine', 'Finishing', 'R 420', 'active', 'online', 'Finishing Area', 'R420-20-1801', 'Rösler', '2020-05-21', 30],
+  ['SHOTBLAST-01', 'Shot Blasting Cabinet', 'Finishing', 'RB-1000', 'active', 'online', 'Finishing Area', 'RB1000-19-1233', 'Rösler', '2019-03-18', 48],
+  ['WASHER-01', 'Industrial Parts Washer', 'Finishing', 'EcoCwave', 'active', 'online', 'Finishing Area', 'ECW-21-9022', 'Ecoclean', '2021-11-09', 17],
+
+  ['CMM-01', 'Coordinate Measuring Machine', 'Quality Control', 'CONTURA', 'active', 'online', 'Metrology Lab', 'CMM-23-1001', 'Zeiss', '2023-01-10', 15],
+  ['OPTICAL-01', 'Optical Measurement System', 'Quality Control', 'SmartScope ZIP 300', 'active', 'online', 'Metrology Lab', 'OGP-23-2002', 'OGP', '2023-08-14', 50],
+  ['HARDNESS-01', 'Rockwell Hardness Tester', 'Quality Control', 'DuraVision 250', 'active', 'online', 'Metrology Lab', 'DV250-21-7802', 'EMCO-TEST', '2021-06-18', 38],
+  ['ROUGHNESS-01', 'Surface Roughness Tester', 'Quality Control', 'MarSurf PS 10', 'active', 'online', 'Metrology Lab', 'PS10-22-4821', 'Mahr', '2022-03-09', 44],
+  ['TENSILE-01', 'Universal Tensile Testing Machine 100 kN', 'Quality Control', 'Z100', 'active', 'online', 'Material Lab', 'Z100-20-3901', 'ZwickRoell', '2020-09-25', 61],
+
+  ['COMPRESSOR-01', 'Rotary Screw Air Compressor 75 kW', 'Utilities', 'GA 75 VSD+', 'maintenance', 'offline', 'Compressor Room', 'GA75-19-1102', 'Atlas Copco', '2019-11-10', 0],
+  ['COMPRESSOR-02', 'Rotary Screw Air Compressor 55 kW', 'Utilities', 'BSD 75', 'active', 'online', 'Compressor Room', 'BSD75-21-1118', 'Kaeser', '2021-04-07', 55],
+  ['AIR-DRYER-01', 'Compressed Air Refrigeration Dryer', 'Utilities', 'FD 185', 'active', 'online', 'Compressor Room', 'FD185-20-3318', 'Atlas Copco', '2020-08-19', 68],
+
+  ['COOLANT-SYS-01', 'Central CNC Coolant Filtration System', 'Utilities', 'MicroMag MM-5000', 'active', 'online', 'Machining Hall A', 'MM5K-22-6630', 'Eclipse Magnetics', '2022-02-28', 23],
+  ['MIST-EXTRACT-01', 'Central Oil Mist Extraction Unit', 'HVAC', 'Filtermist FX6000', 'active', 'online', 'Machining Hall A', 'FX6K-21-1122', 'Filtermist', '2021-04-18', 40],
+  ['DUST-EXTRACT-01', 'Grinding Dust Extraction Unit', 'HVAC', 'S-1000', 'active', 'online', 'Precision Finishing', 'S1000-20-6614', 'Nederman', '2020-10-10', 37],
+
+  ['CRANE-01', 'Overhead Bridge Crane 5 t', 'Material Handling', 'CXT 5T', 'active', 'online', 'Raw Material Bay', 'CXT5-18-0001', 'Konecranes', '2018-02-14', 60],
+  ['CRANE-02', 'Jib Crane 1 t', 'Material Handling', 'ABUS LS 1T', 'active', 'unknown', 'Machining Hall B', 'LS1T-21-0088', 'ABUS', '2021-12-01', 75],
+
+  ['FORKLIFT-01', 'Electric Forklift 3.0 t', 'Material Handling', 'E30', 'active', 'online', 'Warehouse', 'E30-22-9001', 'Linde', '2022-05-05', 12],
+  ['REACH-TRUCK-01', 'Reach Truck 1.6 t', 'Material Handling', 'ETV 216i', 'active', 'online', 'Warehouse', 'ETV216-21-9002', 'Jungheinrich', '2021-10-30', 25],
 ];
 
 const demoSpareParts = [
-  ['[Demo] Cutting Insert TNMG-1604', 'DEMO-INSERT-01', 'Mecora VX-800', 0, 'Carbide turning inserts - critical stockout'],
-  ['[Demo] Hydraulic Filter Cartridge 10um', 'DEMO-FILTER-01', 'Hydronix HP-800', 3, 'High-pressure replacement filter element'],
-  ['[Demo] Drive Belt SPZ-1250', 'DEMO-BELT-01', 'Comprax AC-750', 12, 'Reinforced rubber V-belt for drive assembly'],
-  ['[Demo] Synthetic Coolant Concentrate 20L', 'DEMO-COOLANT-01', 'Mecora VX-800', 4, 'Water-miscible semi-synthetic cutting fluid'],
-  ['[Demo] Polycarbonate Safety Guard', 'DEMO-GUARD-01', 'Mecora MX-1200', 25, 'Interlocked safety enclosure panel'],
-  ['[Demo] Laser Lens Protective Window', 'DEMO-OPTIC-01', 'Novatek LC-4000', 2, 'Fused silica protective cover slide'],
-  ['[Demo] Laser Nozzle Copper 1.5mm', 'DEMO-NOZZLE-01', 'Novatek LC-4000', 18, 'Single-layer chrome-plated cutting nozzle'],
-  ['[Demo] Servo Motor 750W 3000RPM', 'DEMO-MTR-01', 'Convega CV-1200', 1, 'Brushless AC servo motor with brake'],
-  ['[Demo] Photoelectric Sensor NPN', 'DEMO-SENS-01', 'Convega PS-800', 0, 'Infrared diffuse sensor 300mm range'],
-  ['[Demo] Inductive Proximity Switch M12', 'DEMO-PROX-01', 'Mecora MX-1200', 14, 'Flush mount inductive switch IP67'],
-  ['[Demo] Pneumatic Solenoid Valve 5/2', 'DEMO-VALV-01', 'Packora PE-700', 6, '24V DC pilot operated directional valve'],
-  ['[Demo] Air Cylinder 50mm Bore 100mm Stroke', 'DEMO-CYL-01', 'Convega PS-800', 5, 'ISO 15552 double-acting cylinder'],
-  ['[Demo] Linear Bearing Block HGH25CA', 'DEMO-BEAR-01', 'Mecora VX-800', 8, 'Heavy load linear motion ball bearing'],
-  ['[Demo] Ball Screw Nut 3205', 'DEMO-BSCR-01', 'Grindora SG-500', 2, 'Preloaded precision ground ball nut'],
-  ['[Demo] Oil Filter Spin-On Type', 'DEMO-OFIL-01', 'Comprax AC-750', 15, 'Compressor lubricant purification filter'],
-  ['[Demo] Air Filter Element Poly', 'DEMO-AFIL-01', 'Dustra DE-600', 9, 'HEPA class pleated filter cartridge'],
-  ['[Demo] Ceramic Heating Band 230V', 'DEMO-HEAT-01', 'Injectra IM-200', 3, 'Barrel heating element with thermocouple'],
-  ['[Demo] Thermocouple Type K 2m', 'DEMO-TC-01', 'Thermexa IO-800', 11, 'Stainless steel sheathed probe sensor'],
-  ['[Demo] TIG Torch Gas Lens Cup #8', 'DEMO-TIG-01', 'Ferrox W-400', 22, 'Alumina nozzle cup for argon shielding'],
-  ['[Demo] Contact Tip 1.2mm CuCrZr', 'DEMO-MIG-01', 'Ferrox W-600', 45, 'Heavy-duty copper contact tip'],
-  ['[Demo] Forklift Traction Battery Cell 2V', 'DEMO-BAT-01', 'Forka FT-250', 0, 'Lead-acid industrial traction element'],
-  ['[Demo] Polyurethane Drive Wheel 250mm', 'DEMO-WHL-01', 'Forka FT-250', 4, 'Non-marking polyurethane load roller'],
-  ['[Demo] SLA Resin Tough Clear 1L', 'DEMO-RSN-01', 'Printara SLA-500', 7, 'UV photopolymer resin cartridge'],
-  ['[Demo] Metal Recoater Blade 300mm', 'DEMO-BLD-01', 'Printara MP-900', 2, 'Precision ceramic powder spreading blade'],
-  ['[Demo] Wire Rope Hoist Cable 12mm', 'DEMO-CBL-01', 'Cranex CG-1000', 3, 'Galvanized steel non-rotating hoist wire'],
-  ['[Demo] Bi-Metal Bandsaw Blade 4115mm', 'DEMO-SAWBL-01', 'Sawtek BS-700', 8, 'M42 variable pitch band saw strip'],
-  ['[Demo] Diamond Grinding Wheel 200mm', 'DEMO-GRDW-01', 'Grindora SG-500', 1, 'Resin bonded cBN precision grinding wheel'],
-  ['[Demo] Emergency Stop Pushbutton', 'DEMO-ESTOP-01', 'Ferrox W-400', 16, 'Twist-to-release 40mm mushroom button'],
-  ['[Demo] Solid State Relay 40A 480V', 'DEMO-SSR-01', 'Thermexa IO-800', 10, 'Zero-crossing AC solid state switching relay'],
-  ['[Demo] 24V DC Power Supply 10A DIN', 'DEMO-PSU-01', 'Convega CV-1200', 7, 'Regulated industrial switch-mode power unit'],
+  ['CNMG 120408 Turning Insert - Steel Grade', 'INS-CNMG-120408', 'ST-30Y / NLX 2500', 120, 'Coated carbide insert for general steel roughing and finishing; ISO P25-P35.'],
+  ['DNMG 150608 Turning Insert - Steel Grade', 'INS-DNMG-150608', 'ST-30Y / NLX 2500', 75, 'Negative turning insert for profiling alloy and carbon steels.'],
+
+  ['ER32 Collet 12 mm', 'COL-ER32-12', 'VF-4SS / DMU 50', 14, 'Precision spring collet for drills, taps and end mills.'],
+  ['ER32 Collet 16 mm', 'COL-ER32-16', 'VF-4SS / DMU 50', 11, 'Precision spring collet for drills, taps and end mills.'],
+
+  ['Carbide End Mill 10 mm - 4 Flute', 'EM-CARB-10-4F', 'VF-4SS / DMU 50 / NHX 4000', 32, 'TiAlN-coated solid carbide end mill for steel machining.'],
+  ['Carbide Drill 8.5 mm', 'DRILL-CARB-8.5', 'VF-4SS / DMU 50 / NHX 4000', 24, 'Through-coolant carbide drill for production drilling.'],
+
+  ['Machine Tap M8 x 1.25', 'TAP-M8-125', 'VF-4SS / DMU 50', 20, 'Spiral-point HSS-E production tap for steel.'],
+  ['Machine Tap M12 x 1.75', 'TAP-M12-175', 'VF-4SS / DMU 50', 16, 'Spiral-point HSS-E production tap for steel.'],
+
+  ['Semi-Synthetic CNC Coolant - 20L', 'COOLANT-SS-20L', 'CNC Machining', 18, 'Water-miscible machining coolant concentrate for steel and stainless steel.'],
+
+  ['M42 Bandsaw Blade 41 x 1.3 mm - 4/6 TPI', 'BLADE-M42-416', 'KASTOwin A 4.6', 10, 'Bi-metal blade for solid carbon and alloy steel bar.'],
+  ['M42 Bandsaw Blade 34 x 1.1 mm - 5/7 TPI', 'BLADE-M42-347', 'HBE 411A', 12, 'Bi-metal blade for steel tube and profile stock.'],
+
+  ['Cold Heading Punch - M10 Hex Bolt', 'HEAD-PUNCH-M10', 'BF-4D-12', 6, 'Forming punch for M10 hex-head carbon steel bolt production.'],
+  ['Cold Heading Die - M10 Shank', 'HEAD-DIE-M10', 'BF-4D-12', 5, 'Carbide heading die for M10 bolt shank forming.'],
+  ['Cold Heading Punch - M16 Hex Bolt', 'HEAD-PUNCH-M16', 'BF-5D-16', 4, 'Forming punch for M16 alloy steel bolt production.'],
+
+  ['Nut Former Die Insert - M12', 'NUT-DIE-M12', 'NF-6S-M16', 8, 'Carbide die insert for six-station nut forming.'],
+
+  ['Thread Rolling Die Set - M8 x 1.25', 'ROLL-DIE-M8', 'TR-25', 7, 'Matched flat-die set for ISO metric M8 threads.'],
+  ['Thread Rolling Die Set - M10 x 1.5', 'ROLL-DIE-M10', 'TR-25', 5, 'Matched flat-die set for ISO metric M10 threads.'],
+  ['Thread Rolling Die Set - M16 x 2.0', 'ROLL-DIE-M16', 'TR-40', 4, 'Matched flat-die set for ISO metric M16 threads.'],
+
+  ['Nut Tap M8 x 1.25 - Long Shank', 'NUT-TAP-M8', 'NTM-M16', 18, 'Long-shank nut tap for automatic steel nut production.'],
+  ['Nut Tap M12 x 1.75 - Long Shank', 'NUT-TAP-M12', 'NTM-M16', 14, 'Long-shank nut tap for automatic steel nut production.'],
+  ['Nut Tap M20 x 2.5 - Long Shank', 'NUT-TAP-M20', 'NTM-M24', 8, 'Long-shank nut tap for large steel nut production.'],
+
+  ['Fiber Laser Protective Window', 'LASER-WINDOW-01', 'TruLaser 3030 fiber', 6, 'Protective cover window for fiber laser cutting head.'],
+  ['Fiber Laser Nozzle 1.2 mm', 'LASER-NOZ-1.2', 'TruLaser 3030 fiber', 24, 'Copper cutting nozzle for thin steel sheet.'],
+  ['Fiber Laser Nozzle 2.0 mm', 'LASER-NOZ-2.0', 'TruLaser 3030 fiber', 18, 'Copper nozzle for medium-thickness steel.'],
+
+  ['MIG Contact Tip 1.0 mm CuCrZr', 'MIG-TIP-1.0', 'Powertec i500S / TPS/i', 80, 'Heavy-duty contact tip for steel welding wire.'],
+  ['MIG Contact Tip 1.2 mm CuCrZr', 'MIG-TIP-1.2', 'Powertec i500S / TPS/i', 65, 'Heavy-duty contact tip for structural steel welding.'],
+
+  ['CBN Grinding Wheel 400 mm', 'GRIND-CBN-400', 'S33', 2, 'CBN wheel for hardened steel cylindrical grinding.'],
+  ['Surface Grinding Wheel 300 mm', 'GRIND-SURF-300', 'PLANOMAT HP', 4, 'Aluminum oxide grinding wheel for steel.'],
+
+  ['CMM Stylus 3 mm Ruby', 'CMM-STYLUS-3', 'CONTURA', 6, 'Ruby ball stylus for dimensional inspection.'],
+  ['CMM Stylus 5 mm Ruby', 'CMM-STYLUS-5', 'CONTURA', 4, 'Ruby ball stylus for bores and larger steel components.'],
+
+  ['Compressor Oil Filter', 'COMP-OIL-FILTER', 'GA 75 VSD+ / BSD 75', 8, 'Lubricant filter for rotary screw compressors.'],
+  ['Compressor Air Intake Filter', 'COMP-AIR-FILTER', 'GA 75 VSD+ / BSD 75', 8, 'Air intake filter for rotary screw compressors.'],
+  ['Compressor Separator Element', 'COMP-SEPARATOR', 'GA 75 VSD+ / BSD 75', 3, 'Air/oil separator cartridge.'],
+
+  ['Oil Mist Filter Cartridge', 'MIST-FILTER-FX6000', 'Filtermist FX6000', 10, 'High-efficiency CNC oil mist filter element.'],
+  ['Grinding Dust Filter Cartridge', 'DUST-FILTER-S1000', 'S-1000', 12, 'Filter cartridge for steel grinding dust extraction.'],
+
+  ['Crane Wire Rope 10 mm', 'CRANE-ROPE-10', 'CXT 5T', 2, 'Steel wire rope for bridge crane hoist.'],
+  ['Forklift Hydraulic Filter', 'FORK-HYD-FILTER', 'E30 / ETV 216i', 6, 'Hydraulic filter element for warehouse vehicles.'],
 ];
 
 const demoMaintenancePlans = [
-  ['DEMO-LATHE-01', 'Spindle alignment inspection', -14, 'planned', 'Alex Morgan', 450.0, 'Demo overdue maintenance - spindle runout check'],
-  ['DEMO-MILL-01', 'Quarterly guideway lubrication & calibration', 7, 'planned', 'Jamie Lee', 320.0, 'Demo upcoming preventive maintenance'],
-  ['DEMO-COMP-01', 'Emergency pressure valve seal replacement', 0, 'in_progress', 'Alex Morgan', 180.0, 'Demo maintenance due today'],
-  ['DEMO-PUMP-01', 'Annual hydraulic calibration and oil test', -45, 'completed', 'Jamie Lee', 650.0, 'Demo completed calibration with ISO certification'],
-  ['DEMO-ROBOT-01', 'Axis 1-6 gearbox backlash measurement', 21, 'planned', 'Sam Taylor', 800.0, 'Scheduled 5000-hour robot overhaul'],
-  ['DEMO-ROBOT-02', 'Vacuum gripper hose & sensor harness refresh', -7, 'completed', 'Sam Taylor', 210.0, 'Replaced cracked suction tubing'],
-  ['DEMO-LASER-01', 'Beam delivery optic cleaning and focus test', -3, 'planned', 'Chris Jordan', 550.0, 'Overdue protective window check'],
-  ['DEMO-BRAKE-01', 'Hydraulic fluid filter replacement', 45, 'planned', 'Morgan Bailey', 290.0, 'Standard semi-annual servicing'],
-  ['DEMO-CONV-01', 'Emergency roller bearing replacement', -1, 'in_progress', 'Alex Morgan', 920.0, 'Main line stalled due to seized bearing'],
-  ['DEMO-CONV-02', 'Belt tensioning and optical sensor cleaning', 60, 'planned', 'Jamie Lee', 150.0, 'Routine inspection'],
-  ['DEMO-INJ-01', 'Hydraulic clamp tonnage validation', 14, 'planned', 'Sam Taylor', 480.0, 'Scheduled process audit'],
-  ['DEMO-INJ-02', 'Screw and barrel wear inspection', 2, 'planned', 'Sam Taylor', 750.0, 'High injection pressure variance reported'],
-  ['DEMO-GEN-01', 'Diesel engine load bank test', 90, 'planned', 'Chris Jordan', 1200.0, 'Annual backup power readiness test'],
-  ['DEMO-CHILL-01', 'Refrigerant pressure leak detection & top-up', 18, 'planned', 'Morgan Bailey', 360.0, 'Pre-summer thermal cycle preparation'],
-  ['DEMO-OVEN-01', 'Heating element resistance & zone calibration', 28, 'planned', 'Jamie Lee', 420.0, 'Uniformity survey compliance check'],
-  ['DEMO-WELD-01', 'Robotic torch TCP zero-point calibration', 42, 'planned', 'Sam Taylor', 260.0, 'Periodic seam tracking verification'],
-  ['DEMO-WELD-02', 'Wire feeder motor assembly overhaul', -10, 'planned', 'Alex Morgan', 380.0, 'Overdue maintenance - motor stalls under load'],
-  ['DEMO-CMM-01', 'Laser interferometer geometric verification', 15, 'planned', 'Elena Rostova', 1400.0, 'Traceable annual calibration certificate'],
-  ['DEMO-PRINT-01', 'Galvo mirror alignment and tank leveling', 8, 'planned', 'Chris Jordan', 190.0, 'Resin vat optical path tune-up'],
-  ['DEMO-PRINT-02', 'Laser power meter test and filter purge', -5, 'in_progress', 'Chris Jordan', 880.0, 'Low laser power alert investigation'],
-  ['DEMO-PACK-01', 'Suction cup manifold replacement', 30, 'planned', 'Morgan Bailey', 240.0, 'Case erecting reliability improvement'],
-  ['DEMO-FORK-01', 'Hydraulic mast inspection and chain test', 12, 'planned', 'Alex Morgan', 510.0, 'OSHA annual lifting equipment safety test'],
-  ['DEMO-FORK-02', 'Brake pad replacement and tire rotation', 25, 'planned', 'Alex Morgan', 340.0, 'Warehouse fleet preventative service'],
-  ['DEMO-CRANE-01', 'Wire rope magnetic induction testing', 60, 'planned', 'Elena Rostova', 950.0, 'Statutory heavy lifting proof test'],
-  ['DEMO-DUST-01', 'Differential pressure sensor & damper tune', 40, 'planned', 'Morgan Bailey', 220.0, 'Explosion venting door inspection'],
-  ['DEMO-FURN-01', 'Coil insulation resistance diagnostic', 1, 'in_progress', 'Sam Taylor', 1600.0, 'Ground fault safety trip investigation'],
-  ['DEMO-SAW-01', 'Hydraulic downfeed valve refurbishment', 22, 'planned', 'Jamie Lee', 310.0, 'Cutting speed regulator rebuild'],
-  ['DEMO-GRIND-01', 'Hydrostatic spindle oil flush and filter', 33, 'planned', 'Jamie Lee', 490.0, 'Fine surface finish preservation service'],
+  ['CNC-LATHE-01', 'Spindle runout, turret alignment and chuck inspection', -14, 'planned', 'Alex Morgan', 620.0, 'Overdue after finish-diameter drift on precision turned steel parts.'],
+  ['CNC-LATHE-02', 'Guideway lubrication and bar feeder synchronization', 18, 'planned', 'Jamie Lee', 390.0, 'Quarterly preventive service for bar-fed production.'],
+  ['CNC-LATHE-03', 'Guide bushing, sub-spindle and coolant pressure inspection', 31, 'planned', 'Alex Morgan', 470.0, 'Scheduled inspection for small turned fastener components.'],
+
+  ['CNC-MILL-01', 'Ballbar test, tool changer inspection and lubrication service', 7, 'planned', 'Jamie Lee', 520.0, 'Quarterly geometry and automatic tool changer inspection.'],
+  ['CNC-MILL-02', '5-axis kinematic calibration and spindle condition check', 45, 'planned', 'Elena Rostova', 1450.0, 'Annual accuracy verification for complex machined steel components.'],
+  ['CNC-MILL-03', 'Pallet changer hydraulic fault repair', 0, 'in_progress', 'Alex Morgan', 980.0, 'Machine stopped after pallet clamp pressure alarm.'],
+
+  ['SAW-BAR-01', 'Blade guide, hydraulic downfeed and coolant inspection', 22, 'planned', 'Jamie Lee', 310.0, 'Preventive maintenance for production steel bar cutting.'],
+  ['SAW-TUBE-01', 'Blade tension calibration and chip brush replacement', 40, 'planned', 'Jamie Lee', 280.0, 'Routine tube and profile saw service.'],
+  ['SAW-COLD-01', 'Cold saw spindle bearing inspection', -4, 'planned', 'Alex Morgan', 360.0, 'Overdue due to increased vibration during precision blank cutting.'],
+  ['BARFEED-01', 'Magazine chain tension and pusher alignment', 28, 'planned', 'Alex Morgan', 240.0, 'Routine bar feeder alignment and lubrication service.'],
+
+  ['HEADER-01', 'Heading ram guide and transfer timing inspection', 12, 'planned', 'Marcus Vance', 680.0, 'Preventive inspection after high-volume M10 bolt production.'],
+  ['HEADER-02', 'Cut-off station alignment and die pocket inspection', -6, 'planned', 'Marcus Vance', 740.0, 'Overdue after increased scrap caused by inconsistent blank length.'],
+  ['NUTFORMER-01', 'Nut former transfer finger and knockout inspection', 35, 'planned', 'Marcus Vance', 610.0, 'Scheduled multi-station nut former service.'],
+
+  ['THREAD-ROLL-01', 'Thread die alignment and feed rail inspection', 14, 'planned', 'Alex Morgan', 330.0, 'Routine M8 and M10 thread rolling quality maintenance.'],
+  ['THREAD-ROLL-02', 'Thread rolling slide lubrication and die holder inspection', 27, 'planned', 'Alex Morgan', 350.0, 'Preventive service before next M16 production batch.'],
+  ['THREAD-ROLL-03', 'Planetary die carrier bearing replacement', 1, 'in_progress', 'Jamie Lee', 880.0, 'Bearing noise detected during M20 thread rolling.'],
+
+  ['NUT-TAP-01', 'Tap spindle backlash and coolant nozzle inspection', 19, 'planned', 'Jamie Lee', 290.0, 'Preventive service for automatic nut tapping line.'],
+  ['NUT-TAP-02', 'Feed bowl alignment and tapping torque calibration', 42, 'planned', 'Jamie Lee', 340.0, 'Scheduled large-nut tapping line inspection.'],
+
+  ['SORTER-01', 'Camera lens cleaning and dimensional master verification', 50, 'planned', 'Elena Rostova', 460.0, 'Optical sorting system verification using certified master fasteners.'],
+  ['PACK-01', 'Counting sensor calibration and sealing jaw inspection', 33, 'planned', 'Clara Oswald', 220.0, 'Preventive inspection for fastener counting and bagging line.'],
+
+  ['LASER-01', 'Cutting head optic cleaning, nozzle centering and focus test', -3, 'planned', 'Chris Jordan', 550.0, 'Overdue protective window and cutting focus inspection.'],
+
+  ['PRESSBRAKE-01', 'Backgauge accuracy, ram parallelism and hydraulic filter check', 45, 'planned', 'Jamie Lee', 470.0, 'Semi-annual bending accuracy maintenance.'],
+  ['PRESSBRAKE-02', 'Tool clamping system and crowning calibration', 62, 'planned', 'Jamie Lee', 510.0, 'Scheduled press brake calibration.'],
+
+  ['WELD-ROBOT-01', 'Robot TCP calibration, wire feed inspection and torch service', 42, 'planned', 'Sam Taylor', 380.0, 'Periodic seam tracking and torch center point verification.'],
+  ['WELD-MIG-01', 'Wire feeder liner and drive roll service', 24, 'planned', 'Sam Taylor', 190.0, 'Preventive MIG/MAG feeder maintenance.'],
+  ['WELD-TIG-01', 'Cooling circuit and TIG torch inspection', 56, 'planned', 'Sam Taylor', 180.0, 'Routine water-cooled TIG station maintenance.'],
+
+  ['GRINDER-CYL-01', 'Grinding spindle vibration test and dresser inspection', 33, 'planned', 'Jamie Lee', 620.0, 'Required to maintain dimensional accuracy and surface finish on hardened shafts.'],
+  ['GRINDER-SURF-01', 'Table geometry, magnetic chuck and lubrication inspection', 26, 'planned', 'Jamie Lee', 440.0, 'Preventive surface grinder service.'],
+
+  ['DEBURR-01', 'Bowl lining inspection and vibration motor check', 30, 'planned', 'Morgan Bailey', 260.0, 'Routine vibratory finishing machine inspection.'],
+  ['SHOTBLAST-01', 'Blast nozzle, dust seal and media separator inspection', 48, 'planned', 'Morgan Bailey', 310.0, 'Shot blasting system reliability service.'],
+  ['WASHER-01', 'Pump, filter and bath concentration inspection', 17, 'planned', 'Morgan Bailey', 250.0, 'Parts washer process check for reliable oil and chip removal.'],
+
+  ['CMM-01', 'Traceable geometric calibration', 15, 'planned', 'Elena Rostova', 1400.0, 'Annual dimensional inspection system calibration.'],
+  ['OPTICAL-01', 'Optical scale and camera calibration', 50, 'planned', 'Elena Rostova', 980.0, 'Scheduled optical measurement system verification.'],
+  ['HARDNESS-01', 'Force, indenter and reference block verification', 38, 'planned', 'Elena Rostova', 520.0, 'Rockwell hardness tester calibration.'],
+  ['ROUGHNESS-01', 'Stylus condition and roughness standard verification', 44, 'planned', 'Elena Rostova', 260.0, 'Surface roughness tester verification.'],
+  ['TENSILE-01', 'Load cell and extensometer calibration', 61, 'planned', 'Elena Rostova', 1250.0, 'Annual tensile tester calibration for material certification work.'],
+
+  ['COMPRESSOR-01', 'Separator element, oil filter and coupling inspection', 0, 'in_progress', 'Morgan Bailey', 860.0, 'Compressor offline for scheduled 8,000-hour service.'],
+  ['COMPRESSOR-02', 'Air intake filter and condensate drain service', 55, 'planned', 'Morgan Bailey', 390.0, 'Quarterly compressed air system service.'],
+  ['AIR-DRYER-01', 'Condenser cleaning and dew point check', 68, 'planned', 'Morgan Bailey', 280.0, 'Maintain dry compressed air for CNC and pneumatic equipment.'],
+
+  ['COOLANT-SYS-01', 'Magnetic separator cleanout and pump inspection', 23, 'planned', 'Morgan Bailey', 340.0, 'Central CNC coolant filtration preventive maintenance.'],
+  ['MIST-EXTRACT-01', 'Filter cartridge inspection and airflow measurement', 40, 'planned', 'Morgan Bailey', 220.0, 'Oil mist extraction performance inspection.'],
+  ['DUST-EXTRACT-01', 'Filter differential pressure and spark trap inspection', 37, 'planned', 'Morgan Bailey', 260.0, 'Grinding dust extraction system maintenance.'],
+
+  ['CRANE-01', 'Wire rope, hook block, brake and limit switch inspection', 60, 'planned', 'Steve Rogers', 920.0, 'Periodic lifting equipment inspection for steel stock handling.'],
+  ['CRANE-02', 'Slew bearing, hoist brake and pendant inspection', 75, 'planned', 'Steve Rogers', 420.0, 'Jib crane preventive maintenance.'],
+
+  ['FORKLIFT-01', 'Mast chains, forks, brakes and hydraulic system inspection', 12, 'planned', 'Alex Morgan', 510.0, 'Warehouse lifting equipment service.'],
+  ['REACH-TRUCK-01', 'Reach mast rollers, traction battery and brake inspection', 25, 'planned', 'Alex Morgan', 460.0, 'Preventive service for warehouse reach truck.'],
 ];
 
 const demoUsers = [
