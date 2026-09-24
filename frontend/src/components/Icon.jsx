@@ -20,6 +20,9 @@ import userIcon from '../assets/stockholm-icons/General/User.svg';
 import checkIcon from '../assets/stockholm-icons/Navigation/Check.svg';
 import saveIcon from '../assets/stockholm-icons/General/Save.svg';
 import chartBarIcon from '../assets/stockholm-icons/Shopping/Chart-bar1.svg';
+import sortIcon from '../assets/stockholm-icons/Navigation/Up-down.svg';
+import sortAscendingIcon from '../assets/stockholm-icons/Navigation/Arrow-up.svg';
+import sortDescendingIcon from '../assets/stockholm-icons/Navigation/Arrow-down.svg';
 
 const icons = {
   dashboard: dashboardIcon,
@@ -44,6 +47,9 @@ const icons = {
   check: checkIcon,
   save: saveIcon,
   chartBar: chartBarIcon,
+  sort: sortIcon,
+  sortAscending: sortAscendingIcon,
+  sortDescending: sortDescendingIcon,
 };
 
 export function Icon({ name, size = 20 }) {

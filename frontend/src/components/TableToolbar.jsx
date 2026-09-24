@@ -11,9 +11,22 @@ export function TableToolbar({ search, onSearch, placeholder = 'Search...', chil
 
 export function SortButton({ label, sortKey, sort, onSort }) {
   const active = sort?.key === sortKey;
+  const direction = active ? sort.direction : null;
+  const icon = !active ? 'sort' : direction === 'asc' ? 'sortAscending' : 'sortDescending';
+  const accessibleLabel = active
+    ? `${label}, sorted ${direction}. Reverse sort order.`
+    : `Sort by ${label} ascending.`;
+
   return (
-    <button className="table-sort" type="button" onClick={() => onSort(sortKey)}>
-      {label} {active ? (sort.direction === 'asc' ? '↑' : '↓') : '↕'}
+    <button
+      className={`table-sort${active ? ' table-sort-active' : ''}`}
+      type="button"
+      onClick={() => onSort(sortKey)}
+      aria-label={accessibleLabel}
+      aria-pressed={active}
+      title={accessibleLabel}
+    >
+      {label}<Icon name={icon} size={14} />
     </button>
   );
 }

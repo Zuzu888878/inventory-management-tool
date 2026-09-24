@@ -289,6 +289,15 @@ table {
   background: transparent;
 }
 
+.table-sort .icon {
+  color: #94a3b8;
+}
+
+.table-sort-active .icon,
+.table-sort:hover .icon {
+  color: currentColor;
+}
+
 th,
 td {
   padding: 0.75rem 1rem;
