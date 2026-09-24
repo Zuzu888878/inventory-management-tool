@@ -8,6 +8,8 @@
     "start": "node src/server.js",
     "dev": "node --watch src/server.js",
     "db:init": "node src/scripts/initDb.js",
+    "db:check": "node src/scripts/checkDatabase.js",
+    "db:reset": "node src/scripts/resetDatabase.js",
     "db:seed": "npm run db:seed-admin && npm run db:seed-demo",
     "db:seed-admin": "node src/scripts/seedAdmin.js",
     "db:seed-demo": "node src/scripts/seedDemo.js",

@@ -4,27 +4,13 @@ A React frontend and Express/PostgreSQL backend for managing assets and spare pa
 
 ## Setup
 
-1. Create a PostgreSQL database named `leets_inventory_management_db`.
-2. Copy `backend/.env.example` to `backend/.env` and set the database and login values.
-3. Install dependencies and initialize the database:
+Install Node.js 22 or newer and PostgreSQL. Node.js includes npm. PostgreSQL downloads and platform-specific installation instructions are at [postgresql.org/download](https://www.postgresql.org/download/). Make sure the PostgreSQL server is running. The launcher can create the configured app database when you confirm a reset; if you keep the existing database, it must already exist (the example uses `leets_inventory_management_db`).
 
-   ```sh
-   cd backend
-   npm install
-   npm run db:init
-   npm run db:seed # creates the admin account and demo workspace data
-   ```
+Run `./start.sh` on macOS/Linux or double-click `start.bat` on Windows. The launcher checks Node.js and npm, installs the locked dependencies, and asks whether to reset the configured database. Confirming permanently deletes that database, recreates its schema, and seeds the admin plus demo data. Declining keeps existing data, initializes the schema, and runs no seed commands. On first run the launcher creates `backend/.env` from the example and stops so you can set your database credentials and a secure `APP_PASSWORD` before continuing.
 
-4. Start the backend with `npm run dev`.
-5. In another terminal, start the frontend:
+If PostgreSQL is missing, install it from the link above and start its server. If the launcher reports that the configured database does not exist, create it with `createdb -U postgres leets_inventory_management_db` or use pgAdmin. If login or connection settings differ, update `DB_HOST`, `DB_PORT`, `DB_NAME`, `DB_USER`, and `DB_PASSWORD` in `backend/.env`.
 
-   ```sh
-   cd frontend
-   npm install
-   npm run dev
-   ```
-
-Open the URL printed by Vite and sign in with a username and password stored in the `users` table. The seed command creates the initial account from `APP_USERNAME` and `APP_PASSWORD` with an `admin` role and a salted scrypt password hash. Running it again does not overwrite an existing account. Successful login returns an expiring signed token; configure its lifetime with `AUTH_TOKEN_TTL_SECONDS`.
+Open `http://localhost:5173` and sign in with `APP_USERNAME` and `APP_PASSWORD` from `backend/.env` after choosing the reset option. If you keep the existing database, the launcher leaves its users and other data untouched; sign in with an account already present in that database.
 
 ## Verification
 
