@@ -35,7 +35,8 @@ Never commit `backend/.env`. If it has previously been committed, rotate `API_TO
 - Asset list, details, create, edit, and delete
 - Spare-part list, details, create, edit, and delete
 - Maintenance list, details, create, edit, and delete, linked to assets
-- Database-backed users with `admin`, `editor`, and `viewer` roles and secure password hashes
+- Product catalogue with 16 seeded metal products, concrete dimensions, prices, stock levels, and product images
+- Database-backed users with `admin`, `editor`, `viewer`, and `customer` roles and secure password hashes
 - User list, create, edit, activate/deactivate, password reset, and delete
 
 User management is restricted to administrators. Broader role-based permissions for inventory operations are still under development.

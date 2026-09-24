@@ -1,5 +1,5 @@
 import express from 'express';
-import authMiddleware from '../../middleware/auth.js';
+import authMiddleware, { requireRole } from '../../middleware/auth.js';
 import {
   createMaintenance,
   deleteMaintenance,
@@ -11,6 +11,7 @@ import {
 const router = express.Router();
 
 router.use(authMiddleware);
+router.use(requireRole('admin', 'editor', 'viewer'));
 router.get('/', getAllMaintenance);
 router.get('/:id', getMaintenanceById);
 router.post('/', createMaintenance);

@@ -40,7 +40,7 @@ CREATE TABLE IF NOT EXISTS users (
     display_name VARCHAR(255) NOT NULL,
     password_hash TEXT NOT NULL,
     role VARCHAR(50) NOT NULL DEFAULT 'viewer'
-        CHECK (role IN ('admin', 'editor', 'viewer')),
+        CHECK (role IN ('admin', 'editor', 'viewer', 'customer')),
     is_active BOOLEAN NOT NULL DEFAULT TRUE,
     created_at TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP,
@@ -49,6 +49,23 @@ CREATE TABLE IF NOT EXISTS users (
 );
 
 CREATE INDEX IF NOT EXISTS users_role_idx ON users (role);
+
+CREATE TABLE IF NOT EXISTS products (
+    id BIGSERIAL PRIMARY KEY,
+    sku VARCHAR(100) NOT NULL UNIQUE,
+    name VARCHAR(255) NOT NULL,
+    description TEXT NOT NULL DEFAULT '',
+    price NUMERIC(12, 2) CHECK (price >= 0),
+    quantity_in_stock INTEGER NOT NULL DEFAULT 0 CHECK (quantity_in_stock >= 0),
+    image_url TEXT,
+    is_active BOOLEAN NOT NULL DEFAULT TRUE,
+    created_at TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE INDEX IF NOT EXISTS products_name_idx ON products (name);
+CREATE INDEX IF NOT EXISTS products_active_idx ON products (is_active);
+
 
 CREATE TABLE IF NOT EXISTS maintenance_records (
     id BIGSERIAL PRIMARY KEY,

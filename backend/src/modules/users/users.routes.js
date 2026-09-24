@@ -12,7 +12,7 @@ import {
 const router = express.Router();
 
 router.use(authMiddleware);
-router.get('/technicians', getTechnicians);
+router.get('/technicians', requireRole('admin', 'editor', 'viewer'), getTechnicians);
 router.use(requireRole('admin'));
 router.get('/', getAllUsers);
 router.get('/:id', getUserById);

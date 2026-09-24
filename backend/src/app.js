@@ -5,6 +5,7 @@ import sparePartsRoutes from './modules/spareParts/spareParts.routes.js';
 import maintenanceRoutes from './modules/maintenance/maintenance.routes.js';
 import usersRoutes from './modules/users/users.routes.js';
 import dashboardRoutes from './modules/dashboard/dashboard.routes.js';
+import productsRoutes from './modules/products/products.routes.js';
 import { login } from './modules/auth/auth.controller.js';
 
 const app = express();
@@ -34,5 +35,6 @@ app.use('/api/spare-parts', sparePartsRoutes);
 app.use('/api/maintenance', maintenanceRoutes);
 app.use('/api/users', usersRoutes);
 app.use('/api/dashboard', dashboardRoutes);
+app.use('/api/products', productsRoutes);
 
 export default app;

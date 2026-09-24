@@ -141,7 +141,7 @@ const demoMaintenancePlans = [
   ['NUTFORMER-01', 'Nut former transfer finger and knockout inspection', 35, 'planned', 'Marcus Vance', 610.0, 'Scheduled multi-station nut former service.'],
 
   ['THREAD-ROLL-01', 'Thread die alignment and feed rail inspection', 14, 'planned', 'Alex Morgan', 330.0, 'Routine M8 and M10 thread rolling quality maintenance.'],
-  ['THREAD-ROLL-02', 'Thread rolling slide lubrication and die holder inspection', 27, 'planned', 'Alex Morgan', 350.0, 'Preventive service before next M16 production batch.'],
+  ['THREAD-ROLL-02', 'Thread rolling slide lubrication and die holder inspection', 27, 'planned', 'Alex Morgan', 350.0, 'Preventive service before next M15 production batch.'],
   ['THREAD-ROLL-03', 'Planetary die carrier bearing replacement', 1, 'in_progress', 'Jamie Lee', 880.0, 'Bearing noise detected during M20 thread rolling.'],
 
   ['NUT-TAP-01', 'Tap spindle backlash and coolant nozzle inspection', 19, 'planned', 'Jamie Lee', 290.0, 'Preventive service for automatic nut tapping line.'],
@@ -191,6 +191,7 @@ const demoUsers = [
   ['demo.admin', 'Demo Administrator', 'admin', true],
   ['demo.editor', 'Demo Lead Editor', 'editor', true],
   ['demo.viewer', 'Demo Facility Viewer', 'viewer', true],
+  ['demo.customer', 'Demo Customer', 'customer', true],
   ['alex.morgan', 'Alex Morgan (Technician)', 'editor', true],
   ['jamie.lee', 'Jamie Lee (Technician)', 'editor', true],
   ['sam.taylor', 'Sam Taylor (Robotics Eng)', 'editor', true],
@@ -252,6 +253,33 @@ async function seedDemo() {
           [code, name, category, machineType, status, iotState, location, serialNumber, supplier, purchaseDate, maintenanceOffset, `Seeded demonstration asset: ${name}`]
       );
       assetIds[code] = result.rows[0].id;
+    }
+
+    const demoProducts = [
+      ['MET-001', 'Steel Round Tube', 'Seamless cold-drawn steel tube, S235JR. Ø 42.4 mm | Wall thickness 3.2 mm | Length 6,000 mm.', 24.50, 120, '/products/steel-round-tube.jpg'],
+      ['MET-002', 'Steel Square Tube', 'Welded square steel tube, S235JR. 40 × 40 mm | Wall thickness 2.0 mm | Length 6,000 mm.', 18.90, 85, '/products/steel-square-tube.jpg'],
+      ['MET-003', 'IPE Steel Beam', 'Hot-rolled IPE profile, S235JR. IPE 100 | Height 100 mm | Width 55 mm | Length 6,000 mm.', 79.00, 40, '/products/ipe-steel-beam.jpg'],
+      ['MET-004', 'Steel U-Channel', 'Cold-rolled steel U-channel, S235JR. U 50 | Height 50 mm | Width 25 mm | Wall thickness 4 mm.', 32.80, 70, '/products/steel-u-channel.jpg'],
+      ['MET-005', 'Steel Flat Bar', 'Steel flat bar, S235JR. 40 × 5 mm | Length 6,000 mm.', 12.60, 150, '/products/steel-flat-bar.jpg'],
+      ['MET-006', 'Steel Angle Profile', 'Equal angle steel profile, S235JR. 50 × 50 × 5 mm | Length 6,000 mm.', 16.70, 95, '/products/steel-angle-profile.jpg'],
+      ['MET-007', 'Steel Round Bar', 'Drawn steel round bar, S355J2. Ø 20 mm | Length 6,000 mm.', 28.40, 110, '/products/steel-round-bar.jpg'],
+      ['MET-008', 'Steel Sheet', 'Hot- or cold-rolled steel sheet, S235JR. 3 mm | 1,000 × 2,000 mm.', 89.90, 60, '/products/steel-sheet.jpg'],
+      ['MET-009', 'Stainless Steel Tube', 'Seamless stainless steel tube, 1.4301 (V2A). Ø 33.7 mm | Wall thickness 2.0 mm | Length 6,000 mm.', 45.20, 75, '/products/stainless-steel-tube.jpg'],
+      ['MET-010', 'Stainless Steel Square Tube', 'Welded stainless steel square tube, 1.4301 (V2A). 50 × 50 mm | Wall thickness 2.0 mm | Length 6,000 mm.', 38.90, 65, '/products/stainless-steel-square-tube.jpg'],
+      ['MET-011', 'Aluminium Profile', 'Anodized aluminium profile for machine building. 40 × 40 mm | 8 mm T-slot | Length 6,000 mm.', 42.70, 90, '/products/aluminium-profile.jpg'],
+      ['MET-012', 'Steel Gear', 'Precision hardened C45 steel gear. Teeth 30 | Module 2 | Bore 20 mm | Outside diameter 64 mm.', 56.30, 45, '/products/steel-gear.jpg'],
+      ['MET-013', 'Pipe Flange', 'PN16 steel flange for pipe connections. DN 50 | Outside diameter 165 mm | Bolt circle 125 mm.', 37.90, 50, '/products/pipe-flange.jpg'],
+      ['MET-014', 'Pipe Elbow', 'Seamless 90° steel pipe elbow. Ø 42.4 mm | Wall thickness 3.2 mm.', 16.90, 80, '/products/pipe-elbow.jpg'],
+      ['MET-015', 'Pipe Coupling', 'Galvanized steel pipe coupling. Ø 48.3 mm | Length 60 mm | Wall thickness 3.2 mm.', 11.70, 120, '/products/pipe-coupling.jpg'],
+    ];
+    await client.query("DELETE FROM products WHERE sku LIKE 'PROD-%' OR sku LIKE 'MET-%'");
+    for (const [sku, name, description, price, quantity, imageUrl] of demoProducts) {
+      await client.query(
+        `INSERT INTO products (sku, name, description, price, quantity_in_stock, image_url, is_active)
+         VALUES ($1, $2, $3, $4, $5, $6, TRUE)
+         ON CONFLICT (sku) DO UPDATE SET name = EXCLUDED.name, description = EXCLUDED.description, price = EXCLUDED.price, quantity_in_stock = EXCLUDED.quantity_in_stock, image_url = EXCLUDED.image_url, is_active = TRUE`,
+        [sku, name, description, price, quantity, imageUrl]
+      );
     }
 
     for (const [name, partNum, machine, qty, desc] of demoSpareParts) {
@@ -324,7 +352,7 @@ async function seedDemo() {
     }
 
     await client.query('COMMIT');
-    console.log(`Demo data successfully seeded: ${demoAssets.length} assets, ${demoSpareParts.length} spare parts, ${demoMaintenancePlans.length} maintenance records, ${demoUsers.length} users.`);
+    console.log(`Demo data successfully seeded: ${demoAssets.length} assets, ${demoSpareParts.length} spare parts, ${demoMaintenancePlans.length} maintenance records, ${demoUsers.length} users, 15 products.`);
   } catch (error) {
     await client.query('ROLLBACK');
     console.error('Failed to seed demo data:', error.message);

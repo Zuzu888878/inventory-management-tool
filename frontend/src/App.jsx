@@ -10,6 +10,8 @@ import MaintenancePage from './pages/MaintenancePage.jsx';
 import SparePartsPage from './pages/SparePartsPage.jsx';
 import SparePartFormPage from './pages/SparePartFormPage.jsx';
 import SparePartDetailsPage from './pages/SparePartDetailsPage.jsx';
+import ProductsPage from './pages/ProductsPage.jsx';
+import ProductFormPage from './pages/ProductFormPage.jsx';
 import UsersPage from './pages/UsersPage.jsx';
 import { UsersFormPage } from './pages/UsersFormPage.jsx';
 import { clearToken, getCurrentUser, hasToken } from './api/client.js';
@@ -20,12 +22,22 @@ const isAuthenticated = () => hasToken();
 
 function ProtectedRoute() {
   const location = useLocation();
+  const currentUser = getCurrentUser();
 
   if (!isAuthenticated()) {
     return <Navigate to="/login" replace state={{ from: location }} />;
   }
 
+  if (currentUser?.role === 'customer' && !location.pathname.startsWith('/products')) {
+    return <Navigate to="/products" replace />;
+  }
+
   return <Outlet />;
+}
+
+function StaffOnlyRoute() {
+  const currentUser = getCurrentUser();
+  return currentUser?.role === 'customer' ? <Navigate to="/products" replace /> : <Outlet />;
 }
 
 function Layout() {
@@ -48,11 +60,18 @@ function Layout() {
   return (
     <div className="app-shell">
       <header className="topbar">
-        <Link className="brand" to="/dashboard">
+        <Link className="brand" to={currentUser?.role === 'customer' ? '/products' : '/dashboard'}>
           <span className="brand-mark">L</span>
           <span>Leets Inventory</span>
         </Link>
         <nav className="nav-links" aria-label="Main navigation">
+          {currentUser?.role === 'customer' ? (
+            <NavLink to="/products" className={isTabActive('/products') ? 'active' : ''} aria-current={isTabActive('/products') ? 'page' : undefined}>
+              <Icon name="package" />
+              Products
+            </NavLink>
+          ) : (
+            <>
           <NavLink
             to="/dashboard"
             className={isTabActive('/dashboard') ? 'active' : ''}
@@ -85,6 +104,14 @@ function Layout() {
             <Icon name="package" />
             Spare Parts
           </NavLink>
+          <NavLink
+            to="/products"
+            className={isTabActive('/products') ? 'active' : ''}
+            aria-current={isTabActive('/products') ? 'page' : undefined}
+          >
+            <Icon name="package" />
+            Products
+          </NavLink>
           {currentUser?.role === 'admin' && (
             <NavLink
               to="/users"
@@ -94,6 +121,8 @@ function Layout() {
               <Icon name="users" />
               Users
             </NavLink>
+          )}
+            </>
           )}
         </nav>
         <div className="topbar-actions">
@@ -110,6 +139,7 @@ function Layout() {
       <footer className="site-footer">
         <span className="site-footer-company">Leets Inventory</span>
         <span className="site-footer-copyright">© {new Date().getFullYear()} Leets AG</span>
+        <span>Tel.: +41 XX XXX XX XX</span>
       </footer>
     </div>
   );
@@ -144,6 +174,12 @@ function App() {
             <Route path="/users" element={<UsersPage />} />
             <Route path="/users/new" element={<UsersFormPage />} />
             <Route path="/users/:id/edit" element={<UsersFormPage />} />
+
+            <Route path="/products" element={<ProductsPage />} />
+            <Route element={<StaffOnlyRoute />}>
+              <Route path="/products/new" element={<ProductFormPage />} />
+              <Route path="/products/:id/edit" element={<ProductFormPage />} />
+            </Route>
           </Route>
         </Route>
 

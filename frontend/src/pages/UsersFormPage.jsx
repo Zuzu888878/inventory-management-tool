@@ -66,7 +66,7 @@ export function UsersFormPage() {
         <section className="form-section">
           <div className="form-section-heading"><div><h2>Access</h2><p>Control the role, account state, and password.</p></div></div>
           <div className="form-grid">
-            <label>Role<select value={role} onChange={(event) => setRole(event.target.value)}><option value="admin">Admin</option><option value="editor">Editor</option><option value="viewer">Viewer</option></select></label>
+            <label>Role<select value={role} onChange={(event) => setRole(event.target.value)}><option value="admin">Admin</option><option value="editor">Editor</option><option value="viewer">Viewer</option><option value="customer">Customer</option></select></label>
             <label>{isEditing ? 'New password' : 'Password'}<input type="password" value={password} onChange={(event) => setPassword(event.target.value)} required={!isEditing} autoComplete="new-password" placeholder={isEditing ? 'Leave blank to keep current password' : 'Set an initial password'} /></label>
             <label className="toggle-field"><input type="checkbox" checked={isActive} onChange={(event) => setIsActive(event.target.checked)} /><span><strong>Active account</strong><small>Allow this user to sign in and access the workspace.</small></span></label>
           </div>

@@ -1,6 +1,6 @@
 import pool from '../../config/database.js';
 
-export const USER_ROLES = Object.freeze(['admin', 'editor', 'viewer']);
+export const USER_ROLES = Object.freeze(['admin', 'editor', 'viewer', 'customer']);
 
 const normalizeUsername = (username = '') => String(username).trim().toLowerCase();
 
