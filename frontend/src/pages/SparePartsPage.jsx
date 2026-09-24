@@ -1,15 +1,26 @@
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { Link } from 'react-router-dom';
+import { useSetRecoilState } from 'recoil';
 import { deleteSparePart, getSpareParts } from '../api/spareParts.js';
 import { Icon } from '../components/Icon.jsx';
 import { Pagination, SortButton, TableToolbar } from '../components/TableToolbar.jsx';
+import { useCachedResource } from '../hooks/useCachedResource.js';
 import { useTableControls } from '../hooks/useTableControls.js';
+import { dashboardState, sparePartsState } from '../state/inventoryAtoms.js';
+import { markDashboardStale } from '../state/cacheUtils.js';
 
 function SparePartsPage() {
-  const [spareParts, setSpareParts] = useState([]);
-  const [error, setError] = useState('');
-  const [loading, setLoading] = useState(true);
+  const {
+    cache: sparePartsCache,
+    setCache: setSparePartsCache,
+    loading,
+    refreshing,
+    error,
+    setError,
+  } = useCachedResource(sparePartsState, getSpareParts);
+  const setDashboardCache = useSetRecoilState(dashboardState);
   const [stockFilter, setStockFilter] = useState('all');
+  const spareParts = sparePartsCache.items;
   const {
     rows,
     search,
@@ -33,19 +44,16 @@ function SparePartsPage() {
     defaultPageSize: 20,
   });
 
-  useEffect(() => {
-    getSpareParts()
-      .then(setSpareParts)
-      .catch((requestError) => setError(requestError.message))
-      .finally(() => setLoading(false));
-  }, []);
-
   async function removeSparePart(sparePart) {
     if (!window.confirm(`Delete spare part "${sparePart.name}"?`)) return;
     setError('');
     try {
       await deleteSparePart(sparePart.id);
-      setSpareParts((currentParts) => currentParts.filter((currentPart) => currentPart.id !== sparePart.id));
+      setSparePartsCache((currentCache) => ({
+        ...currentCache,
+        items: currentCache.items.filter((currentPart) => currentPart.id !== sparePart.id),
+      }));
+      setDashboardCache(markDashboardStale);
     } catch (requestError) {
       setError(requestError.message);
     }
@@ -78,6 +86,7 @@ function SparePartsPage() {
       </TableToolbar>
 
       {loading && <p>Loading...</p>}
+      {refreshing && !loading && <p className="refresh-status">Refreshing spare parts...</p>}
 
       {error && <p>{error}</p>}
 

@@ -1,13 +1,18 @@
 import { useEffect, useState } from 'react';
 import { Link, useNavigate, useParams } from 'react-router-dom';
+import { useSetRecoilState } from 'recoil';
 import { createAsset, getAsset, updateAsset } from '../api/assets.js';
 import { Icon } from '../components/Icon.jsx';
 import { CategorySearchSelect } from '../components/CategorySearchSelect.jsx';
+import { assetsState, dashboardState } from '../state/inventoryAtoms.js';
+import { markDashboardStale, upsertCachedItem } from '../state/cacheUtils.js';
 
 function AssetFormPage() {
   const { id } = useParams();
   const navigate = useNavigate();
   const isEditing = Boolean(id);
+  const setAssetsCache = useSetRecoilState(assetsState);
+  const setDashboardCache = useSetRecoilState(dashboardState);
 
   const [assetCode, setAssetCode] = useState('');
   const [name, setName] = useState('');
@@ -65,6 +70,8 @@ function AssetFormPage() {
       };
 
       const asset = isEditing ? await updateAsset(id, assetData) : await createAsset(assetData);
+      setAssetsCache((cache) => upsertCachedItem(cache, asset));
+      setDashboardCache(markDashboardStale);
 
       navigate(`/assets/${asset.id}`);
     } catch (requestError) {

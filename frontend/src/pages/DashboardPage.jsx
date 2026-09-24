@@ -1,11 +1,13 @@
-import { useEffect, useRef, useState } from 'react';
-import { Link } from 'react-router-dom';
+import { useRef, useState } from 'react';
+import { Link, Navigate, useNavigate, useParams } from 'react-router-dom';
 import { getDashboard } from '../api/dashboard.js';
 import { adjustSparePartStock } from '../api/spareParts.js';
 import { formatDate } from '../utils/formatDate.js';
 import { Icon } from '../components/Icon.jsx';
 import DashboardCharts from '../components/DashboardCharts.jsx';
 import MaintenanceCalendar from '../components/MaintenanceCalendar.jsx';
+import { useCachedResource } from '../hooks/useCachedResource.js';
+import { dashboardState } from '../state/inventoryAtoms.js';
 
 const scheduleLabel = (item) => {
   if (item.daysUntil < 0) return `${Math.abs(item.daysUntil)} day(s) overdue`;
@@ -14,22 +16,31 @@ const scheduleLabel = (item) => {
 };
 
 const dashboardTabs = [
-  { id: 'overview', label: 'Overview' },
-  { id: 'calendar', label: 'Calendar' },
-  { id: 'schedule', label: 'Schedule' },
-  { id: 'stock', label: 'Stock alerts' },
+  { id: 'overview', label: 'Overview', path: '/dashboard', icon: 'dashboard' },
+  { id: 'calendar', label: 'Calendar', path: '/dashboard/calendar', icon: 'check' },
+  { id: 'schedule', label: 'Schedule', path: '/dashboard/schedule', icon: 'wrench' },
+  { id: 'stock', label: 'Stock alerts', path: '/dashboard/stock', icon: 'package' },
 ];
 
+const dashboardTabIds = new Set(dashboardTabs.map((tab) => tab.id));
+
 function DashboardPage() {
-  const [dashboard, setDashboard] = useState(null);
-  const [error, setError] = useState('');
-  const [loading, setLoading] = useState(true);
-  const [activeTab, setActiveTab] = useState('overview');
+  const { tab } = useParams();
+  const navigate = useNavigate();
+  const {
+    cache: dashboardCache,
+    setCache: setDashboardCache,
+    loading,
+    refreshing,
+    error,
+  } = useCachedResource(dashboardState, getDashboard);
   const [restockQuantities, setRestockQuantities] = useState({});
   const [restockingPartId, setRestockingPartId] = useState(null);
   const [stockMessage, setStockMessage] = useState('');
   const [stockActionError, setStockActionError] = useState('');
   const tabRefs = useRef([]);
+  const activeTab = tab || 'overview';
+  const dashboard = dashboardCache.data;
 
   async function restockPart(event, part) {
     event.preventDefault();
@@ -54,7 +65,8 @@ function DashboardPage() {
     }
 
     try {
-      setDashboard(await getDashboard());
+      const nextDashboard = await getDashboard();
+      setDashboardCache({ data: nextDashboard, hasLoaded: true });
     } catch {
       setStockActionError(
         'Stock was updated, but the dashboard could not refresh. Reload the page to see current totals.'
@@ -72,17 +84,11 @@ function DashboardPage() {
     if (event.key === 'End') nextIndex = dashboardTabs.length - 1;
     if (nextIndex === undefined) return;
     event.preventDefault();
-    setActiveTab(dashboardTabs[nextIndex].id);
+    navigate(dashboardTabs[nextIndex].path);
     tabRefs.current[nextIndex]?.focus();
   }
 
-  useEffect(() => {
-    getDashboard()
-      .then(setDashboard)
-      .catch((requestError) => setError(requestError.message))
-      .finally(() => setLoading(false));
-  }, []);
-
+  if (!dashboardTabIds.has(activeTab)) return <Navigate to="/dashboard" replace />;
   if (loading) return <p>Loading dashboard...</p>;
   if (error) return <p>{error}</p>;
   if (!dashboard) return null;
@@ -96,28 +102,28 @@ function DashboardPage() {
           <h1>Dashboard</h1>
           <p>Operational overview for assets, inventory, and maintenance.</p>
         </div>
-        <small>Updated {new Date(dashboard.generatedAt).toLocaleString()}</small>
+        <small>{refreshing ? 'Refreshing...' : `Updated ${new Date(dashboard.generatedAt).toLocaleString()}`}</small>
       </div>
 
       <div className="dashboard-tabs" role="tablist" aria-label="Dashboard widgets">
         {dashboardTabs.map((tab, index) => (
-          <button
+          <Link
             key={tab.id}
             ref={(element) => {
               tabRefs.current[index] = element;
             }}
+            to={tab.path}
             id={`dashboard-tab-${tab.id}`}
             className={`dashboard-tab${activeTab === tab.id ? ' dashboard-tab-active' : ''}`}
-            type="button"
             role="tab"
             aria-selected={activeTab === tab.id}
             aria-controls="dashboard-widget-panel"
             tabIndex={activeTab === tab.id ? 0 : -1}
-            onClick={() => setActiveTab(tab.id)}
             onKeyDown={(event) => handleTabKeyDown(event, index)}
           >
+            <Icon name={tab.icon} size={16} />
             {tab.label}
-          </button>
+          </Link>
         ))}
       </div>
 

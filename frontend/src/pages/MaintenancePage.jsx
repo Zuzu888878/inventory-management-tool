@@ -1,20 +1,31 @@
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { Link } from 'react-router-dom';
+import { useSetRecoilState } from 'recoil';
 import { deleteMaintenanceRecord, getMaintenanceRecords } from '../api/maintenance.js';
 import { Icon } from '../components/Icon.jsx';
 import { formatDate } from '../utils/formatDate.js';
 import { Pagination, SortButton, TableToolbar } from '../components/TableToolbar.jsx';
+import { useCachedResource } from '../hooks/useCachedResource.js';
 import { useTableControls } from '../hooks/useTableControls.js';
+import { dashboardState, maintenanceRecordsState } from '../state/inventoryAtoms.js';
+import { markDashboardStale } from '../state/cacheUtils.js';
 
 const statusLabel = (status) =>
   ({ planned: 'Planned', in_progress: 'In progress', completed: 'Completed', cancelled: 'Cancelled' })[status] ||
   status;
 
 function MaintenancePage() {
-  const [records, setRecords] = useState([]);
-  const [error, setError] = useState('');
-  const [loading, setLoading] = useState(true);
+  const {
+    cache: recordsCache,
+    setCache: setRecordsCache,
+    loading,
+    refreshing,
+    error,
+    setError,
+  } = useCachedResource(maintenanceRecordsState, getMaintenanceRecords);
+  const setDashboardCache = useSetRecoilState(dashboardState);
   const [statusFilter, setStatusFilter] = useState('all');
+  const records = recordsCache.items;
   const {
     rows,
     search,
@@ -34,19 +45,16 @@ function MaintenancePage() {
     defaultPageSize: 20,
   });
 
-  useEffect(() => {
-    getMaintenanceRecords()
-      .then(setRecords)
-      .catch((requestError) => setError(requestError.message))
-      .finally(() => setLoading(false));
-  }, []);
-
   async function removeRecord(record) {
     if (!window.confirm(`Delete maintenance record "${record.maintenanceType}"?`)) return;
     setError('');
     try {
       await deleteMaintenanceRecord(record.id);
-      setRecords((currentRecords) => currentRecords.filter((currentRecord) => currentRecord.id !== record.id));
+      setRecordsCache((currentCache) => ({
+        ...currentCache,
+        items: currentCache.items.filter((currentRecord) => currentRecord.id !== record.id),
+      }));
+      setDashboardCache(markDashboardStale);
     } catch (requestError) {
       setError(requestError.message);
     }
@@ -81,6 +89,7 @@ function MaintenancePage() {
       </TableToolbar>
 
       {loading && <p>Loading...</p>}
+      {refreshing && !loading && <p className="refresh-status">Refreshing maintenance...</p>}
       {error && <p>{error}</p>}
       {!loading && !error && records.length === 0 && <p>No maintenance records found.</p>}
 

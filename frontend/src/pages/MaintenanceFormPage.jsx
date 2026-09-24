@@ -1,15 +1,21 @@
 import { useEffect, useState } from 'react';
 import { Link, useNavigate, useParams } from 'react-router-dom';
+import { useSetRecoilState } from 'recoil';
 import { getAssets } from '../api/assets.js';
 import { createMaintenanceRecord, getMaintenanceRecord, updateMaintenanceRecord } from '../api/maintenance.js';
 import { getTechnicians } from '../api/users.js';
 import { Icon } from '../components/Icon.jsx';
 import { TechnicianSearchSelect } from '../components/TechnicianSearchSelect.jsx';
+import { assetsState, dashboardState, maintenanceRecordsState } from '../state/inventoryAtoms.js';
+import { markDashboardStale, upsertCachedItem } from '../state/cacheUtils.js';
 
 function MaintenanceFormPage() {
   const { id } = useParams();
   const navigate = useNavigate();
   const isEditing = Boolean(id);
+  const setAssetsCache = useSetRecoilState(assetsState);
+  const setDashboardCache = useSetRecoilState(dashboardState);
+  const setRecordsCache = useSetRecoilState(maintenanceRecordsState);
   const [assets, setAssets] = useState([]);
   const [technicians, setTechnicians] = useState([]);
   const [assetId, setAssetId] = useState('');
@@ -31,6 +37,7 @@ function MaintenanceFormPage() {
     Promise.all(requests)
       .then(([assetList, techList, record]) => {
         setAssets(assetList);
+        setAssetsCache({ items: assetList, hasLoaded: true });
         setTechnicians(techList || []);
         if (!record) return;
         setAssetId(String(record.assetId));
@@ -45,7 +52,7 @@ function MaintenanceFormPage() {
       })
       .catch((requestError) => setError(requestError.message))
       .finally(() => setLoading(false));
-  }, [id, isEditing]);
+  }, [id, isEditing, setAssetsCache]);
 
   async function saveMaintenance(event) {
     event.preventDefault();
@@ -66,6 +73,8 @@ function MaintenanceFormPage() {
       const record = isEditing
         ? await updateMaintenanceRecord(id, maintenanceData)
         : await createMaintenanceRecord(maintenanceData);
+      setRecordsCache((cache) => upsertCachedItem(cache, record));
+      setDashboardCache(markDashboardStale);
       navigate(`/maintenance/${record.id}`);
     } catch (requestError) {
       setError(requestError.message);

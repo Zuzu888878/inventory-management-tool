@@ -1,6 +1,8 @@
-import { useEffect, useMemo, useState } from 'react';
+import { useMemo, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { getMaintenanceRecords } from '../api/maintenance.js';
+import { useCachedResource } from '../hooks/useCachedResource.js';
+import { maintenanceRecordsState } from '../state/inventoryAtoms.js';
 import { Icon } from './Icon.jsx';
 
 const weekdays = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
@@ -21,16 +23,11 @@ export default function MaintenanceCalendar() {
   const todayKey = dateKey(today);
   const [visibleMonth, setVisibleMonth] = useState(() => new Date(today.getFullYear(), today.getMonth(), 1));
   const [selectedDate, setSelectedDate] = useState(todayKey);
-  const [records, setRecords] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState('');
-
-  useEffect(() => {
-    getMaintenanceRecords()
-      .then(setRecords)
-      .catch((requestError) => setError(requestError.message))
-      .finally(() => setLoading(false));
-  }, []);
+  const { cache: recordsCache, loading, refreshing, error } = useCachedResource(
+    maintenanceRecordsState,
+    getMaintenanceRecords
+  );
+  const records = recordsCache.items;
 
   const recordsByDate = useMemo(() => {
     const grouped = new Map();
@@ -104,6 +101,7 @@ export default function MaintenanceCalendar() {
 
       {error && <p className="calendar-message" role="alert">Could not load maintenance: {error}</p>}
       {loading && <p className="calendar-message">Loading maintenance calendar...</p>}
+      {refreshing && !loading && <p className="calendar-message">Refreshing calendar...</p>}
       {!loading && !error && (
         <>
           <div className="calendar-grid" aria-label="Monthly maintenance calendar">

@@ -1,15 +1,26 @@
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { Link } from 'react-router-dom';
+import { useSetRecoilState } from 'recoil';
 import { deleteAsset, getAssets } from '../api/assets.js';
 import { Icon } from '../components/Icon.jsx';
 import { Pagination, SortButton, TableToolbar } from '../components/TableToolbar.jsx';
+import { useCachedResource } from '../hooks/useCachedResource.js';
 import { useTableControls } from '../hooks/useTableControls.js';
+import { assetsState, dashboardState } from '../state/inventoryAtoms.js';
+import { markDashboardStale } from '../state/cacheUtils.js';
 
 function AssetsPage() {
-  const [assets, setAssets] = useState([]);
-  const [error, setError] = useState('');
-  const [loading, setLoading] = useState(true);
+  const {
+    cache: assetCache,
+    setCache: setAssetCache,
+    loading,
+    refreshing,
+    error,
+    setError,
+  } = useCachedResource(assetsState, getAssets);
+  const setDashboardCache = useSetRecoilState(dashboardState);
   const [statusFilter, setStatusFilter] = useState('all');
+  const assets = assetCache.items;
 
   const {
     rows,
@@ -30,19 +41,16 @@ function AssetsPage() {
     defaultPageSize: 100,
   });
 
-  useEffect(() => {
-    getAssets()
-      .then(setAssets)
-      .catch((requestError) => setError(requestError.message))
-      .finally(() => setLoading(false));
-  }, []);
-
   async function removeAsset(asset) {
     if (!window.confirm(`Delete asset "${asset.name || asset.assetCode}"?`)) return;
     setError('');
     try {
       await deleteAsset(asset.id);
-      setAssets((currentAssets) => currentAssets.filter((currentAsset) => currentAsset.id !== asset.id));
+      setAssetCache((currentCache) => ({
+        ...currentCache,
+        items: currentCache.items.filter((currentAsset) => currentAsset.id !== asset.id),
+      }));
+      setDashboardCache(markDashboardStale);
     } catch (requestError) {
       setError(requestError.message);
     }
@@ -78,6 +86,7 @@ function AssetsPage() {
       </TableToolbar>
 
       {loading && <p>Loading...</p>}
+      {refreshing && !loading && <p className="refresh-status">Refreshing assets...</p>}
 
       {error && <p>{error}</p>}
 

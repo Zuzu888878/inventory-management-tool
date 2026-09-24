@@ -1,12 +1,17 @@
 import { useEffect, useState } from 'react';
 import { Link, useNavigate, useParams } from 'react-router-dom';
+import { useSetRecoilState } from 'recoil';
 import { createSparePart, getSparePart, updateSparePart } from '../api/spareParts.js';
 import { Icon } from '../components/Icon.jsx';
+import { dashboardState, sparePartsState } from '../state/inventoryAtoms.js';
+import { markDashboardStale, upsertCachedItem } from '../state/cacheUtils.js';
 
 function SparePartFormPage() {
   const { id } = useParams();
   const navigate = useNavigate();
   const isEditing = Boolean(id);
+  const setSparePartsCache = useSetRecoilState(sparePartsState);
+  const setDashboardCache = useSetRecoilState(dashboardState);
 
   const [name, setName] = useState('');
   const [manufacturerNumber, setManufacturerNumber] = useState('');
@@ -43,6 +48,8 @@ function SparePartFormPage() {
       };
 
       const sparePart = isEditing ? await updateSparePart(id, sparePartData) : await createSparePart(sparePartData);
+      setSparePartsCache((cache) => upsertCachedItem(cache, sparePart));
+      setDashboardCache(markDashboardStale);
 
       navigate(`/spare-parts/${sparePart.id}`);
     } catch (requestError) {
