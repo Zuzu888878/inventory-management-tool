@@ -71,7 +71,7 @@ function MaintenancePage() {
         </Link>
       </div>
 
-      <TableToolbar search={search} onSearch={setSearch} placeholder="Search maintenance...">
+      <TableToolbar search={search} onSearch={setSearch} placeholder="Search asset, work type, or technician...">
         <select
           value={statusFilter}
           onChange={(event) => {

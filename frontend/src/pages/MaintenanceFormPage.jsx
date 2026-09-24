@@ -117,7 +117,7 @@ function MaintenanceFormPage() {
         <section className="form-section">
           <div className="form-section-heading"><div><h2>Completion notes</h2><p>Track the cost and any useful follow-up information.</p></div></div>
           <div className="form-grid">
-            <label>Cost (CHF)<input type="number" min="0" step="0.01" inputMode="decimal" value={cost} onChange={(event) => setCost(event.target.value)} placeholder="0.00" /></label>
+            <label>Cost (CHF)<input type="number" min="0" step="0.01" inputMode="decimal" value={cost} onChange={(event) => setCost(event.target.value)} placeholder="e.g. 125.00" /></label>
             <label className="form-field-wide">Notes<textarea value={notes} onChange={(event) => setNotes(event.target.value)} placeholder="Work completed, parts used, safety notes, or next steps…" /></label>
           </div>
         </section>

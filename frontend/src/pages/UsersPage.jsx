@@ -59,7 +59,7 @@ function UsersPage() {
         </Link>
       </div>
 
-      <TableToolbar search={search} onSearch={setSearch} placeholder="Search users...">
+      <TableToolbar search={search} onSearch={setSearch} placeholder="Search username, name, or role...">
         <select
           value={roleFilter}
           onChange={(event) => {

@@ -39,12 +39,12 @@ function LoginPage() {
       <form className="login-form" onSubmit={login}>
         <label>
           Username
-          <input name="username" required />
+          <input name="username" placeholder="e.g. admin" autoComplete="username" required />
         </label>
         <br />
         <label>
           Password
-          <input name="password" type="password" required />
+          <input name="password" type="password" placeholder="Enter your password" autoComplete="current-password" required />
         </label>
         <br />
         <button className="button" type="submit" disabled={submitting}>

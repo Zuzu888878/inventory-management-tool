@@ -288,7 +288,7 @@ function DashboardPage() {
                                   }))
                                 }
                                 aria-label={`Quantity to add to ${part.name}`}
-                                placeholder="Qty"
+                                placeholder="Add qty"
                                 disabled={restockingPartId !== null}
                               />
                               <button type="submit" disabled={restockingPartId !== null}>

@@ -70,7 +70,7 @@ function SparePartsPage() {
         </Link>
       </div>
 
-      <TableToolbar search={search} onSearch={setSearch} placeholder="Search spare parts...">
+      <TableToolbar search={search} onSearch={setSearch} placeholder="Search part, manufacturer number, or machine type...">
         <select
           value={stockFilter}
           onChange={(event) => {

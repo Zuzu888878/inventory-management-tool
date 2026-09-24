@@ -117,6 +117,7 @@ function SparePartDetailsPage() {
               required
               value={stockAmount}
               onChange={(event) => setStockAmount(event.target.value)}
+              placeholder="e.g. 5"
               disabled={updatingStock}
             />
           </label>

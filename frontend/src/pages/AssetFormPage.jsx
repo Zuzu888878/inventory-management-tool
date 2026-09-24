@@ -88,11 +88,11 @@ function AssetFormPage() {
         <section className="form-section">
           <div className="form-section-heading"><div><h2>Identity</h2><p>The details used to find and identify this asset.</p></div></div>
           <div className="form-grid">
-            <label>Asset code<input value={assetCode} onChange={(event) => setAssetCode(event.target.value)} autoComplete="off" required /></label>
-            <label>Asset name<input value={name} onChange={(event) => setName(event.target.value)} autoComplete="off" required /></label>
+            <label>Asset code<input value={assetCode} onChange={(event) => setAssetCode(event.target.value)} placeholder="e.g. CNC-LATHE-01" autoComplete="off" required /></label>
+            <label>Asset name<input value={name} onChange={(event) => setName(event.target.value)} placeholder="e.g. CNC Turning Center" autoComplete="off" required /></label>
             <label>Category<CategorySearchSelect value={category} onChange={setCategory} /></label>
-            <label>Machine type<input value={machineType} onChange={(event) => setMachineType(event.target.value)} placeholder="e.g. CNC mill" /></label>
-            <label className="form-field-wide">Serial number<input value={serialNumber} onChange={(event) => setSerialNumber(event.target.value)} autoComplete="off" /></label>
+            <label>Machine type<input value={machineType} onChange={(event) => setMachineType(event.target.value)} placeholder="e.g. Haas ST-30Y" /></label>
+            <label className="form-field-wide">Serial number<input value={serialNumber} onChange={(event) => setSerialNumber(event.target.value)} placeholder="e.g. ST30Y-21-1048" autoComplete="off" /></label>
           </div>
         </section>
 
@@ -101,8 +101,8 @@ function AssetFormPage() {
           <div className="form-grid">
             <label>Status<select value={status} onChange={(event) => setStatus(event.target.value)}><option value="active">Active</option><option value="maintenance">Maintenance</option><option value="warning">Warning</option><option value="critical">Critical</option><option value="offline">Offline</option></select></label>
             <label>IoT state<select value={iotState} onChange={(event) => setIotState(event.target.value)}><option value="unknown">Unknown</option><option value="online">Online</option><option value="offline">Offline</option></select></label>
-            <label>Location<input value={location} onChange={(event) => setLocation(event.target.value)} autoComplete="off" /></label>
-            <label>Supplier<input value={supplier} onChange={(event) => setSupplier(event.target.value)} autoComplete="organization" /></label>
+            <label>Location<input value={location} onChange={(event) => setLocation(event.target.value)} placeholder="e.g. Machining Hall A" autoComplete="off" /></label>
+            <label>Supplier<input value={supplier} onChange={(event) => setSupplier(event.target.value)} placeholder="e.g. Haas Automation" autoComplete="organization" /></label>
           </div>
         </section>
 

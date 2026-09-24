@@ -67,7 +67,7 @@ function AssetsPage() {
         </Link>
       </div>
 
-      <TableToolbar search={search} onSearch={setSearch} placeholder="Search assets...">
+      <TableToolbar search={search} onSearch={setSearch} placeholder="Search code, name, category, or location...">
         <select
           value={statusFilter}
           onChange={(event) => {

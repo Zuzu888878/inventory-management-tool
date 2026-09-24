@@ -67,15 +67,15 @@ function SparePartFormPage() {
         <section className="form-section">
           <div className="form-section-heading"><div><h2>Part details</h2><p>Use a clear name and supplier reference for quick identification.</p></div></div>
           <div className="form-grid">
-            <label>Part name<input value={name} onChange={(event) => setName(event.target.value)} autoComplete="off" required /></label>
-            <label>Manufacturer number<input value={manufacturerNumber} onChange={(event) => setManufacturerNumber(event.target.value)} autoComplete="off" /></label>
-            <label className="form-field-wide">Compatible machine type<input value={compatibleMachineType} onChange={(event) => setCompatibleMachineType(event.target.value)} placeholder="e.g. CNC mill" /></label>
+            <label>Part name<input value={name} onChange={(event) => setName(event.target.value)} placeholder="e.g. ER32 Collet 12 mm" autoComplete="off" required /></label>
+            <label>Manufacturer number<input value={manufacturerNumber} onChange={(event) => setManufacturerNumber(event.target.value)} placeholder="e.g. COL-ER32-12" autoComplete="off" /></label>
+            <label className="form-field-wide">Compatible machine type<input value={compatibleMachineType} onChange={(event) => setCompatibleMachineType(event.target.value)} placeholder="e.g. VF-4SS or DMU 50" /></label>
           </div>
         </section>
         <section className="form-section">
           <div className="form-section-heading"><div><h2>Inventory</h2><p>Set the quantity currently available for use.</p></div></div>
           <div className="form-grid">
-            <label>Quantity in stock<input type="number" min="0" step="1" inputMode="numeric" value={quantityInStock} onChange={(event) => setQuantityInStock(event.target.value)} required /></label>
+            <label>Quantity in stock<input type="number" min="0" step="1" inputMode="numeric" value={quantityInStock} onChange={(event) => setQuantityInStock(event.target.value)} placeholder="e.g. 24" required /></label>
             <label className="form-field-wide">Description<textarea value={description} onChange={(event) => setDescription(event.target.value)} placeholder="Specifications, storage location, or fitting notes…" /></label>
           </div>
         </section>

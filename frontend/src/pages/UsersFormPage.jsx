@@ -59,15 +59,15 @@ export function UsersFormPage() {
         <section className="form-section">
           <div className="form-section-heading"><div><h2>User profile</h2><p>Choose a recognisable name and a unique sign-in handle.</p></div></div>
           <div className="form-grid">
-            <label>Display name<input value={displayName} onChange={(event) => setDisplayName(event.target.value)} autoComplete="name" required /></label>
-            <label>Username<input value={username} onChange={(event) => setUsername(event.target.value)} minLength="3" maxLength="100" pattern="[A-Za-z0-9._-]+" autoComplete="username" spellCheck="false" required /></label>
+            <label>Display name<input value={displayName} onChange={(event) => setDisplayName(event.target.value)} placeholder="e.g. Alex Morgan" autoComplete="name" required /></label>
+            <label>Username<input value={username} onChange={(event) => setUsername(event.target.value)} placeholder="e.g. alex.morgan" minLength="3" maxLength="100" pattern="[A-Za-z0-9._-]+" autoComplete="username" spellCheck="false" required /></label>
           </div>
         </section>
         <section className="form-section">
           <div className="form-section-heading"><div><h2>Access</h2><p>Control the role, account state, and password.</p></div></div>
           <div className="form-grid">
             <label>Role<select value={role} onChange={(event) => setRole(event.target.value)}><option value="admin">Admin</option><option value="editor">Editor</option><option value="viewer">Viewer</option></select></label>
-            <label>{isEditing ? 'New password' : 'Password'}<input type="password" value={password} onChange={(event) => setPassword(event.target.value)} required={!isEditing} autoComplete="new-password" placeholder={isEditing ? 'Leave blank to keep current password' : ''} /></label>
+            <label>{isEditing ? 'New password' : 'Password'}<input type="password" value={password} onChange={(event) => setPassword(event.target.value)} required={!isEditing} autoComplete="new-password" placeholder={isEditing ? 'Leave blank to keep current password' : 'Set an initial password'} /></label>
             <label className="toggle-field"><input type="checkbox" checked={isActive} onChange={(event) => setIsActive(event.target.checked)} /><span><strong>Active account</strong><small>Allow this user to sign in and access the workspace.</small></span></label>
           </div>
         </section>
