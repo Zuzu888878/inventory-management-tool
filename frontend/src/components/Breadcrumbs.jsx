@@ -5,6 +5,7 @@ const labels = {
   calendar: 'Calendar',
   schedule: 'Schedule',
   stock: 'Stock Alerts',
+  finance: 'Finance',
   assets: 'Assets',
   'spare-parts': 'Spare Parts',
   maintenance: 'Maintenance',

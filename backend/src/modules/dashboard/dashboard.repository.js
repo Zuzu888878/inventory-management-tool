@@ -1,7 +1,7 @@
 import pool from '../../config/database.js';
 
 const getDashboard = async () => {
-  const [assetSummary, sparePartSummary, maintenanceSummary, schedule, lowStock] = await Promise.all([
+  const [assetSummary, sparePartSummary, maintenanceSummary, monthlySpending, schedule, lowStock] = await Promise.all([
     pool.query(`
       SELECT COUNT(*)::INTEGER AS total,
              COUNT(*) FILTER (WHERE status = 'active')::INTEGER AS active,
@@ -22,6 +22,30 @@ const getDashboard = async () => {
              COUNT(*) FILTER (WHERE status = 'completed' AND completed_date >= DATE_TRUNC('month', CURRENT_DATE))::INTEGER AS completed_this_month,
              COALESCE(SUM(cost) FILTER (WHERE status = 'completed' AND completed_date >= DATE_TRUNC('month', CURRENT_DATE)), 0)::NUMERIC AS cost_this_month
       FROM maintenance_records`),
+    pool.query(`
+      SELECT TO_CHAR(months.month, 'YYYY-MM') AS month,
+             COALESCE(actual.amount, 0)::NUMERIC AS actual,
+             COALESCE(forecast.amount, 0)::NUMERIC AS forecast
+      FROM generate_series(
+        DATE_TRUNC('month', CURRENT_DATE) - INTERVAL '11 months',
+        DATE_TRUNC('month', CURRENT_DATE) + INTERVAL '12 months',
+        INTERVAL '1 month'
+      ) AS months(month)
+      LEFT JOIN (
+        SELECT DATE_TRUNC('month', completed_date) AS month, SUM(cost) AS amount
+        FROM maintenance_records
+        WHERE status = 'completed' AND completed_date IS NOT NULL
+        GROUP BY DATE_TRUNC('month', completed_date)
+      ) AS actual ON actual.month = months.month
+      LEFT JOIN (
+        SELECT DATE_TRUNC('month', scheduled_date) AS month, SUM(cost) AS amount
+        FROM maintenance_records
+        WHERE status IN ('planned', 'in_progress')
+          AND scheduled_date > CURRENT_DATE
+          AND DATE_TRUNC('month', scheduled_date) > DATE_TRUNC('month', CURRENT_DATE)
+        GROUP BY DATE_TRUNC('month', scheduled_date)
+      ) AS forecast ON forecast.month = months.month
+      ORDER BY months.month`),
     pool.query(`
       SELECT maintenance_records.id, maintenance_records.asset_id,
              maintenance_records.maintenance_type, maintenance_records.scheduled_date,
@@ -70,6 +94,11 @@ const getDashboard = async () => {
       completedThisMonth: maintenance.completed_this_month,
       costThisMonth: Number(maintenance.cost_this_month),
     },
+    monthlySpending: monthlySpending.rows.map((row) => ({
+      month: row.month,
+      actual: Number(row.actual),
+      forecast: Number(row.forecast),
+    })),
     schedule: schedule.rows.map((row) => ({
       id: row.id,
       assetId: row.asset_id,

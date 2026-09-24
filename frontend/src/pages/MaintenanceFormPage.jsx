@@ -4,7 +4,9 @@ import { useSetRecoilState } from 'recoil';
 import { getAssets } from '../api/assets.js';
 import { createMaintenanceRecord, getMaintenanceRecord, updateMaintenanceRecord } from '../api/maintenance.js';
 import { getTechnicians } from '../api/users.js';
+import { AssetSearchSelect } from '../components/AssetSearchSelect.jsx';
 import { Icon } from '../components/Icon.jsx';
+import { MaintenanceTypeSearchSelect } from '../components/MaintenanceTypeSearchSelect.jsx';
 import { TechnicianSearchSelect } from '../components/TechnicianSearchSelect.jsx';
 import { assetsState, dashboardState, maintenanceRecordsState } from '../state/inventoryAtoms.js';
 import { markDashboardStale, upsertCachedItem } from '../state/cacheUtils.js';
@@ -57,6 +59,10 @@ function MaintenanceFormPage() {
   async function saveMaintenance(event) {
     event.preventDefault();
     setError('');
+    if (!assetId) {
+      setError('Select an asset from the list.');
+      return;
+    }
 
     try {
       const maintenanceData = {
@@ -93,10 +99,9 @@ function MaintenanceFormPage() {
         <section className="form-section">
           <div className="form-section-heading"><div><h2>Work order</h2><p>Select the asset and describe the maintenance to be performed.</p></div></div>
           <div className="form-grid">
-            <label className="form-field-wide">Asset<select value={assetId} onChange={(event) => setAssetId(event.target.value)} required><option value="">Select an asset</option>{assets.map((asset) => <option key={asset.id} value={asset.id}>{asset.assetCode} — {asset.name}</option>)}</select></label>
-            <label className="form-field-wide">Maintenance type<input value={maintenanceType} onChange={(event) => setMaintenanceType(event.target.value)} list="maintenance-types" placeholder="e.g. Annual inspection" required /></label>
+            <label className="form-field-wide">Asset<AssetSearchSelect assets={assets} selectedId={assetId} onChange={setAssetId} disabled={assets.length === 0} /></label>
+            <label className="form-field-wide">Maintenance type<MaintenanceTypeSearchSelect value={maintenanceType} onChange={setMaintenanceType} /></label>
           </div>
-          <datalist id="maintenance-types"><option value="Inspection" /><option value="Preventive maintenance" /><option value="Repair" /><option value="Calibration" /></datalist>
         </section>
 
         <section className="form-section">

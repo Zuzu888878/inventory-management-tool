@@ -5,6 +5,7 @@ import { adjustSparePartStock } from '../api/spareParts.js';
 import { formatDate } from '../utils/formatDate.js';
 import { Icon } from '../components/Icon.jsx';
 import DashboardCharts from '../components/DashboardCharts.jsx';
+import FinanceChart from '../components/FinanceChart.jsx';
 import MaintenanceCalendar from '../components/MaintenanceCalendar.jsx';
 import { useCachedResource } from '../hooks/useCachedResource.js';
 import { dashboardState } from '../state/inventoryAtoms.js';
@@ -20,6 +21,7 @@ const dashboardTabs = [
   { id: 'calendar', label: 'Calendar', path: '/dashboard/calendar', icon: 'check' },
   { id: 'schedule', label: 'Schedule', path: '/dashboard/schedule', icon: 'wrench' },
   { id: 'stock', label: 'Stock alerts', path: '/dashboard/stock', icon: 'package' },
+  { id: 'finance', label: 'Finance', path: '/dashboard/finance', icon: 'chartBar' },
 ];
 
 const dashboardTabIds = new Set(dashboardTabs.map((tab) => tab.id));
@@ -163,6 +165,8 @@ function DashboardPage() {
         )}
 
         {activeTab === 'calendar' && <MaintenanceCalendar />}
+
+        {activeTab === 'finance' && <FinanceChart monthlySpending={dashboard.monthlySpending || []} />}
 
         {activeTab === 'schedule' && (
           <article className="dashboard-panel">
