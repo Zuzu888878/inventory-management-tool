@@ -1079,6 +1079,35 @@ p {
   margin-top: 2rem;
 }
 
+.login-demo-credentials {
+  display: grid;
+  gap: 0.35rem;
+  margin-top: 1.25rem;
+  padding: 0.8rem 0.9rem;
+  border: 1px solid #e4e4e7;
+  border-radius: 0.5rem;
+  background: #f4f4f5;
+  color: #27272a;
+  font-size: 0.8rem;
+}
+
+.login-demo-credentials code {
+  overflow-wrap: anywhere;
+  color: #3f3f46;
+  font-size: 0.75rem;
+}
+
+.login-demo-credential {
+  display: grid;
+  grid-template-columns: 5rem minmax(0, 1fr);
+  gap: 0.5rem;
+  align-items: baseline;
+}
+
+.login-demo-credential > span {
+  color: var(--muted);
+}
+
 .login-form {
   margin-top: 1.5rem;
 }

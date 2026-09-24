@@ -33,25 +33,31 @@ function LoginPage() {
           <span className="brand-mark">L</span>
           <span>Leets Inventory</span>
         </div>
-        <h1>Welcome back</h1>
-        <p className="muted">Sign in to manage your inventory.</p>
-      {error && <p role="alert">{error}</p>}
-      <form className="login-form" onSubmit={login}>
-        <label>
-          Username
-          <input name="username" placeholder="e.g. admin" autoComplete="username" required />
-        </label>
-        <br />
-        <label>
-          Password
-          <input name="password" type="password" placeholder="Enter your password" autoComplete="current-password" required />
-        </label>
-        <br />
-        <button className="button" type="submit" disabled={submitting}>
-          <Icon name="login" /> {submitting ? 'Logging in...' : 'Login'}
-        </button>
-      </form>
+        <h1>Sign In</h1>
+        {error && <p role="alert">{error}</p>}
+        <form className="login-form" onSubmit={login}>
+          <label>
+            Username
+            <input name="username" placeholder="e.g. admin" autoComplete="username" required />
+          </label>
+          <br />
+          <label>
+            Password
+            <input name="password" type="password" placeholder="Enter your password" autoComplete="current-password" required />
+          </label>
+          <br />
+          <button className="button" type="submit" disabled={submitting}>
+            <Icon name="login" /> {submitting ? 'Logging in...' : 'Login'}
+          </button>
+        </form>
+        <aside className="login-demo-credentials" aria-label="Demo login credentials">
+          <strong>Demo credentials</strong>
+          <div className="login-demo-credential"><span>Username</span><code>admin</code></div>
+          <div className="login-demo-credential"><span>Password</span><code>replace-with-a-secure-password</code></div>
+        </aside>
+
       </div>
+
     </main>
   );
 }
