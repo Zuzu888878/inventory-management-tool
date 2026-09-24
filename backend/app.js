@@ -1,4 +1,5 @@
 import express from 'express';
+import morgan from 'morgan';
 import assetRoutes from './routes.js';
 import sparePartsRoutes from './sparePartsRoutes.js';
 import maintenanceRoutes from './maintenanceRoutes.js';
@@ -7,6 +8,15 @@ import dashboardRoutes from './dashboardRoutes.js';
 import { login } from './controllers.js';
 
 const app = express();
+
+morgan.token('local-date', () => new Date().toLocaleString());
+morgan.token('response-size', (req, res) => res.getHeader('content-length') || '0');
+
+app.use(
+  morgan(
+    '[:local-date] :method :url -> :status in :response-time ms (:response-size bytes)'
+  )
+);
 
 // Middleware for parsing JSON request bodies.
 app.use(express.json());
