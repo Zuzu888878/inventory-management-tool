@@ -1,4 +1,4 @@
-import maintenanceRepository from './maintenanceData.js';
+import maintenanceRepository from './maintenance.repository.js';
 
 const allowedStatuses = new Set(['planned', 'in_progress', 'completed', 'cancelled']);
 

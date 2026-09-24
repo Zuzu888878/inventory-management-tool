@@ -1,12 +1,12 @@
 import express from 'express';
-import authMiddleware from './middleware.js';
+import authMiddleware from '../../middleware/auth.js';
 import {
   createSparePart,
   deleteSparePart,
   getAllSpareParts,
   getSparePartById,
   updateSparePart,
-} from './sparePartsControllers.js';
+} from './spareParts.controller.js';
 
 const router = express.Router();
 

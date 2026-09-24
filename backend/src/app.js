@@ -1,11 +1,11 @@
 import express from 'express';
 import morgan from 'morgan';
-import assetRoutes from './routes.js';
-import sparePartsRoutes from './sparePartsRoutes.js';
-import maintenanceRoutes from './maintenanceRoutes.js';
-import usersRoutes from './usersRoutes.js';
-import dashboardRoutes from './dashboardRoutes.js';
-import { login } from './controllers.js';
+import assetRoutes from './modules/assets/assets.routes.js';
+import sparePartsRoutes from './modules/spareParts/spareParts.routes.js';
+import maintenanceRoutes from './modules/maintenance/maintenance.routes.js';
+import usersRoutes from './modules/users/users.routes.js';
+import dashboardRoutes from './modules/dashboard/dashboard.routes.js';
+import { login } from './modules/auth/auth.controller.js';
 
 const app = express();
 

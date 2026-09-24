@@ -1,4 +1,4 @@
-import pool from './config.js';
+import pool from '../../config/database.js';
 
 const getDashboard = async () => {
   const [assetSummary, sparePartSummary, maintenanceSummary, schedule, lowStock] = await Promise.all([

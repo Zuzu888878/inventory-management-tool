@@ -1,6 +1,6 @@
 import assert from 'node:assert/strict';
 import { test } from 'node:test';
-import { hashPassword, validatePassword, verifyPassword } from '../passwords.js';
+import { hashPassword, validatePassword, verifyPassword } from '../src/utils/passwords.js';
 
 test('password hashes are salted and can be verified', async () => {
   const password = 'correct-horse-battery-staple';

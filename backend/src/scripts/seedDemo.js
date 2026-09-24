@@ -1,5 +1,5 @@
-import pool from './config.js';
-import { hashPassword } from './passwords.js';
+import pool from '../config/database.js';
+import { hashPassword } from '../utils/passwords.js';
 
 const demoAssets = [
   ['CNC-LATHE-01', 'CNC Turning Center - Bar Line 1', 'CNC Machining', 'ST-30Y', 'warning', 'online', 'Machining Hall A', 'ST30Y-21-1048', 'Haas Automation', '2021-03-15', -14],

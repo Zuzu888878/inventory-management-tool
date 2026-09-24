@@ -1,6 +1,6 @@
-import pool from './config.js';
-import { hashPassword, validatePassword } from './passwords.js';
-import usersRepository from './usersData.js';
+import pool from '../config/database.js';
+import { hashPassword, validatePassword } from '../utils/passwords.js';
+import usersRepository from '../modules/users/users.repository.js';
 
 const username = process.env.APP_USERNAME;
 const password = process.env.APP_PASSWORD;

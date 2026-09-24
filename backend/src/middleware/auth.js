@@ -1,4 +1,4 @@
-import { verifyAuthToken } from './authTokens.js';
+import { verifyAuthToken } from '../utils/authTokens.js';
 
 const authMiddleware = (req, res, next) => {
   const apiToken = process.env.API_TOKEN;

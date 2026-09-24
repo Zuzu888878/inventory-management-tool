@@ -1,4 +1,4 @@
-import dashboardRepository from './dashboardData.js';
+import dashboardRepository from './dashboard.repository.js';
 
 export const getDashboard = async (req, res) => {
   try {

@@ -1,5 +1,5 @@
 import express from 'express';
-import authMiddleware, { requireRole } from './middleware.js';
+import authMiddleware, { requireRole } from '../../middleware/auth.js';
 import {
   createUser,
   deleteUser,
@@ -7,7 +7,7 @@ import {
   getTechnicians,
   getUserById,
   updateUser,
-} from './usersControllers.js';
+} from './users.controller.js';
 
 const router = express.Router();
 

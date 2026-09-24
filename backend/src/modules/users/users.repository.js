@@ -1,4 +1,4 @@
-import pool from './config.js';
+import pool from '../../config/database.js';
 
 export const USER_ROLES = Object.freeze(['admin', 'editor', 'viewer']);
 

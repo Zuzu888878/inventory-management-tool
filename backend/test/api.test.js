@@ -1,14 +1,14 @@
 import assert from 'node:assert/strict';
 import { after, before, beforeEach, test } from 'node:test';
-import app from '../app.js';
-import { createAuthToken } from '../authTokens.js';
-import pool from '../config.js';
-import assetRepository from '../data.js';
-import dashboardRepository from '../dashboardData.js';
-import maintenanceRepository from '../maintenanceData.js';
-import { hashPassword } from '../passwords.js';
-import sparePartsRepository from '../sparePartsData.js';
-import usersRepository from '../usersData.js';
+import app from '../src/app.js';
+import { createAuthToken } from '../src/utils/authTokens.js';
+import pool from '../src/config/database.js';
+import assetRepository from '../src/modules/assets/assets.repository.js';
+import dashboardRepository from '../src/modules/dashboard/dashboard.repository.js';
+import maintenanceRepository from '../src/modules/maintenance/maintenance.repository.js';
+import { hashPassword } from '../src/utils/passwords.js';
+import sparePartsRepository from '../src/modules/spareParts/spareParts.repository.js';
+import usersRepository from '../src/modules/users/users.repository.js';
 
 let server;
 let baseUrl;

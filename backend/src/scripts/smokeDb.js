@@ -1,5 +1,5 @@
-import pool from './config.js';
-import { hashPassword } from './passwords.js';
+import pool from '../config/database.js';
+import { hashPassword } from '../utils/passwords.js';
 
 const client = await pool.connect();
 

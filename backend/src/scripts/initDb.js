@@ -1,8 +1,8 @@
 import { readFile } from 'node:fs/promises';
 import { fileURLToPath } from 'node:url';
-import pool from './config.js';
+import pool from '../config/database.js';
 
-const schemaUrl = new URL('./db/schema.sql', import.meta.url);
+const schemaUrl = new URL('../../db/schema.sql', import.meta.url);
 
 try {
   const schema = await readFile(fileURLToPath(schemaUrl), 'utf8');

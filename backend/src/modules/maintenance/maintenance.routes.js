@@ -1,12 +1,12 @@
 import express from 'express';
-import authMiddleware from './middleware.js';
+import authMiddleware from '../../middleware/auth.js';
 import {
   createMaintenance,
   deleteMaintenance,
   getAllMaintenance,
   getMaintenanceById,
   updateMaintenance,
-} from './maintenanceControllers.js';
+} from './maintenance.controller.js';
 
 const router = express.Router();
 

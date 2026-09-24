@@ -1,6 +1,6 @@
 import assert from 'node:assert/strict';
 import { test } from 'node:test';
-import { createAuthToken, verifyAuthToken } from '../authTokens.js';
+import { createAuthToken, verifyAuthToken } from '../src/utils/authTokens.js';
 
 test('signed authentication tokens preserve user identity and role', () => {
   process.env.API_TOKEN = 'token-test-secret';

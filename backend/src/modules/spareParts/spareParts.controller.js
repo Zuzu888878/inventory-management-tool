@@ -1,4 +1,4 @@
-import sparePartsRepository from './sparePartsData.js';
+import sparePartsRepository from './spareParts.repository.js';
 
 const validateSparePart = (sparePart) => {
   if (!sparePart.name) return 'Name is required';

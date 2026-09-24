@@ -1,5 +1,5 @@
-import { hashPassword, validatePassword } from './passwords.js';
-import usersRepository, { USER_ROLES } from './usersData.js';
+import { hashPassword, validatePassword } from '../../utils/passwords.js';
+import usersRepository, { USER_ROLES } from './users.repository.js';
 
 const validateUserRequest = (user, passwordRequired) => {
   if (!/^[a-z0-9._-]{3,100}$/.test(user.username?.trim().toLowerCase() || '')) {

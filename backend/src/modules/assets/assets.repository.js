@@ -1,4 +1,4 @@
-import pool from './config.js';
+import pool from '../../config/database.js';
 
 const mapAsset = (row) => ({
     id: row.id,

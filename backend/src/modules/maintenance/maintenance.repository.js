@@ -1,4 +1,4 @@
-import pool from './config.js';
+import pool from '../../config/database.js';
 
 const selectMaintenance = `
   SELECT maintenance_records.*, assets.asset_code, assets.name AS asset_name,
